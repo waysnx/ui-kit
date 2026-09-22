@@ -4,7 +4,20 @@ All notable changes to WaysNX UI Kit are documented in this file.
 
 The project follows [Semantic Versioning](https://semver.org/).
 
-For the initial public release, the WaysNX UI Kit packages are being released as version `1.0.0`.
+---
+
+## [1.0.1] — 2026-09-10
+
+### Added
+- **LLM.md AI agent integration guides** for all 19 packages with structured exports, TypeScript interfaces, usage examples, and integration notes optimized for AI code generation
+- AI agent callout section in all package README.md files pointing to LLM.md
+
+### Changed
+- **Repository references updated** from `waysnx-tech/waysnx-ui-kit` → `waysnx/ui-kit` across all packages, documentation, and tooling
+- Updated release workflow and validation for 1.0.1
+
+### Fixed
+- Repository URLs in package.json files now point to correct `waysnx/ui-kit` repository
 
 ---
 
@@ -150,4 +163,5 @@ Detailed release procedures, package publishing, validation gates, and release w
 
 ---
 
-[1.0.0]: https://github.com/waysnx/waysnx-ui-kit/releases/tag/v1.0.0
+[1.0.1]: https://github.com/waysnx/ui-kit/releases/tag/v1.0.1
+[1.0.0]: https://github.com/waysnx/ui-kit/releases/tag/v1.0.0

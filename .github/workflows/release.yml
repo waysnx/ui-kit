@@ -12,7 +12,7 @@ name: Release (npm publish)
 #     distinct, ordered jobs. Publication only runs if everything before
 #     it passed.
 #   - Uses pnpm for the workspace release so `workspace:*` specifiers are
-#     rewritten to concrete versions (1.0.0) in the published tarballs.
+#     rewritten to concrete versions (1.0.1) in the published tarballs.
 #   - Least-privilege GitHub permissions; `id-token: write` is granted
 #     only to the publish job that actually needs OIDC.
 #
@@ -30,9 +30,9 @@ on:
   workflow_dispatch:
     inputs:
       release_tag:
-        description: "Release tag/version to validate against (e.g. 1.0.0). Must match every publishable package version."
+        description: "Release tag/version to validate against (e.g. 1.0.1). Must match every publishable package version."
         required: true
-        default: "1.0.0"
+        default: "1.0.1"
       dry_run:
         description: "Dry run only (pack + publish --dry-run, no upload)."
         type: boolean
@@ -76,7 +76,7 @@ jobs:
       - name: Verify workspace resolution
         run: pnpm list --recursive --depth=0
 
-      - name: Validate package metadata (19 packages @ 1.0.0)
+      - name: Validate package metadata (19 packages @ 1.0.1)
         run: node scripts/ci-validate-packages.js
 
       - name: Verify requested release tag matches package versions

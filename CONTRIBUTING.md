@@ -50,8 +50,8 @@ WaysNX UI Kit uses a pnpm workspace.
 Clone the repository and install dependencies:
 
 ```bash
-git clone https://github.com/waysnx/waysnx-ui-kit.git
-cd waysnx-ui-kit
+git clone https://github.com/waysnx/ui-kit.git
+cd ui-kit
 pnpm install
 ```
 
