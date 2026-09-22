@@ -1,5 +1,7 @@
 # @waysnx/ui-accessibility
 
+> 🤖 **AI agents & LLMs:** See **LLM.md** (shipped with this package) for a structured integration guide — AccessibilityProvider, preset profiles, and granular hooks.
+
 Enterprise-grade accessibility control center for WaysNX UI Kit — centralized settings with real-time application across components.
 
 ## Installation

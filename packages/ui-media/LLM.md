@@ -12,7 +12,7 @@ Media capture and display components — QR/barcode generation and scanning, sig
 
 ## Package info
 
-- **npm:** `@waysnx/ui-media` v1.0.0 (companion package — NOT in `@waysnx/ui-kit` meta)
+- **npm:** `@waysnx/ui-media` v1.0.1 (companion package — NOT in `@waysnx/ui-kit` meta)
 - **Install:** `npm install @waysnx/ui-media`
 - **Peer deps:** `react >=18`, `react-dom >=18`
 - **CSS (required):** `import '@waysnx/ui-media/dist/index.css'`

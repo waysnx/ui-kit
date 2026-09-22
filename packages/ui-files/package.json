@@ -1,6 +1,6 @@
 {
   "name": "@waysnx/ui-files",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "File and document viewing components from WaysNX - PDF viewer and document preview",
   "type": "module",
   "main": "dist/index.cjs",
@@ -43,5 +43,5 @@
     }
   },
   "sideEffects": ["*.css"],
-  "repository": { "type": "git", "url": "https://github.com/waysnx/waysnx-ui-kit", "directory": "packages/ui-files" }
+  "repository": { "type": "git", "url": "https://github.com/waysnx/ui-kit", "directory": "packages/ui-files" }
 }

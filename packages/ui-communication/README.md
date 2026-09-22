@@ -1,5 +1,7 @@
 # @waysnx/ui-communication
 
+> 🤖 **AI agents & LLMs:** See **LLM.md** (shipped with this package) for a structured integration guide — messaging, threads, presence, reactions, and collaboration hooks.
+
 Enterprise-grade communication components from WaysNX — messaging, threads, presence, reactions, mentions, and realtime collaboration.
 
 ## Installation

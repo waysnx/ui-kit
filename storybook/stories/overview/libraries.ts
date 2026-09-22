@@ -226,6 +226,6 @@ export const LIBRARIES: LibraryInfo[] = [
 
 export const LINKS = {
   docs: 'https://uikit.waysnx.tech',
-  github: 'https://github.com/waysnx/waysnx-ui-kit',
+  github: 'https://github.com/waysnx/ui-kit',
   npm: 'https://www.npmjs.com/org/waysnx',
 };

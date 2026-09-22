@@ -14,7 +14,7 @@
   "uiKit": {
     "name": "WaysNX UI Kit",
     "scope": "@waysnx",
-    "repository": "waysnx-tech/waysnx-ui-kit",
+    "repository": "waysnx/ui-kit",
     "version": "1.0.0"
   },
   "catalogPolicy": {

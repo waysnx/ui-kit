@@ -12,7 +12,7 @@ Enterprise-grade security components — pre-built auth UIs, MFA flows, session 
 
 ## Package info
 
-- **npm:** `@waysnx/ui-security` v1.0.0 (companion package — NOT included in `@waysnx/ui-kit` meta)
+- **npm:** `@waysnx/ui-security` v1.0.1 (companion package — NOT included in `@waysnx/ui-kit` meta)
 - **Install:** `npm install @waysnx/ui-security`
 - **Deps:** `@waysnx/ui-core`, `@waysnx/ui-feedback`, `@waysnx/ui-layout`, `@waysnx/ui-i18n`
 - **Peer deps:** `react >=18`, `react-dom >=18`

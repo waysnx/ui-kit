@@ -1,6 +1,6 @@
 {
   "name": "@waysnx/ui-layout",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Comprehensive layout components from WaysNX - page structure, layout utilities, content organization, and navigation",
   "type": "module",
   "main": "dist/index.cjs",
@@ -39,5 +39,5 @@
     }
   },
   "sideEffects": ["*.css"],
-  "repository": { "type": "git", "url": "https://github.com/waysnx/waysnx-ui-kit", "directory": "packages/ui-layout" }
+  "repository": { "type": "git", "url": "https://github.com/waysnx/ui-kit", "directory": "packages/ui-layout" }
 }

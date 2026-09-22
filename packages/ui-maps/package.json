@@ -1,6 +1,6 @@
 {
   "name": "@waysnx/ui-maps",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Maps and location components from WaysNX - address search, map views, route planning, and geolocation",
   "type": "module",
   "main": "dist/index.cjs",
@@ -43,5 +43,5 @@
     }
   },
   "sideEffects": ["*.css"],
-  "repository": { "type": "git", "url": "https://github.com/waysnx/waysnx-ui-kit", "directory": "packages/ui-maps" }
+  "repository": { "type": "git", "url": "https://github.com/waysnx/ui-kit", "directory": "packages/ui-maps" }
 }

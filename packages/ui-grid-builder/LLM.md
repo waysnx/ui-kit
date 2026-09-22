@@ -12,7 +12,7 @@ Data grid with sorting, filtering, pagination, column types, row actions, and ro
 
 ## Package info
 
-- **npm:** `@waysnx/ui-grid-builder` v1.0.0
+- **npm:** `@waysnx/ui-grid-builder` v1.0.1
 - **Peer deps:** `@tanstack/react-table ^8.0.0`, `react >=18`, `react-dom >=18`
 - **CSS (required):** `import '@waysnx/ui-grid-builder/dist/index.css'`
 

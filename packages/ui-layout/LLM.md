@@ -12,7 +12,7 @@ Layout primitives for page structure and content organization — Grid, Tabs, Ac
 
 ## Package info
 
-- **npm:** `@waysnx/ui-layout` v1.0.0
+- **npm:** `@waysnx/ui-layout` v1.0.1
 - **Peer deps:** `react >=18`
 - **CSS (required):** `import '@waysnx/ui-layout/dist/index.css'`
 

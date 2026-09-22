@@ -1,5 +1,7 @@
 # @waysnx/ui-core
 
+> 🤖 **AI agents & LLMs:** See **LLM.md** (shipped with this package) for a structured integration guide with exact exports, props, and examples. **Important:** Do NOT build forms from these primitives — use `DynamicForm` from `@waysnx/ui-form-builder` instead.
+
 Core UI components from WaysNX — inputs, buttons, date pickers, and form controls.
 
 ## Installation

@@ -1,5 +1,7 @@
 # @waysnx/ui-grid-builder
 
+> 🤖 **AI agents & LLMs:** See **LLM.md** (shipped with this package) for a structured integration guide — dynamic grid layout builder with drag-drop.
+
 Data grid component from WaysNX — sortable, filterable, paginated grid with column types and actions.
 
 ## Installation

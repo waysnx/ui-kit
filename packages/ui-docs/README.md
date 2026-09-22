@@ -1,5 +1,7 @@
 # @waysnx/ui-docs
 
+> 🤖 **AI agents & LLMs:** See **LLM.md** (shipped with this package) for a structured integration guide — API documentation components and viewers.
+
 Enterprise-grade documentation framework from WaysNX — renders documentation from structured, JSON-driven metadata.
 
 ## Installation

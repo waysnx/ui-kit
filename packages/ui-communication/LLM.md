@@ -12,7 +12,7 @@ Networking-agnostic communication framework — provides UI components for chat/
 
 ## Package info
 
-- **npm:** `@waysnx/ui-communication` v1.0.0 (companion package — NOT in `@waysnx/ui-kit` meta)
+- **npm:** `@waysnx/ui-communication` v1.0.1 (companion package — NOT in `@waysnx/ui-kit` meta)
 - **Install:** `npm install @waysnx/ui-communication`
 - **Peer deps:** `react >=18`, `react-dom >=18`, `@waysnx/ui-core >=1.0.0`, `@waysnx/ui-layout >=1.0.0`, `@waysnx/ui-feedback >=1.0.0`
 - **CSS (required):** `import '@waysnx/ui-communication/dist/index.css'`

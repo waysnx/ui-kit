@@ -1,6 +1,6 @@
 {
   "name": "@waysnx/ui-i18n",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Internationalization (i18n) provider for WaysNX UI Kit - shared translation context across all packages",
   "type": "module",
   "main": "dist/index.cjs",
@@ -31,5 +31,5 @@
     }
   },
   "sideEffects": false,
-  "repository": { "type": "git", "url": "https://github.com/waysnx/waysnx-ui-kit", "directory": "packages/ui-i18n" }
+  "repository": { "type": "git", "url": "https://github.com/waysnx/ui-kit", "directory": "packages/ui-i18n" }
 }

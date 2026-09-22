@@ -1,6 +1,6 @@
 {
   "name": "@waysnx/ui-media",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Media and visual components from WaysNX - QR/barcode, signatures, image/video/audio, OCR, and color picker",
   "type": "module",
   "main": "dist/index.cjs",
@@ -45,5 +45,5 @@
     }
   },
   "sideEffects": ["*.css"],
-  "repository": { "type": "git", "url": "https://github.com/waysnx/waysnx-ui-kit", "directory": "packages/ui-media" }
+  "repository": { "type": "git", "url": "https://github.com/waysnx/ui-kit", "directory": "packages/ui-media" }
 }

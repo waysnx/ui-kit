@@ -1,6 +1,6 @@
 {
   "name": "@waysnx/ui-core",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Core UI components from WaysNX - includes inputs, buttons, date pickers, and form controls",
   "type": "module",
   "main": "dist/index.cjs",
@@ -65,7 +65,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/waysnx/waysnx-ui-kit",
+    "url": "https://github.com/waysnx/ui-kit",
     "directory": "packages/ui-core"
   }
 }

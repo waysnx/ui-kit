@@ -14,7 +14,7 @@ Base UI primitives — 25+ components including Input, Button, Select, DatePicke
 
 ## Package info
 
-- **npm:** `@waysnx/ui-core` v1.0.0
+- **npm:** `@waysnx/ui-core` v1.0.1
 - **Peer deps:** `react >=18`, `react-dom >=18`, `react-datepicker ^8.0.0`
 - **CSS (required):** `import '@waysnx/ui-core/dist/index.css'`
 - **Also import:** `import 'react-datepicker/dist/react-datepicker.css'` (for DatePicker)

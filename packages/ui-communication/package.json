@@ -1,6 +1,6 @@
 {
   "name": "@waysnx/ui-communication",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Enterprise-grade communication components from WaysNX - messaging, threads, presence, reactions, mentions, and realtime collaboration",
   "type": "module",
   "main": "dist/index.cjs",
@@ -46,5 +46,5 @@
     }
   },
   "sideEffects": ["*.css"],
-  "repository": { "type": "git", "url": "https://github.com/waysnx/waysnx-ui-kit", "directory": "packages/ui-communication" }
+  "repository": { "type": "git", "url": "https://github.com/waysnx/ui-kit", "directory": "packages/ui-communication" }
 }

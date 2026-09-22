@@ -1,5 +1,7 @@
 # @waysnx/ui-feedback
 
+> 🤖 **AI agents & LLMs:** See **LLM.md** (shipped with this package) for a structured integration guide — alerts, notifications, toasts, and user feedback components.
+
 Feedback and overlay components from WaysNX — Modal, Toast, Drawer, Tooltip, Skeleton, Progress, Badge, and more.
 
 ## Installation

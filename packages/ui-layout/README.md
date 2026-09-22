@@ -1,5 +1,7 @@
 # @waysnx/ui-layout
 
+> 🤖 **AI agents & LLMs:** See **LLM.md** (shipped with this package) for a structured integration guide — layout components and responsive utilities.
+
 Comprehensive layout components from WaysNX — page structure, layout utilities, and content organization.
 
 ## Installation

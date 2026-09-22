@@ -69,7 +69,7 @@ properties:
 - Previously-flagged package gaps are now **resolved in the catalog**: `Modal`
   and `Tooltip` are under `@waysnx/ui-feedback`, and `Tabs` under
   `@waysnx/ui-layout`.
-- `uiKit.repository` (`waysnx-tech/waysnx-ui-kit`) is **transfer-dependent** and
+- `uiKit.repository` (`waysnx/ui-kit`) is **transfer-dependent** and
   is left as supplied (data, not a hard-coded source URL).
 - `wdgWillBeUsedLaterForCatalogGenerationOrValidation: true` records the intent
   to use WDG for future catalog generation/validation — still with **no runtime

@@ -12,7 +12,7 @@ Shared i18n provider for all WaysNX UI Kit packages. Wrap your app with `Transla
 
 ## Package info
 
-- **npm:** `@waysnx/ui-i18n` v1.0.0 (companion package — NOT in `@waysnx/ui-kit` meta, but re-exported by `@waysnx/ui-core`)
+- **npm:** `@waysnx/ui-i18n` v1.0.1 (companion package — NOT in `@waysnx/ui-kit` meta, but re-exported by `@waysnx/ui-core`)
 - **Install:** `npm install @waysnx/ui-i18n` (or get it via `@waysnx/ui-core` / `@waysnx/ui-kit`)
 - **Peer deps:** `react >=18`
 - **CSS:** None (this package ships no CSS)

@@ -12,7 +12,7 @@ Provider-agnostic maps and location UI shells. Provides address search, map view
 
 ## Package info
 
-- **npm:** `@waysnx/ui-maps` v1.0.0 (companion package — NOT in `@waysnx/ui-kit` meta)
+- **npm:** `@waysnx/ui-maps` v1.0.1 (companion package — NOT in `@waysnx/ui-kit` meta)
 - **Install:** `npm install @waysnx/ui-maps`
 - **Peer deps:** `react >=18`, `react-dom >=18`
 - **CSS (required):** `import '@waysnx/ui-maps/dist/index.css'`

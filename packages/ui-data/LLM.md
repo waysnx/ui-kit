@@ -12,7 +12,7 @@ Data editing and viewing components — JSON editor, XML viewer, code editor/vie
 
 ## Package info
 
-- **npm:** `@waysnx/ui-data` v1.0.0 (companion package — NOT in `@waysnx/ui-kit` meta)
+- **npm:** `@waysnx/ui-data` v1.0.1 (companion package — NOT in `@waysnx/ui-kit` meta)
 - **Install:** `npm install @waysnx/ui-data`
 - **Peer deps:** `react >=18`, `react-dom >=18`
 - **CSS (required):** `import '@waysnx/ui-data/dist/index.css'`

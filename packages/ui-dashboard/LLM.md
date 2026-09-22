@@ -12,7 +12,7 @@ Chart-agnostic dashboard framework. Provides widget containers, KPI/metric cards
 
 ## Package info
 
-- **npm:** `@waysnx/ui-dashboard` v1.0.0 (companion package — NOT included in `@waysnx/ui-kit` meta)
+- **npm:** `@waysnx/ui-dashboard` v1.0.1 (companion package — NOT included in `@waysnx/ui-kit` meta)
 - **Install:** `npm install @waysnx/ui-dashboard`
 - **Peer deps:** `react >=18`, `react-dom >=18`
 - **CSS (required):** `import '@waysnx/ui-dashboard/dist/index.css'`

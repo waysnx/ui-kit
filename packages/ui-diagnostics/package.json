@@ -1,6 +1,6 @@
 {
   "name": "@waysnx/ui-diagnostics",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Framework-agnostic client-side runtime diagnostics, UI error observability, and form diagnostics for the WaysNX UI Kit",
   "type": "module",
   "main": "dist/index.cjs",
@@ -62,7 +62,7 @@
   "sideEffects": false,
   "repository": {
     "type": "git",
-    "url": "https://github.com/waysnx/waysnx-ui-kit",
+    "url": "https://github.com/waysnx/ui-kit",
     "directory": "packages/ui-diagnostics"
   }
 }

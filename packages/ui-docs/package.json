@@ -1,6 +1,6 @@
 {
   "name": "@waysnx/ui-docs",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Enterprise-grade documentation framework for rendering documentation entirely from structured metadata — JSON driven, component based, and completely generic",
   "type": "module",
   "main": "dist/index.cjs",
@@ -44,5 +44,5 @@
     }
   },
   "sideEffects": false,
-  "repository": { "type": "git", "url": "https://github.com/waysnx/waysnx-ui-kit", "directory": "packages/ui-docs" }
+  "repository": { "type": "git", "url": "https://github.com/waysnx/ui-kit", "directory": "packages/ui-docs" }
 }
