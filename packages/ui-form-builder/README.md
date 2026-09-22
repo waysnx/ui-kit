@@ -1,5 +1,7 @@
 # @waysnx/ui-form-builder
 
+> 🤖 **AI agents & LLMs:** See **LLM.md** (shipped with this package) for a structured integration guide — DynamicForm, JSON Schema to form, conditional logic, and form arrays.
+
 Schema-driven form builder from WaysNX — renders forms from JSON Schema using `@waysnx/ui-core` components.
 
 ## Installation

@@ -1,5 +1,7 @@
 # @waysnx/ui-kit
 
+> 🤖 **AI agents & LLMs:** See **LLM.md** (shipped with this package) for a structured integration guide — meta-package that installs all WaysNX UI libraries.
+
 The aggregate WaysNX UI Kit package — install the primary libraries through one dependency.
 
 ## Installation

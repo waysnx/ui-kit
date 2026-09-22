@@ -43,11 +43,11 @@ npm install @waysnx/ui-kit react-datepicker @tanstack/react-table
 These are **not** included in the meta-package. Each peer-depends on some of the core packages above.
 
 ```bash
-npm install @waysnx/ui-navigation      # v1.0.0  menus, sidebar, breadcrumbs, command palette
-npm install @waysnx/ui-dashboard       # v1.0.0  chart-agnostic dashboard framework
-npm install @waysnx/ui-security        # v1.0.0  auth, MFA, sessions, authorization gates
-npm install @waysnx/ui-accessibility   # v1.0.0  accessibility control center
-npm install @waysnx/ui-i18n            # v1.0.0  translations (no CSS)
+npm install @waysnx/ui-navigation      # v1.0.1  menus, sidebar, breadcrumbs, command palette
+npm install @waysnx/ui-dashboard       # v1.0.1  chart-agnostic dashboard framework
+npm install @waysnx/ui-security        # v1.0.1  auth, MFA, sessions, authorization gates
+npm install @waysnx/ui-accessibility   # v1.0.1  accessibility control center
+npm install @waysnx/ui-i18n            # v1.0.1  translations (no CSS)
 ```
 
 ---
@@ -112,7 +112,7 @@ import { Grid as DataGrid } from '@waysnx/ui-grid-builder';
 
 ## 5. Package export reference
 
-### 5.1 `@waysnx/ui-core` (v1.0.0)
+### 5.1 `@waysnx/ui-core` (v1.0.1)
 **Peer:** `react`, `react-dom`, `react-datepicker ^8`. **CSS:** `@waysnx/ui-core/dist/index.css`.
 
 Each component ships alongside a `<Name>Props` type. Some also export option types.
@@ -128,7 +128,7 @@ Key props:
 - **FileUpload:** `label?`, `accept?`, `multiple?`, `maxSize?` (bytes), `onChange?(files: File[] | string[])`, `onError?(error)`, `hint?`, `error?`, `disabled?`, `id?`, `className?`, `format?` (`'blob' | 'binary'`), `showPreview?`, `autoUpload?`, `browseButtonText?`, `uploadedFiles?: {name; url}[]`, `onUpload?(files)`, `onDelete?(file)`, `uploadStatus?` (`'idle' | 'uploading' | 'success' | 'error'`), `uploadProgress?` (0-100), `showLastModified?`, `testId?`.
 - **DatePicker:** `value?: Date | null`, `onChange?(date: Date | null)`, plus `label`/format options.
 
-### 5.2 `@waysnx/ui-form-builder` (v1.0.0)
+### 5.2 `@waysnx/ui-form-builder` (v1.0.1)
 **Peer:** `@waysnx/ui-core`, `react`, `react-dom`. **CSS:** `@waysnx/ui-form-builder/dist/index.css`.
 
 **Components:** `DynamicForm` (+`DynamicFormProps`), `FormArray` (+`FormArrayProps`).
@@ -137,14 +137,14 @@ Key props:
 
 **DynamicForm props:** `schema?` (`JSONSchema | string`), `formLayout?` (`FormLayout | string`), `formLayoutId?` (string — loads schema+layout from the WaysNX API `https://api.apiformbuilder.com/pageLayouts/layout/{formLayoutId}`), `formData?`, `formClass?`, `isFormReadonly?`, `onSubmit?(data)`, `onBtnClick?(buttonName)`, `onFieldChange?(name, value, formData)`, `onFormReady?({ getData, reset, validate })`.
 
-### 5.3 `@waysnx/ui-layout` (v1.0.0)
+### 5.3 `@waysnx/ui-layout` (v1.0.1)
 **Peer:** `react`. **CSS:** `@waysnx/ui-layout/dist/index.css`.
 
 **Components (+`Props`):** `PageLayout`, `PageHeader`, `PageContent`, `SidebarLayout`, `Container`, `Section`, `Grid`, `Row`, `Column`, `Stack`, `Divider`, `Spacer`, `Card`, `Panel`, `Tabs` (+`TabList`, `Tab`, `TabPanels`, `TabPanel`), `Accordion` (+`AccordionItem`), `Collapsible`, `Breadcrumb` (+`BreadcrumbItem`), `Stepper` (+`StepItem`), `PageTabs` (+`PageTab`), `SplitLayout`, `Wizard` (+`WizardStep`).
 
 Sample props: `Container{ maxWidth?: 'sm'|'md'|'lg'|'xl'|'full' }`, `Grid{ columns?: number | string }`, `Stack{ direction?: 'vertical'|'horizontal' }`, `Card{ title?, className?, testId? }`, `Stepper{ steps: StepItem[]; currentStep }`.
 
-### 5.4 `@waysnx/ui-feedback` (v1.0.0)
+### 5.4 `@waysnx/ui-feedback` (v1.0.1)
 **Peer:** `react`. **CSS:** `@waysnx/ui-feedback/dist/index.css`.
 
 **Components (+`Props`):** `Modal`, `ConfirmDialog`, `Toast`, `Tooltip`, `Drawer`, `Skeleton`, `Progress`, `CircularProgress`, `Badge`, `Alert`, `Spinner`, `EmptyState`.
@@ -152,7 +152,7 @@ Sample props: `Container{ maxWidth?: 'sm'|'md'|'lg'|'xl'|'full' }`, `Grid{ colum
 
 Key props: `Modal{ open (required), onClose (required), ... }`, `Drawer{ open (required), onClose (required), ... }`, `ConfirmDialog{ open, title?, ... }`, `ToastProvider{ position?, ... }`.
 
-### 5.5 `@waysnx/ui-grid-builder` (v1.0.0)
+### 5.5 `@waysnx/ui-grid-builder` (v1.0.1)
 **Peer:** `@tanstack/react-table ^8`, `react`, `react-dom`. **CSS:** `@waysnx/ui-grid-builder/dist/index.css`.
 
 **Component:** `Grid` (the data grid). **Function:** `schemaToGridConfig`.
@@ -164,7 +164,7 @@ Key props: `Modal{ open (required), onClose (required), ... }`, `Drawer{ open (r
 
 **GridAction:** `label`, `icon?`, `onClick(row)`, `variant?` (`'primary'|'secondary'|'destructive'|'ghost'`), `hidden?(row)`.
 
-### 5.6 `@waysnx/ui-navigation` (v1.0.0) — companion
+### 5.6 `@waysnx/ui-navigation` (v1.0.1) — companion
 **Peer:** `react`, `react-dom`. **CSS:** `@waysnx/ui-navigation/dist/index.css`.
 
 **Provider:** `NavigationProvider` (+`NavigationContextType`).
@@ -172,7 +172,7 @@ Key props: `Modal{ open (required), onClose (required), ... }`, `Drawer{ open (r
 **Hooks:** `useNavigation`, `useSidebar`, `useMenu`, `useTabs`, `useDrawer`, `useBreadcrumb`, `useWorkspace`, `useCommandPalette`.
 **Utils:** `createMenu`, `flattenMenu`, `findMenuItem`, `buildBreadcrumb`, `filterMenuByPermissions`, and related helpers.
 
-### 5.7 `@waysnx/ui-dashboard` (v1.0.0) — companion
+### 5.7 `@waysnx/ui-dashboard` (v1.0.1) — companion
 **Peer:** `react`, `react-dom`. **CSS:** `@waysnx/ui-dashboard/dist/index.css`.
 
 **Provider:** `DashboardProvider`, `DashboardContext`.
@@ -183,7 +183,7 @@ Key props: `Modal{ open (required), onClose (required), ... }`, `Drawer{ open (r
 
 > This dashboard framework is **chart-agnostic** — bring your own chart library and render it inside `ChartWidget`.
 
-### 5.8 `@waysnx/ui-security` (v1.0.0) — companion
+### 5.8 `@waysnx/ui-security` (v1.0.1) — companion
 **Peer:** `react`, `react-dom`. **Deps:** `@waysnx/ui-core`, `@waysnx/ui-feedback`, `@waysnx/ui-layout`, `@waysnx/ui-i18n`. **CSS:** `@waysnx/ui-security/dist/index.css`.
 
 **Providers/hooks:** `AuthenticationProvider`/`useAuthentication`, `SessionProvider`/`useSession`, `AuthorizationProvider`/`useAuthorization`, `MFAProvider`/`useMFA`; plus `useAuth`, `useIdleDetection`, `usePasswordValidation`, `useSecureStorage`, `useBiometricAuth`, `useOTP`.
@@ -205,12 +205,12 @@ Key props: `Modal{ open (required), onClose (required), ... }`, `Drawer{ open (r
 
 **Types:** `User`, `Session`, `Permission`, `Role`, `AuthorizationContext`, `AuditEvent`, `LoginCredentials`, `PasswordPolicy`, `SecurityPolicy`, `RiskScore`, and more.
 
-### 5.9 `@waysnx/ui-i18n` (v1.0.0) — companion
+### 5.9 `@waysnx/ui-i18n` (v1.0.1) — companion
 **Peer:** `react`. **No dependencies, no CSS.**
 
 **Exports:** `TranslationProvider`, `useTranslation`, `withTranslation`, `defaultMessages`; locale packs `esMessages`, `frMessages`, `arMessages`; types `TranslationMessages`, `TranslationConfig`, `AllMessages`, and per-package message types (`UICoreMessages`, `UIFormBuilderMessages`, etc.).
 
-### 5.10 `@waysnx/ui-accessibility` (v1.0.0) — companion
+### 5.10 `@waysnx/ui-accessibility` (v1.0.1) — companion
 **Peer:** `react`, `react-dom`. **CSS:** `@waysnx/ui-accessibility/dist/index.css`.
 
 **Context:** `AccessibilityProvider`, `AccessibilityContext`.
@@ -528,4 +528,4 @@ npm view @waysnx/ui-kit dependencies
 npm view @waysnx/ui-core version
 ```
 
-If a version listed here differs from what `npm view` reports, trust `npm view` — this document reflects the versions at the time of writing (meta v1.0.0).
+If a version listed here differs from what `npm view` reports, trust `npm view` — this document reflects the versions at the time of writing (meta v1.0.1).

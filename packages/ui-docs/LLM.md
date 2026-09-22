@@ -12,7 +12,7 @@ Metadata-driven documentation framework. Feed it structured JSON artifacts (comp
 
 ## Package info
 
-- **npm:** `@waysnx/ui-docs` v1.0.0 (companion package — NOT in `@waysnx/ui-kit` meta)
+- **npm:** `@waysnx/ui-docs` v1.0.1 (companion package — NOT in `@waysnx/ui-kit` meta)
 - **Install:** `npm install @waysnx/ui-docs`
 - **Peer deps:** `react >=18`, `react-dom >=18`
 - **Deps:** `prismjs`, `react-markdown`, `react-syntax-highlighter`

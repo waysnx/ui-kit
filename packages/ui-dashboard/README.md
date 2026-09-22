@@ -1,5 +1,7 @@
 # @waysnx/ui-dashboard
 
+> 🤖 **AI agents & LLMs:** See **LLM.md** (shipped with this package) for a structured integration guide — widgets, KPI cards, chart-agnostic layout, and persistence utilities.
+
 Enterprise-grade dashboard framework from WaysNX — widgets, layout system, and dashboard infrastructure without opinion on chart libraries.
 
 ## Installation

@@ -12,7 +12,7 @@ File and document viewing — PDF viewer with pagination/zoom and smart document
 
 ## Package info
 
-- **npm:** `@waysnx/ui-files` v1.0.0 (companion package — NOT in `@waysnx/ui-kit` meta)
+- **npm:** `@waysnx/ui-files` v1.0.1 (companion package — NOT in `@waysnx/ui-kit` meta)
 - **Install:** `npm install @waysnx/ui-files`
 - **Peer deps:** `react >=18`, `react-dom >=18`
 - **CSS (required):** `import '@waysnx/ui-files/dist/index.css'`

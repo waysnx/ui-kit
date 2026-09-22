@@ -3,11 +3,11 @@
 /**
  * WaysNX UI Kit Package Metadata Validation
  *
- * Release-critical validation for Phase 1 (1.0.0 release gate).
+ * Release-critical validation for Phase 1 (1.0.1 release gate).
  *
  * Validates:
  * - Exactly 19 publishable packages are present
- * - All packages are version 1.0.0 (1.0 release gate requirement)
+ * - All packages are version 1.0.1 (1.0 release gate requirement)
  * - No publishable package is marked private
  * - Package names follow @waysnx/* convention
  * - package.json files are valid JSON
@@ -85,11 +85,11 @@ function getPackageDir(pkgName) {
 function validatePackageJson(pkg, pkgName, dir) {
   log(`\n  Validating ${pkgName}...`);
 
-  // Check version is 1.0.0 (1.0 release gate requirement)
-  if (pkg.version !== '1.0.0') {
-    error(`    ${pkgName}: version is ${pkg.version}, expected 1.0.0 (1.0 release gate)`);
+  // Check version is 1.0.1 (1.0 release gate requirement)
+  if (pkg.version !== '1.0.1') {
+    error(`    ${pkgName}: version is ${pkg.version}, expected 1.0.1 (1.0 release gate)`);
   } else {
-    success(`    version: 1.0.0 (1.0 release gate)`);
+    success(`    version: 1.0.1 (1.0 release gate)`);
   }
 
   // Check not marked private
@@ -134,7 +134,7 @@ function validatePackageJson(pkg, pkgName, dir) {
 
 // Main validation
 log('=== Package Metadata Validation ===');
-log(`\nExpected: ${PUBLISHABLE_PACKAGES.size} publishable packages at version 1.0.0`);
+log(`\nExpected: ${PUBLISHABLE_PACKAGES.size} publishable packages at version 1.0.1`);
 log(`Validating...\n`);
 
 let foundCount = 0;
@@ -166,7 +166,7 @@ if (foundCount !== PUBLISHABLE_PACKAGES.size) {
 }
 
 if (exitCode === 0) {
-  success(`All ${PUBLISHABLE_PACKAGES.size} packages valid for 1.0.0 release`);
+  success(`All ${PUBLISHABLE_PACKAGES.size} packages valid for 1.0.1 release`);
 } else {
   log('\n⚠ Package validation failed');
 }

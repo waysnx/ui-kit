@@ -1,5 +1,7 @@
 # @waysnx/ui-maps
 
+> 🤖 **AI agents & LLMs:** See **LLM.md** (shipped with this package) for a structured integration guide — map components and geolocation utilities.
+
 Maps and location components from WaysNX — address search, map views, route planning, and geolocation.
 
 ## Installation

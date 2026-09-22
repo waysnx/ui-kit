@@ -1,6 +1,6 @@
 {
   "name": "@waysnx/ui-grid-builder",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Data grid component from WaysNX - sortable, filterable, paginated grid with column types and actions",
   "type": "module",
   "main": "dist/index.cjs",
@@ -43,5 +43,5 @@
     }
   },
   "sideEffects": ["*.css"],
-  "repository": { "type": "git", "url": "https://github.com/waysnx/waysnx-ui-kit", "directory": "packages/ui-grid-builder" }
+  "repository": { "type": "git", "url": "https://github.com/waysnx/ui-kit", "directory": "packages/ui-grid-builder" }
 }

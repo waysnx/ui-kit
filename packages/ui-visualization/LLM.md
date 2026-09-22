@@ -12,7 +12,7 @@ High-performance visualization engine for org charts, trees, and hierarchies. Su
 
 ## Package info
 
-- **npm:** `@waysnx/ui-visualization` v1.0.0 (companion package — NOT in `@waysnx/ui-kit` meta)
+- **npm:** `@waysnx/ui-visualization` v1.0.1 (companion package — NOT in `@waysnx/ui-kit` meta)
 - **Install:** `npm install @waysnx/ui-visualization`
 - **Peer deps:** `react >=18`, `react-dom >=18`
 - **CSS (required):** `import '@waysnx/ui-visualization/dist/index.css'`

@@ -12,7 +12,7 @@ Enterprise navigation framework — menus, sidebars, breadcrumbs, command palett
 
 ## Package info
 
-- **npm:** `@waysnx/ui-navigation` v1.0.0 (companion package — NOT included in `@waysnx/ui-kit` meta)
+- **npm:** `@waysnx/ui-navigation` v1.0.1 (companion package — NOT included in `@waysnx/ui-kit` meta)
 - **Install:** `npm install @waysnx/ui-navigation`
 - **Peer deps:** `react >=18`, `react-dom >=18`
 - **CSS (required):** `import '@waysnx/ui-navigation/dist/index.css'`

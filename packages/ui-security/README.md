@@ -1,5 +1,7 @@
 # @waysnx/ui-security
 
+> 🤖 **AI agents & LLMs:** See **LLM.md** (shipped with this package) for a structured integration guide — authentication, authorization, and security utilities.
+
 Enterprise-grade security components from WaysNX — authentication, authorization, MFA, secure inputs, and session management.
 
 ## Installation

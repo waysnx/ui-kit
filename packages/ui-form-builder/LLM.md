@@ -17,7 +17,7 @@ When building ANY form in an application that uses this library, you MUST:
 
 ## Package info
 
-- **npm:** `@waysnx/ui-form-builder` v1.0.0
+- **npm:** `@waysnx/ui-form-builder` v1.0.1
 - **Peer deps:** `@waysnx/ui-core >=1.0.0`, `react >=18`, `react-dom >=18`
 - **CSS (required):**
   ```ts

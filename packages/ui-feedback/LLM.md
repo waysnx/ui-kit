@@ -12,7 +12,7 @@ Overlay and feedback components — Modal, Toast, Drawer, Tooltip, Badge, Skelet
 
 ## Package info
 
-- **npm:** `@waysnx/ui-feedback` v1.0.0
+- **npm:** `@waysnx/ui-feedback` v1.0.1
 - **Peer deps:** `react >=18`
 - **CSS (required):** `import '@waysnx/ui-feedback/dist/index.css'`
 

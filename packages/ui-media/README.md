@@ -1,5 +1,7 @@
 # @waysnx/ui-media
 
+> 🤖 **AI agents & LLMs:** See **LLM.md** (shipped with this package) for a structured integration guide — image, video, and media components.
+
 Media and visual components from WaysNX — QR/barcode, signatures, image/video/audio, OCR, and color picker.
 
 ## Installation

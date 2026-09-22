@@ -1,5 +1,7 @@
 # @waysnx/ui-navigation
 
+> 🤖 **AI agents & LLMs:** See **LLM.md** (shipped with this package) for a structured integration guide — navigation components (menus, breadcrumbs, tabs).
+
 Enterprise-grade navigation framework from WaysNX — menus, sidebars, breadcrumbs, and advanced navigation patterns.
 
 ## Installation

@@ -1,5 +1,7 @@
 # @waysnx/ui-visualization
 
+> 🤖 **AI agents & LLMs:** See **LLM.md** (shipped with this package) for a structured integration guide — charts, graphs, and data visualization components.
+
 Enterprise-grade visualization components for React — OrgChart, Tree, Hierarchy, and more.
 
 ## Installation

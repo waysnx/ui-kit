@@ -1,5 +1,7 @@
 # @waysnx/ui-diagnostics
 
+> 🤖 **AI agents & LLMs:** See **LLM.md** (shipped with this package) for a structured integration guide — runtime diagnostics, error capture, classification, and reporting.
+
 ## Purpose
 Framework-agnostic client-side runtime diagnostics, UI error observability, and
 form diagnostics for applications built with the WaysNX UI Kit.

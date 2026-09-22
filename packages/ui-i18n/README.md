@@ -1,5 +1,7 @@
 # @waysnx/ui-i18n
 
+> 🤖 **AI agents & LLMs:** See **LLM.md** (shipped with this package) for a structured integration guide — TranslationProvider and locale management.
+
 Internationalization (i18n) provider for WaysNX UI Kit — shared translation context across all packages.
 
 ## Installation

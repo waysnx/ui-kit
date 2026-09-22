@@ -1,5 +1,7 @@
 # @waysnx/ui-files
 
+> 🤖 **AI agents & LLMs:** See **LLM.md** (shipped with this package) for a structured integration guide — file management components and utilities.
+
 File and document viewing components from WaysNX — PDF viewer and document preview.
 
 ## Installation

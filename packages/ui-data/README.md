@@ -1,5 +1,7 @@
 # @waysnx/ui-data
 
+> 🤖 **AI agents & LLMs:** See **LLM.md** (shipped with this package) for a structured integration guide — JSON, XML, code, and markdown editors/viewers.
+
 Data editing and viewing components from WaysNX — JSON, XML, code, and markdown editors and viewers.
 
 ## Installation
