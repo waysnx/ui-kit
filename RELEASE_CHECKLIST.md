@@ -9,13 +9,14 @@ Status: Release Candidate
 - [x] CSS/design tokens validated
 
 ## Documentation
-- [x] Generated documentation (WDG) integration in place
+- [x] Existing generated documentation (WDG output) included
 - [x] WDG P0.6 — PASS
 - [x] WDG P0.7 — props-resolution issue documented/deferred to future backlog
 - [x] WDG P0.8 — PASS
 - [x] WDG P0.9 — PASS
 - [x] Primary package READMEs complete
 - [x] LLM.md AI agent guides added to all 19 packages
+- [ ] WDG local integration/regeneration intentionally deferred to future backlog
 
 ## Quality & Validation
 - [x] Storybook production build passes

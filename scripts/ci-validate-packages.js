@@ -85,11 +85,11 @@ function getPackageDir(pkgName) {
 function validatePackageJson(pkg, pkgName, dir) {
   log(`\n  Validating ${pkgName}...`);
 
-  // Check version is 1.0.1 (1.0 release gate requirement)
+  // Check version is 1.0.1 (release gate requirement)
   if (pkg.version !== '1.0.1') {
-    error(`    ${pkgName}: version is ${pkg.version}, expected 1.0.1 (1.0 release gate)`);
+    error(`    ${pkgName}: version is ${pkg.version}, expected 1.0.1 (release gate)`);
   } else {
-    success(`    version: 1.0.1 (1.0 release gate)`);
+    success(`    version: 1.0.1 (release gate)`);
   }
 
   // Check not marked private
