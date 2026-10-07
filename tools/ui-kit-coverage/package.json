@@ -1,11 +1,19 @@
 {
   "name": "@waysnx/ui-kit-coverage",
   "version": "0.1.0",
-  "private": true,
   "description": "Deterministic, read-only analyzer that reports how much of a React/TypeScript application uses the WaysNX UI Kit — adoption, utilization, native/custom UI, and replacement candidates. No AI, no network.",
   "type": "module",
   "license": "Apache-2.0",
   "author": "WaysNX Technologies",
+  "homepage": "https://github.com/waysnx/ui-kit#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/waysnx/ui-kit.git",
+    "directory": "tools/ui-kit-coverage"
+  },
+  "bugs": {
+    "url": "https://github.com/waysnx/ui-kit/issues"
+  },
   "keywords": [
     "waysnx",
     "ui-kit",
@@ -16,6 +24,9 @@
     "react",
     "cli"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "bin": {
     "ui-kit-coverage": "dist/cli/index.js"
   },
