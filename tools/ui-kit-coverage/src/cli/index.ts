@@ -15,6 +15,7 @@ import { analyze } from "../analyze.js";
 import { resolveConfig } from "./config.js";
 import { writeJsonReport } from "../reports/json/index.js";
 import { writeMarkdownReport } from "../reports/markdown/index.js";
+import { writeHtmlReport } from "../reports/html/index.js";
 import { evaluatePolicy } from "../policy/index.js";
 import type { CliOptions, OutputFormat, PolicyConfig } from "../types/index.js";
 
@@ -24,16 +25,16 @@ const EXIT_ERROR = 2;
 // `check` policy failure (M6).
 const EXIT_POLICY = 3;
 
-const USAGE = `ui-kit-coverage — WaysNX UI Kit adoption analyzer (v0.1)
+const USAGE = `ui-kit-coverage — WaysNX UI Kit adoption analyzer (v0.2)
 
 Usage:
   ui-kit-coverage analyze <path> [options]
-  ui-kit-coverage report  <path> [options] [--format json|markdown|all]
+  ui-kit-coverage report  <path> [options] [--format json|markdown|html|all]
   ui-kit-coverage check   <path> [options] [threshold flags]
 
 Options:
   --output <directory>   Output directory (default: <path>/ui-kit-coverage)
-  --format <fmt>         report/check: json | markdown | all (default: all for report)
+  --format <fmt>         report/check: json | markdown | html | all (default: all for report)
   --include <glob>       Include glob (repeatable)
   --exclude <glob>       Exclude glob (repeatable)
   --config <path>        Path to a config file (overrides auto-discovery)
@@ -52,12 +53,13 @@ Notes:
   - Read-only: never modifies the target project.
   - No network, no GitHub integration, no AI, no WDG.
   - 'analyze' writes coverage.json. 'report' additionally renders a
-    deterministic coverage.md. 'check' evaluates opt-in CI policy thresholds
-    and exits 3 on a policy failure (exits 0 when no thresholds are set).
+    deterministic coverage.md and/or coverage.html. 'check' evaluates opt-in 
+    CI policy thresholds and exits 3 on a policy failure (exits 0 when no 
+    thresholds are set).
 `;
 
 function isFormat(v: string | undefined): v is OutputFormat {
-  return v === "json" || v === "markdown" || v === "all";
+  return v === "json" || v === "markdown" || v === "html" || v === "all";
 }
 
 function parsePolicyFlags(values: {
@@ -167,7 +169,7 @@ async function runReport(argv: string[]): Promise<number> {
   }
 
   if (values.format !== undefined && !isFormat(values.format)) {
-    process.stderr.write(`error: invalid --format '${values.format}' (expected json|markdown|all)\n`);
+    process.stderr.write(`error: invalid --format '${values.format}' (expected json|markdown|html|all)\n`);
     return EXIT_USAGE;
   }
   const format: OutputFormat = isFormat(values.format) ? values.format : "all";
@@ -191,6 +193,9 @@ async function runReport(argv: string[]): Promise<number> {
   if (format === "markdown" || format === "all") {
     // No timestamp injected → deterministic output.
     wrote.push(await writeMarkdownReport(config.output, report));
+  }
+  if (format === "html" || format === "all") {
+    wrote.push(await writeHtmlReport(config.output, report));
   }
 
   process.stdout.write(
@@ -235,7 +240,7 @@ async function runCheck(argv: string[]): Promise<number> {
     return EXIT_USAGE;
   }
   if (values.format !== undefined && !isFormat(values.format)) {
-    process.stderr.write(`error: invalid --format '${values.format}' (expected json|markdown|all)\n`);
+    process.stderr.write(`error: invalid --format '${values.format}' (expected json|markdown|html|all)\n`);
     return EXIT_USAGE;
   }
 
@@ -257,6 +262,7 @@ async function runCheck(argv: string[]): Promise<number> {
     const format = values.format as OutputFormat;
     if (format === "json" || format === "all") await writeJsonReport(config.output, report);
     if (format === "markdown" || format === "all") await writeMarkdownReport(config.output, report);
+    if (format === "html" || format === "all") await writeHtmlReport(config.output, report);
   }
 
   const result = evaluatePolicy(report, config.policy);
