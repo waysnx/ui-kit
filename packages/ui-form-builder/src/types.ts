@@ -190,9 +190,9 @@ export interface LayoutSettings {
   cssClass?: string;
   fieldGroup?: string;
   infoText?: string;
-  buttonsPosition?: 'top' | 'bottom';
-  buttonsAlignment?: 'text-left' | 'text-right' | 'text-center';
-  buttons?: LayoutButton[];
+  buttonsPosition: 'top' | 'bottom';
+  buttonsAlignment: 'text-left' | 'text-right' | 'text-center';
+  buttons: LayoutButton[];
 }
 
 export interface FormLayout {
@@ -200,3 +200,10 @@ export interface FormLayout {
   settings: LayoutSettings;
   childForms?: Record<string, any>;
 }
+
+/** Default settings for FormLayout - use this to ensure all required properties are set */
+export const DEFAULT_LAYOUT_SETTINGS: LayoutSettings = {
+  buttonsPosition: 'bottom',
+  buttonsAlignment: 'text-right',
+  buttons: [],
+};

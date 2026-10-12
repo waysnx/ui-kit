@@ -4,11 +4,13 @@ import type {
   JSONSchema,
   JSONSchemaProperty,
   FormLayout,
+  LayoutSettings,
   GridRow,
   GridCell,
   CellSettings,
   FormFieldConfig,
 } from './types';
+import { DEFAULT_LAYOUT_SETTINGS } from './types';
 import { resolveField } from './DynamicField';
 import { shouldShowField, shouldDisableField, shouldRequireField } from './conditionalLogic';
 import { FORM_BUILDER_API_URL } from './config';
@@ -280,10 +282,20 @@ function DynamicFormInner({
     () => (typeof schemaProp === 'string' ? JSON.parse(schemaProp) : schemaProp),
     [schemaProp],
   );
-  const layout: FormLayout = useMemo(
+  const parsedLayout: FormLayout = useMemo(
     () => (typeof layoutProp === 'string' ? JSON.parse(layoutProp) : layoutProp),
     [layoutProp],
   );
+  
+  // Merge user-provided settings with defaults to ensure all required properties exist.
+  // This prevents crashes when AI agents or users omit buttonsPosition, buttonsAlignment, or buttons.
+  const layout: FormLayout = useMemo(() => ({
+    ...parsedLayout,
+    settings: {
+      ...DEFAULT_LAYOUT_SETTINGS,
+      ...parsedLayout.settings,
+    },
+  }), [parsedLayout]);
 
   const [formData, setFormData] = useState<Record<string, any>>(
     () => initialData || createInitialData(schema),
@@ -516,16 +528,22 @@ function DynamicFormInner({
   };
 
   const renderLayout = (l: FormLayout, isNested = false) => {
+    // Ensure nested layouts also have default settings
+    const layoutWithDefaults = {
+      ...l,
+      settings: { ...DEFAULT_LAYOUT_SETTINGS, ...l.settings },
+    };
+    
     const content = (
       <>
-        {l.settings?.infoText && <DismissibleInfo text={l.settings.infoText} dismissLabel={t('formBuilder.dismissInfo')} />}
-        {l.rows.map((row, ri) => renderRow(row, ri))}
+        {layoutWithDefaults.settings.infoText && <DismissibleInfo text={layoutWithDefaults.settings.infoText} dismissLabel={t('formBuilder.dismissInfo')} />}
+        {layoutWithDefaults.rows.map((row, ri) => renderRow(row, ri))}
       </>
     );
-    if (isNested && l.settings?.fieldGroup) {
+    if (isNested && layoutWithDefaults.settings.fieldGroup) {
       return (
-        <fieldset className={`wx-df-fieldset ${l.settings.cssClass || ''}`}>
-          <legend className="wx-df-legend">{l.settings.fieldGroup}</legend>
+        <fieldset className={`wx-df-fieldset ${layoutWithDefaults.settings.cssClass || ''}`}>
+          <legend className="wx-df-legend">{layoutWithDefaults.settings.fieldGroup}</legend>
           {content}
         </fieldset>
       );

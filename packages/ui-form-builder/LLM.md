@@ -17,7 +17,7 @@ When building ANY form in an application that uses this library, you MUST:
 
 ## Package info
 
-- **npm:** `@waysnx/ui-form-builder` v1.0.1
+- **npm:** `@waysnx/ui-form-builder` v1.0.2
 - **Peer deps:** `@waysnx/ui-core >=1.0.0`, `react >=18`, `react-dom >=18`
 - **CSS (required):**
   ```ts
@@ -32,9 +32,64 @@ When building ANY form in an application that uses this library, you MUST:
 
 **Components:** `DynamicForm` (+`DynamicFormProps`), `FormArray` (+`FormArrayProps`)
 
+**Constants:** `DEFAULT_LAYOUT_SETTINGS` — default values for `FormLayout.settings` (`buttonsPosition: 'bottom'`, `buttonsAlignment: 'text-right'`, `buttons: []`)
+
 **Functions:** `schemaToFormFields`, `resolveField`, `evaluateCondition`, `evaluateConditions`, `shouldShowField`, `shouldDisableField`, `shouldRequireField`
 
 **Types:** `JSONSchema`, `JSONSchemaProperty`, `FormFieldConfig`, `ControlCondition`, `FormLayout`, `GridRow`, `GridCell`, `CellSettings`, `RowSettings`, `LayoutSettings`, `LayoutButton`
+
+---
+
+## DynamicForm — Minimal example
+
+The simplest working form requires only `schema`, `formLayout`, and an `onSubmit` handler. The `settings` object in `formLayout` is **required**, but you can use `DEFAULT_LAYOUT_SETTINGS` to get sensible defaults, then override specific properties as needed.
+
+```tsx
+import { DynamicForm, DEFAULT_LAYOUT_SETTINGS } from '@waysnx/ui-form-builder';
+import type { JSONSchema, FormLayout } from '@waysnx/ui-form-builder';
+
+const schema: JSONSchema = {
+  type: 'object',
+  properties: {
+    name:  { type: 'string', title: 'Name' },
+    email: { type: 'string', format: 'email', title: 'Email' },
+  },
+  required: ['name', 'email'],
+};
+
+const layout: FormLayout = {
+  rows: [
+    {
+      cells: [
+        { settings: { fieldName: 'name', controlType: 'input', inputType: 'text', 'x-col-size': 6, required: true } },
+        { settings: { fieldName: 'email', controlType: 'input', inputType: 'email', 'x-col-size': 6, required: true } },
+      ],
+    },
+  ],
+  // Use DEFAULT_LAYOUT_SETTINGS and override buttons
+  settings: {
+    ...DEFAULT_LAYOUT_SETTINGS,
+    buttons: [
+      { label: 'Submit', name: 'submit', type: 'submit', appearance: 'primary' },
+    ],
+  },
+};
+
+export function ContactForm() {
+  return (
+    <DynamicForm
+      schema={schema}
+      formLayout={layout}
+      onSubmit={(data) => console.log('Submitted:', data)}
+    />
+  );
+}
+```
+
+**DEFAULT_LAYOUT_SETTINGS** provides:
+- `buttonsPosition: 'bottom'`
+- `buttonsAlignment: 'text-right'`
+- `buttons: []`
 
 ---
 

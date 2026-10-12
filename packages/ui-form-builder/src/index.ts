@@ -1,4 +1,5 @@
 export type { JSONSchema, JSONSchemaProperty, FormFieldConfig, ControlCondition, FormLayout, GridRow, GridCell, CellSettings, RowSettings, LayoutSettings, LayoutButton } from './types';
+export { DEFAULT_LAYOUT_SETTINGS } from './types';
 export { resolveField } from './DynamicField';
 export { schemaToFormFields } from './SchemaRenderer';
 export { FormArray } from './FormArray';

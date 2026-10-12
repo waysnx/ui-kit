@@ -128,7 +128,7 @@ Key props:
 - **FileUpload:** `label?`, `accept?`, `multiple?`, `maxSize?` (bytes), `onChange?(files: File[] | string[])`, `onError?(error)`, `hint?`, `error?`, `disabled?`, `id?`, `className?`, `format?` (`'blob' | 'binary'`), `showPreview?`, `autoUpload?`, `browseButtonText?`, `uploadedFiles?: {name; url}[]`, `onUpload?(files)`, `onDelete?(file)`, `uploadStatus?` (`'idle' | 'uploading' | 'success' | 'error'`), `uploadProgress?` (0-100), `showLastModified?`, `testId?`.
 - **DatePicker:** `value?: Date | null`, `onChange?(date: Date | null)`, plus `label`/format options.
 
-### 5.2 `@waysnx/ui-form-builder` (v1.0.1)
+### 5.2 `@waysnx/ui-form-builder` (v1.0.2)
 **Peer:** `@waysnx/ui-core`, `react`, `react-dom`. **CSS:** `@waysnx/ui-form-builder/dist/index.css`.
 
 **Components:** `DynamicForm` (+`DynamicFormProps`), `FormArray` (+`FormArrayProps`).
