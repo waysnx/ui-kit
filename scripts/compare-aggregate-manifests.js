@@ -6,9 +6,8 @@
  * This confirms whether aggregate package dependency changes require publication.
  * 
  * Exit codes:
- *   0 - No differences (or no published version to compare)
- *   1 - Differences detected (expected when dependencies updated)
- *   2 - Execution error (npm fetch failed, pack failed, etc.)
+ *   0 - Comparison completed successfully (regardless of whether differences found)
+ *   1 - Execution error (npm fetch failed, pack failed, etc.)
  */
 
 const fs = require('fs');
@@ -49,7 +48,7 @@ try {
     publishedDeps = {};
   } else {
     console.error('Failed to fetch from npm:', error.message);
-    process.exit(2);
+    process.exit(1);
   }
 }
 
@@ -85,7 +84,7 @@ try {
   );
 } catch (error) {
   console.error('Failed to pack local:', error.message);
-  process.exit(2);
+  process.exit(1);
 }
 
 // Compare
@@ -124,13 +123,13 @@ if (hasDifferences) {
   console.log(`- npm install @waysnx/ui-kit@${baselineVersion} will get the old dependency versions`);
   console.log(`- Publishing ui-kit@${currentVersion} with updated dependencies is required`);
   console.log(`- Consumers can then upgrade to ui-kit@${currentVersion} to get the fix`);
-  // Exit 1 indicates difference detected (expected condition, not an error)
-  process.exit(1);
 } else {
   console.log('✓ No differences found.');
   console.log('Published and local manifests are identical.');
   if (Object.keys(publishedDeps).length === 0) {
     console.log('(No published version to compare against)');
   }
-  process.exit(0);
 }
+
+// Exit 0 for successful comparison (regardless of whether differences were found)
+process.exit(0);
