@@ -1,6 +1,6 @@
 {
   "name": "@waysnx/ui-kit",
-  "version": "1.0.2",
+  "version": "1.0.1",
   "description": "WaysNX UI Kit aggregate - a curated core set of five libraries (ui-core, ui-form-builder, ui-layout, ui-feedback, ui-grid-builder) in one install; other libraries install directly",
   "license": "Apache-2.0",
   "keywords": ["react", "ui", "components", "form-builder", "layout", "feedback", "waysnx"],
