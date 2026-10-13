@@ -46,6 +46,7 @@ const PUBLISHABLE_PACKAGES = new Set([
 // Expected versions for packages (allows different versions per package)
 const EXPECTED_VERSIONS = {
   '@waysnx/ui-form-builder': '1.0.2',  // Bug fix release
+  '@waysnx/ui-kit': '1.0.2',           // Aggregate updated to include form-builder fix
   // All others default to 1.0.1
 };
 

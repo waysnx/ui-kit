@@ -82,16 +82,62 @@ jobs:
       - name: Verify requested release tag against package versions
         run: |
           REQUESTED="${{ github.event.inputs.release_tag }}"
+          echo "=== Release Tag Validation ==="
           echo "Requested release tag: $REQUESTED"
-          echo "Note: Individual packages may have different versions (e.g., ui-form-builder@1.0.2)"
-          echo "The release tag should match the majority baseline version or be a meta-release tag."
           echo ""
-          echo "Current package versions:"
-          for pkg in packages/*/package.json; do
+          
+          # Release tag policy:
+          # - Tag must match the baseline version (currently 1.0.1) OR
+          # - Tag must match a specific updated package version (e.g., 1.0.2 for ui-form-builder) OR
+          # - Tag must be in format "baseline-with-updates" (e.g., "1.0.1-with-form-builder-1.0.2")
+          
+          # Collect actual package versions
+          VERSIONS=$(for pkg in packages/*/package.json; do
             NAME=$(node -p "require('./$pkg').name")
             VER=$(node -p "require('./$pkg').version")
-            echo "  $NAME: $VER"
+            echo "$NAME@$VER"
+          done)
+          
+          echo "Current package versions:"
+          echo "$VERSIONS"
+          echo ""
+          
+          # Check if release tag matches baseline (1.0.1) or any package version
+          BASELINE="1.0.1"
+          VALID_TAGS="$BASELINE"
+          
+          # Add each unique package version to valid tags
+          for pkg in packages/*/package.json; do
+            VER=$(node -p "require('./$pkg').version")
+            if [[ ! " $VALID_TAGS " =~ " $VER " ]]; then
+              VALID_TAGS="$VALID_TAGS $VER"
+            fi
           done
+          
+          echo "Valid release tags for this changeset:"
+          for tag in $VALID_TAGS; do
+            echo "  - $tag"
+          done
+          echo ""
+          
+          # Validate requested tag
+          if [[ " $VALID_TAGS " =~ " $REQUESTED " ]]; then
+            echo "✓ Release tag '$REQUESTED' is valid"
+            if [[ "$REQUESTED" == "$BASELINE" ]]; then
+              echo "  This is a baseline release - all packages at $BASELINE will be published"
+            else
+              echo "  This is a patch release - packages at $REQUESTED will be published"
+              echo "  Packages at other versions will also be published at their current versions"
+            fi
+          else
+            echo "✗ ERROR: Release tag '$REQUESTED' is not valid for this changeset"
+            echo ""
+            echo "The release tag must be one of the valid tags listed above."
+            echo "Current package versions show:"
+            echo "$VERSIONS" | grep -v "@$BASELINE$" | sed 's/^/  - Updated: /'
+            echo "$VERSIONS" | grep "@$BASELINE$" | sed 's/^/  - Baseline: /'
+            exit 1
+          fi
 
       - name: Scan for committed secrets and credentials
         run: bash scripts/ci-security-check.sh

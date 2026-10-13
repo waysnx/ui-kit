@@ -13,6 +13,7 @@
 - **Styling:** CSS custom properties with the `--wx-` prefix. CSS is **side-effect based** — you must import each package's compiled CSS once.
 - **Registry:** Public npm — `https://registry.npmjs.org/`
 - **License:** Apache-2.0
+- **Version:** 1.0.2
 
 > The scope `@waysnx` resolves to the public npm registry by default. No auth/token is required to install published versions.
 
@@ -26,7 +27,7 @@
 npm install @waysnx/ui-kit react-datepicker @tanstack/react-table
 ```
 
-`@waysnx/ui-kit@1.0.0` bundles:
+`@waysnx/ui-kit@1.0.2` bundles:
 
 | Bundled package | Version | npm name |
 |---|---|---|
