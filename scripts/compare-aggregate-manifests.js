@@ -35,11 +35,17 @@ const uiKitMetaDir = path.join(__dirname, '..', 'packages', 'ui-kit-meta');
 let localDeps;
 
 try {
+  // Read current version from package.json
+  const pkgPath = path.join(uiKitMetaDir, 'package.json');
+  const currentPkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
+  const currentVersion = currentPkg.version;
+  
   execSync('pnpm pack', { cwd: uiKitMetaDir, encoding: 'utf8' });
   
+  const tarballName = `waysnx-ui-kit-${currentVersion}.tgz`;
   const extractCmd = process.platform === 'win32'
-    ? 'tar -xOf waysnx-ui-kit-1.0.1.tgz package/package.json'
-    : 'tar -xOf waysnx-ui-kit-1.0.1.tgz package/package.json';
+    ? `tar -xOf ${tarballName} package/package.json`
+    : `tar -xOf ${tarballName} package/package.json`;
   
   const manifestJson = execSync(extractCmd, {
     cwd: uiKitMetaDir,
@@ -49,14 +55,14 @@ try {
   const manifest = JSON.parse(manifestJson);
   localDeps = manifest.dependencies || {};
   
-  console.log('Local packed @waysnx/ui-kit@1.0.1 dependencies:');
+  console.log(`Local packed @waysnx/ui-kit@${currentVersion} dependencies:`);
   for (const [name, version] of Object.entries(localDeps)) {
     console.log(`  ${name}: ${version}`);
   }
   
   // Clean up tarball
   execSync(
-    process.platform === 'win32' ? 'del waysnx-ui-kit-1.0.1.tgz' : 'rm waysnx-ui-kit-1.0.1.tgz',
+    process.platform === 'win32' ? `del ${tarballName}` : `rm ${tarballName}`,
     { cwd: uiKitMetaDir }
   );
 } catch (error) {
