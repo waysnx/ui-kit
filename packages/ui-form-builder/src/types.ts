@@ -190,9 +190,9 @@ export interface LayoutSettings {
   cssClass?: string;
   fieldGroup?: string;
   infoText?: string;
-  buttonsPosition: 'top' | 'bottom';
-  buttonsAlignment: 'text-left' | 'text-right' | 'text-center';
-  buttons: LayoutButton[];
+  buttonsPosition?: 'top' | 'bottom';
+  buttonsAlignment?: 'text-left' | 'text-right' | 'text-center';
+  buttons?: LayoutButton[];
 }
 
 export interface FormLayout {

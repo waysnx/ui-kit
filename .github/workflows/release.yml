@@ -87,9 +87,10 @@ jobs:
           echo ""
           
           # Release tag policy:
-          # - Tag must match the baseline version (currently 1.0.1) OR
-          # - Tag must match a specific updated package version (e.g., 1.0.2 for ui-form-builder) OR
-          # - Tag must be in format "baseline-with-updates" (e.g., "1.0.1-with-form-builder-1.0.2")
+          # Tag must match any actual package version in the workspace.
+          # Examples: "1.0.1" (baseline), "1.0.2" (patch update)
+          # The tag is used for release notes and changelog identification.
+          # Each package publishes at its own package.json version regardless of tag.
           
           # Collect actual package versions
           VERSIONS=$(for pkg in packages/*/package.json; do
