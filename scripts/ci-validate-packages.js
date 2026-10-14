@@ -3,11 +3,11 @@
 /**
  * WaysNX UI Kit Package Metadata Validation
  *
- * Release-critical validation for Phase 1 (1.0.1 release gate).
+ * Release-critical validation.
  *
  * Validates:
  * - Exactly 19 publishable packages are present
- * - All packages are version 1.0.1 (1.0 release gate requirement)
+ * - All packages follow semantic versioning (1.x.x format)
  * - No publishable package is marked private
  * - Package names follow @waysnx/* convention
  * - package.json files are valid JSON
@@ -42,6 +42,13 @@ const PUBLISHABLE_PACKAGES = new Set([
   '@waysnx/ui-security',
   '@waysnx/ui-visualization',
 ]);
+
+// Expected versions for packages (allows different versions per package)
+const EXPECTED_VERSIONS = {
+  '@waysnx/ui-form-builder': '1.0.2',  // Bug fix release
+  '@waysnx/ui-kit': '1.0.2',           // Aggregate updated to include form-builder fix
+  // All others default to 1.0.1
+};
 
 // Directory mappings: handle special case where @waysnx/ui-kit is in ui-kit-meta directory
 const PACKAGE_DIR_MAP = {
@@ -85,11 +92,21 @@ function getPackageDir(pkgName) {
 function validatePackageJson(pkg, pkgName, dir) {
   log(`\n  Validating ${pkgName}...`);
 
-  // Check version is 1.0.1 (release gate requirement)
-  if (pkg.version !== '1.0.1') {
-    error(`    ${pkgName}: version is ${pkg.version}, expected 1.0.1 (release gate)`);
+  // Get expected version for this package (default to 1.0.1)
+  const expectedVersion = EXPECTED_VERSIONS[pkgName] || '1.0.1';
+
+  // Check version matches expected
+  if (pkg.version !== expectedVersion) {
+    error(`    ${pkgName}: version is ${pkg.version}, expected ${expectedVersion}`);
   } else {
-    success(`    version: 1.0.1 (release gate)`);
+    success(`    version: ${pkg.version}`);
+  }
+
+  // Validate version follows semantic versioning (1.x.x format)
+  if (!/^1\.\d+\.\d+$/.test(pkg.version)) {
+    error(`    ${pkgName}: version ${pkg.version} does not follow semantic versioning (1.x.x)`);
+  } else {
+    success(`    follows semantic versioning`);
   }
 
   // Check not marked private
@@ -134,8 +151,13 @@ function validatePackageJson(pkg, pkgName, dir) {
 
 // Main validation
 log('=== Package Metadata Validation ===');
-log(`\nExpected: ${PUBLISHABLE_PACKAGES.size} publishable packages at version 1.0.1`);
-log(`Validating...\n`);
+log(`\nExpected: ${PUBLISHABLE_PACKAGES.size} publishable packages`);
+log(`Package versions:`);
+for (const [pkgName, version] of Object.entries(EXPECTED_VERSIONS)) {
+  log(`  ${pkgName}: ${version}`);
+}
+log(`  All others: 1.0.1 (default)`);
+log(`\nValidating...\n`);
 
 let foundCount = 0;
 for (const pkgName of PUBLISHABLE_PACKAGES) {
@@ -166,7 +188,7 @@ if (foundCount !== PUBLISHABLE_PACKAGES.size) {
 }
 
 if (exitCode === 0) {
-  success(`All ${PUBLISHABLE_PACKAGES.size} packages valid for 1.0.1 release`);
+  success(`All ${PUBLISHABLE_PACKAGES.size} packages valid and versions correct`);
 } else {
   log('\n⚠ Package validation failed');
 }

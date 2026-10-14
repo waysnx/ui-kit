@@ -1,6 +1,6 @@
 {
   "name": "@waysnx/ui-form-builder",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Schema-driven form builder from WaysNX - renders forms from JSON Schema using ui-core components",
   "type": "module",
   "main": "dist/index.cjs",

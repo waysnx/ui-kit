@@ -200,3 +200,10 @@ export interface FormLayout {
   settings: LayoutSettings;
   childForms?: Record<string, any>;
 }
+
+/** Default settings for FormLayout - use this to ensure all required properties are set */
+export const DEFAULT_LAYOUT_SETTINGS: LayoutSettings = {
+  buttonsPosition: 'bottom',
+  buttonsAlignment: 'text-right',
+  buttons: [],
+};
