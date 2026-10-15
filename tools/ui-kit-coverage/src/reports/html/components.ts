@@ -19,23 +19,23 @@ export function renderSummary(report: CoverageReport): string {
   
   return `
     <div class="section" id="summary">
-      <div class="section-header">
+      <button class="section-header" type="button" aria-expanded="true" aria-controls="summary-content">
         <h2 class="section-title">📊 Executive Summary</h2>
-        <span class="expand-icon">▼</span>
-      </div>
-      <div class="section-content">
+        <span class="expand-icon" aria-hidden="true">▼</span>
+      </button>
+      <div class="section-content" id="summary-content">
         <div class="kpi-grid">
           <div class="kpi-card">
             <div class="kpi-value">${summary.waysnxPackagesDetected}</div>
-            <div class="kpi-label">UI Kit Packages</div>
+            <div class="kpi-label">UI Kit Packages Used</div>
           </div>
           <div class="kpi-card">
             <div class="kpi-value">${summary.uiKitComponentsDetected}</div>
-            <div class="kpi-label">Components Used</div>
+            <div class="kpi-label">UI Kit Components Detected</div>
           </div>
           <div class="kpi-card">
             <div class="kpi-value">${summary.nativeElementsDetected}</div>
-            <div class="kpi-label">Native Elements</div>
+            <div class="kpi-label">Native Element Types</div>
           </div>
           <div class="kpi-card">
             <div class="kpi-value">${summary.customComponentsDetected}</div>
@@ -47,7 +47,7 @@ export function renderSummary(report: CoverageReport): string {
           </div>
           <div class="kpi-card">
             <div class="kpi-value">${highConfidence}</div>
-            <div class="kpi-label">High Confidence</div>
+            <div class="kpi-label">${highConfidence === 1 ? 'High-Confidence Replacement' : 'High-Confidence Replacements'}</div>
           </div>
         </div>
         
@@ -75,11 +75,11 @@ export function renderPackagesTable(report: CoverageReport): string {
   if (packages.length === 0) {
     return `
       <div class="section" id="packages">
-        <div class="section-header">
+        <button class="section-header" type="button" aria-expanded="true" aria-controls="packages-content">
           <h2 class="section-title">📦 Package Adoption</h2>
-          <span class="expand-icon">▼</span>
-        </div>
-        <div class="section-content">
+          <span class="expand-icon" aria-hidden="true">▼</span>
+        </button>
+        <div class="section-content" id="packages-content">
           <div class="empty-state">
             <div class="empty-state-icon">📦</div>
             <p>No WaysNX UI Kit packages detected.</p>
@@ -103,11 +103,11 @@ export function renderPackagesTable(report: CoverageReport): string {
   
   return `
     <div class="section" id="packages">
-      <div class="section-header">
+      <button class="section-header" type="button" aria-expanded="true" aria-controls="packages-content">
         <h2 class="section-title">📦 Package Adoption (${packages.length})</h2>
-        <span class="expand-icon">▼</span>
-      </div>
-      <div class="section-content">
+        <span class="expand-icon" aria-hidden="true">▼</span>
+      </button>
+      <div class="section-content" id="packages-content">
         <div class="table-wrapper">
           <table>
             <thead>
@@ -140,11 +140,11 @@ export function renderComponentsTable(report: CoverageReport): string {
   if (components.length === 0) {
     return `
       <div class="section" id="components">
-        <div class="section-header">
+        <button class="section-header" type="button" aria-expanded="true" aria-controls="components-content">
           <h2 class="section-title">🧩 Component Usage</h2>
-          <span class="expand-icon">▼</span>
-        </div>
-        <div class="section-content">
+          <span class="expand-icon" aria-hidden="true">▼</span>
+        </button>
+        <div class="section-content" id="components-content">
           <div class="empty-state">
             <div class="empty-state-icon">🧩</div>
             <p>No UI Kit components detected.</p>
@@ -166,11 +166,11 @@ export function renderComponentsTable(report: CoverageReport): string {
   
   return `
     <div class="section" id="components">
-      <div class="section-header">
+      <button class="section-header" type="button" aria-expanded="true" aria-controls="components-content">
         <h2 class="section-title">🧩 Component Usage (${components.length})</h2>
-        <span class="expand-icon">▼</span>
-      </div>
-      <div class="section-content">
+        <span class="expand-icon" aria-hidden="true">▼</span>
+      </button>
+      <div class="section-content" id="components-content">
         <div class="table-wrapper">
           <table>
             <thead>
@@ -201,11 +201,11 @@ export function renderNativeElementsTable(report: CoverageReport): string {
   if (nativeUi.length === 0) {
     return `
       <div class="section" id="native">
-        <div class="section-header">
+        <button class="section-header" type="button" aria-expanded="true" aria-controls="native-content">
           <h2 class="section-title">🏷️ Native Elements</h2>
-          <span class="expand-icon">▼</span>
-        </div>
-        <div class="section-content">
+          <span class="expand-icon" aria-hidden="true">▼</span>
+        </button>
+        <div class="section-content" id="native-content">
           <div class="empty-state">
             <div class="empty-state-icon">🏷️</div>
             <p>No native HTML elements detected.</p>
@@ -225,11 +225,11 @@ export function renderNativeElementsTable(report: CoverageReport): string {
   
   return `
     <div class="section" id="native">
-      <div class="section-header">
+      <button class="section-header" type="button" aria-expanded="true" aria-controls="native-content">
         <h2 class="section-title">🏷️ Native Elements (${nativeUi.length})</h2>
-        <span class="expand-icon">▼</span>
-      </div>
-      <div class="section-content">
+        <span class="expand-icon" aria-hidden="true">▼</span>
+      </button>
+      <div class="section-content" id="native-content">
         <div class="table-wrapper">
           <table>
             <thead>
@@ -258,11 +258,11 @@ export function renderCustomComponentsTable(report: CoverageReport): string {
   if (customComponents.length === 0) {
     return `
       <div class="section" id="custom">
-        <div class="section-header">
+        <button class="section-header" type="button" aria-expanded="true" aria-controls="custom-content">
           <h2 class="section-title">⚙️ Custom Components</h2>
-          <span class="expand-icon">▼</span>
-        </div>
-        <div class="section-content">
+          <span class="expand-icon" aria-hidden="true">▼</span>
+        </button>
+        <div class="section-content" id="custom-content">
           <div class="empty-state">
             <div class="empty-state-icon">⚙️</div>
             <p>No custom components detected.</p>
@@ -283,11 +283,11 @@ export function renderCustomComponentsTable(report: CoverageReport): string {
   
   return `
     <div class="section" id="custom">
-      <div class="section-header">
+      <button class="section-header" type="button" aria-expanded="true" aria-controls="custom-content">
         <h2 class="section-title">⚙️ Custom Components (${customComponents.length})</h2>
-        <span class="expand-icon">▼</span>
-      </div>
-      <div class="section-content">
+        <span class="expand-icon" aria-hidden="true">▼</span>
+      </button>
+      <div class="section-content" id="custom-content">
         <div class="table-wrapper">
           <table>
             <thead>
@@ -317,11 +317,11 @@ export function renderReplacementCandidatesTable(report: CoverageReport): string
   if (replacementCandidates.length === 0) {
     return `
       <div class="section" id="replacements">
-        <div class="section-header">
+        <button class="section-header" type="button" aria-expanded="true" aria-controls="replacements-content">
           <h2 class="section-title">💡 Replacement Candidates</h2>
-          <span class="expand-icon">▼</span>
-        </div>
-        <div class="section-content">
+          <span class="expand-icon" aria-hidden="true">▼</span>
+        </button>
+        <div class="section-content" id="replacements-content">
           <div class="empty-state">
             <div class="empty-state-icon">💡</div>
             <p>No replacement candidates identified.</p>
@@ -351,11 +351,11 @@ export function renderReplacementCandidatesTable(report: CoverageReport): string
   
   return `
     <div class="section" id="replacements">
-      <div class="section-header">
+      <button class="section-header" type="button" aria-expanded="true" aria-controls="replacements-content">
         <h2 class="section-title">💡 Replacement Candidates (${replacementCandidates.length})</h2>
-        <span class="expand-icon">▼</span>
-      </div>
-      <div class="section-content">
+        <span class="expand-icon" aria-hidden="true">▼</span>
+      </button>
+      <div class="section-content" id="replacements-content">
         <div class="table-wrapper">
           <table>
             <thead>
@@ -395,15 +395,15 @@ export function renderMetadata(report: CoverageReport): string {
         </li>
       `).join('')}
     </ul>
-  ` : '<p style="color: var(--text-secondary);">No limitations reported.</p>';
+  ` : '<p style="color: var(--text-secondary);">No analyzer limitations were recorded for this scan.</p>';
   
   return `
     <div class="section" id="metadata">
-      <div class="section-header">
+      <button class="section-header" type="button" aria-expanded="true" aria-controls="metadata-content">
         <h2 class="section-title">ℹ️ Metadata & Limitations</h2>
-        <span class="expand-icon">▼</span>
-      </div>
-      <div class="section-content">
+        <span class="expand-icon" aria-hidden="true">▼</span>
+      </button>
+      <div class="section-content" id="metadata-content">
         <h3 style="margin-bottom: var(--spacing-sm);">Project Information</h3>
         <div style="display: grid; grid-template-columns: auto 1fr; gap: var(--spacing-sm) var(--spacing-lg); margin-bottom: var(--spacing-lg);">
           <div style="font-weight: 600;">Name:</div>

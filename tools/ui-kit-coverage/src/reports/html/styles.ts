@@ -126,13 +126,23 @@ body {
   align-items: center;
   padding: var(--spacing-md) var(--spacing-lg);
   background: var(--bg-secondary);
+  border: none;
   border-bottom: 1px solid var(--border-color);
   cursor: pointer;
   user-select: none;
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  color: inherit;
 }
 
 .section-header:hover {
   background: var(--bg-tertiary);
+}
+
+.section-header:focus {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: -2px;
 }
 
 .section-title {

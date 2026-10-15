@@ -586,7 +586,7 @@ describe("HTML Report Edge Cases", () => {
     const filePath = await writeHtmlReport(tempDir, report);
     const content = await readHtmlFile(filePath);
     
-    expect(content).toContain("No limitations reported");
+    expect(content).toContain("No analyzer limitations were recorded for this scan");
   });
 
   it("handles component name with special characters", async () => {

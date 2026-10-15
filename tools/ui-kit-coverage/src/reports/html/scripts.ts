@@ -163,21 +163,6 @@ export const JS_SCRIPTS = `
     const headers = document.querySelectorAll('.section-header');
     
     headers.forEach(header => {
-      // Add ARIA attributes
-      header.setAttribute('role', 'button');
-      header.setAttribute('tabindex', '0');
-      header.setAttribute('aria-expanded', 'true');
-      
-      const content = header.nextElementSibling;
-      if (content && content.classList.contains('section-content')) {
-        // Set unique ID for content if not already set
-        if (!content.id) {
-          const sectionId = header.closest('.section')?.id || 'section';
-          content.id = sectionId + '-content';
-        }
-        header.setAttribute('aria-controls', content.id);
-      }
-      
       // Toggle function
       const toggleSection = function() {
         const content = header.nextElementSibling;
@@ -197,7 +182,8 @@ export const JS_SCRIPTS = `
       // Click handler
       header.addEventListener('click', toggleSection);
       
-      // Keyboard handler (Enter or Space)
+      // Keyboard handler (Enter or Space) - already handled by button element
+      // but keeping this for explicit handling
       header.addEventListener('keydown', function(e) {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
