@@ -57,17 +57,35 @@ no new analysis:
 ```bash
 ui-kit-coverage report ./my-react-app --format all       # coverage.json + coverage.md
 ui-kit-coverage report ./my-react-app --format markdown   # coverage.md only
+ui-kit-coverage report ./my-react-app --format html      # HTML report (browsable)
 ```
 
 | `--format` | Output |
 |---|---|
 | `json` | `coverage.json` |
 | `markdown` | `coverage.md` |
-| `all` (default) | both |
+| `html` | `coverage/index.html` (browsable HTML report) |
+| `all` (default) | all formats |
 
 The Markdown report keeps observed facts, catalog facts, and inferred
 replacement candidates as distinct sections, preserves the partial-catalog
 disclaimer, and is byte-deterministic (no timestamp is written by default).
+
+The HTML report generates a visual, browsable interface in the `coverage/`
+directory. To view the HTML report, open `coverage/index.html` in your browser:
+
+```bash
+# After running report with --format html or --format all
+open coverage/index.html           # macOS
+start coverage/index.html          # Windows
+xdg-open coverage/index.html       # Linux
+```
+
+The HTML report provides:
+- Visual coverage overview with color-coded metrics
+- File-by-file breakdown with line-by-line coverage highlighting
+- Interactive navigation through source files
+- Detailed coverage statistics and summaries
 
 ### CI checks (`check`)
 
