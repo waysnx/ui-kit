@@ -64,21 +64,21 @@ ui-kit-coverage report ./my-react-app --format html      # HTML report (browsabl
 |---|---|
 | `json` | `coverage.json` |
 | `markdown` | `coverage.md` |
-| `html` | `coverage/index.html` (browsable HTML report) |
+| `html` | `coverage.html` (browsable HTML report) |
 | `all` (default) | all formats |
 
 The Markdown report keeps observed facts, catalog facts, and inferred
 replacement candidates as distinct sections, preserves the partial-catalog
 disclaimer, and is byte-deterministic (no timestamp is written by default).
 
-The HTML report generates a visual, browsable interface in the `coverage/`
-directory. To view the HTML report, open `coverage/index.html` in your browser:
+The HTML report generates a visual, browsable interface as a single
+self-contained file. To view the HTML report, open `coverage.html` in your browser:
 
 ```bash
 # After running report with --format html or --format all
-open coverage/index.html           # macOS
-start coverage/index.html          # Windows
-xdg-open coverage/index.html       # Linux
+open coverage.html           # macOS
+start coverage.html          # Windows
+xdg-open coverage.html       # Linux
 ```
 
 The HTML report provides:

@@ -5,7 +5,7 @@
  */
 
 import type { CoverageReport } from "../../types/index.js";
-import { safeJsonSerialize } from "./utils.js";
+import { safeJsonSerialize, escapeHtml } from "./utils.js";
 import { CSS_STYLES } from "./styles.js";
 import { JS_SCRIPTS } from "./scripts.js";
 import {
@@ -26,6 +26,7 @@ import {
  */
 export function generateHtml(report: CoverageReport): string {
   const timestamp = new Date().toISOString();
+  const safeProjectName = escapeHtml(report.project.name);
   
   return `<!DOCTYPE html>
 <html lang="en">
@@ -33,7 +34,7 @@ export function generateHtml(report: CoverageReport): string {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="generator" content="@waysnx/ui-kit-coverage v${report.analyzerVersion}">
-  <title>UI Kit Coverage Report - ${report.project.name}</title>
+  <title>UI Kit Coverage Report - ${safeProjectName}</title>
   <style>${CSS_STYLES}</style>
 </head>
 <body>
@@ -64,10 +65,12 @@ export function generateHtml(report: CoverageReport): string {
  * Renders the report header.
  */
 function renderHeader(report: CoverageReport, timestamp: string): string {
+  const safeProjectName = escapeHtml(report.project.name);
+  
   return `
     <header class="report-header">
       <h1 class="report-title">UI Kit Coverage Report</h1>
-      <p class="report-subtitle">${report.project.name}</p>
+      <p class="report-subtitle">${safeProjectName}</p>
       <div class="report-meta">
         <span>Analyzer v${report.analyzerVersion}</span>
         <span>•</span>

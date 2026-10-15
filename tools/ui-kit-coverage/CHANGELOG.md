@@ -5,7 +5,7 @@ All notable changes to `@waysnx/ui-kit-coverage` will be documented in this file
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.0] - 2026-09-10
+## [Unreleased]
 
 ### Added
 
@@ -48,6 +48,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Implemented comprehensive HTML escaping to prevent XSS vulnerabilities
 - All user data is sanitized before insertion into HTML output
+- Project names are escaped in HTML title and report header
 
 ### Backward Compatibility
 
@@ -91,5 +92,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-[0.2.0]: https://github.com/waysnx/ui-kit/compare/ui-kit-coverage-v0.1.0...ui-kit-coverage-v0.2.0
+[Unreleased]: https://github.com/waysnx/ui-kit/compare/ui-kit-coverage-v0.1.0...HEAD
 [0.1.0]: https://github.com/waysnx/ui-kit/releases/tag/ui-kit-coverage-v0.1.0

@@ -163,15 +163,45 @@ export const JS_SCRIPTS = `
     const headers = document.querySelectorAll('.section-header');
     
     headers.forEach(header => {
-      header.addEventListener('click', function() {
-        const content = this.nextElementSibling;
-        const icon = this.querySelector('.expand-icon');
+      // Add ARIA attributes
+      header.setAttribute('role', 'button');
+      header.setAttribute('tabindex', '0');
+      header.setAttribute('aria-expanded', 'true');
+      
+      const content = header.nextElementSibling;
+      if (content && content.classList.contains('section-content')) {
+        // Set unique ID for content if not already set
+        if (!content.id) {
+          const sectionId = header.closest('.section')?.id || 'section';
+          content.id = sectionId + '-content';
+        }
+        header.setAttribute('aria-controls', content.id);
+      }
+      
+      // Toggle function
+      const toggleSection = function() {
+        const content = header.nextElementSibling;
+        const icon = header.querySelector('.expand-icon');
         
         if (content && content.classList.contains('section-content')) {
+          const isExpanded = !content.classList.contains('collapsed');
           content.classList.toggle('collapsed');
+          header.setAttribute('aria-expanded', (!isExpanded).toString());
+          
           if (icon) {
             icon.classList.toggle('collapsed');
           }
+        }
+      };
+      
+      // Click handler
+      header.addEventListener('click', toggleSection);
+      
+      // Keyboard handler (Enter or Space)
+      header.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggleSection();
         }
       });
     });
