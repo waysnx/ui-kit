@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-09-02
+
 ### Added
 
 - **HTML Report Generation**: New `--format html` option for the `report` command
@@ -92,5 +94,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-[Unreleased]: https://github.com/waysnx/ui-kit/compare/ui-kit-coverage-v0.1.0...HEAD
+[Unreleased]: https://github.com/waysnx/ui-kit/compare/ui-kit-coverage-v0.2.0...HEAD
+[0.2.0]: https://github.com/waysnx/ui-kit/compare/ui-kit-coverage-v0.1.0...ui-kit-coverage-v0.2.0
 [0.1.0]: https://github.com/waysnx/ui-kit/releases/tag/ui-kit-coverage-v0.1.0

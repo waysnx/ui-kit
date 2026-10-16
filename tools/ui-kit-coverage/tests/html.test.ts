@@ -624,6 +624,39 @@ describe("HTML Report Edge Cases", () => {
     expect(content).toContain("&amp;");
   });
 
+  it("prevents XSS injection via project name in title", async () => {
+    const report = createMinimalReport();
+    report.project.name = '<script>alert("XSS")</script>';
+    
+    const filePath = await writeHtmlReport(tempDir, report);
+    const content = await readHtmlFile(filePath);
+    
+    // Script tag should be escaped in title
+    expect(content).toMatch(/<title>.*&lt;script&gt;.*&lt;\/script&gt;.*<\/title>/);
+    expect(content).not.toMatch(/<title>.*<script>.*<\/script>.*<\/title>/);
+    
+    // Script tag should be escaped in subtitle
+    const subtitleMatch = content.match(/<p class="report-subtitle">.*?<\/p>/s);
+    expect(subtitleMatch).toBeTruthy();
+    if (subtitleMatch) {
+      expect(subtitleMatch[0]).toContain("&lt;script&gt;");
+      expect(subtitleMatch[0]).not.toContain("<script>");
+    }
+  });
+
+  it("prevents XSS injection via project name with event handlers", async () => {
+    const report = createMinimalReport();
+    report.project.name = '<img src=x onerror="alert(1)">';
+    
+    const filePath = await writeHtmlReport(tempDir, report);
+    const content = await readHtmlFile(filePath);
+    
+    // Should be fully escaped
+    expect(content).toContain("&lt;img");
+    expect(content).toContain("&quot;");
+    expect(content).not.toContain('<img src=x onerror=');
+  });
+
   it("handles file path with special characters", async () => {
     const report = createMinimalReport();
     report.components[0].files = ['src/<special>/file & "name".tsx'];
