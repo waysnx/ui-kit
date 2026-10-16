@@ -28,7 +28,7 @@ import {
 } from "./types/index.js";
 
 /** Analyzer version, surfaced in the report (approval doc §11). */
-export const ANALYZER_VERSION = "0.1.0";
+export const ANALYZER_VERSION = "0.2.0";
 
 export interface AnalyzeResult {
   report: CoverageReport;

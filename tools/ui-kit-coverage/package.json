@@ -1,6 +1,6 @@
 {
   "name": "@waysnx/ui-kit-coverage",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Deterministic, read-only analyzer that reports how much of a React/TypeScript application uses the WaysNX UI Kit — adoption, utilization, native/custom UI, and replacement candidates. No AI, no network.",
   "type": "module",
   "license": "Apache-2.0",
