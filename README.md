@@ -290,6 +290,38 @@ WaysNX UI Kit uses shared design tokens and CSS variables to provide consistent:
 - Interaction states
 - Themes
 
+All tokens are prefixed with `--wx-` and can be customized by overriding CSS variables.
+
+### Design Resources
+
+- **[Design Tokens Reference](docs/theming/TOKENS.md)** — Complete catalog of all 44 CSS custom properties with usage examples
+- **[Integrating into Existing Apps](docs/integrations/EXISTING_APPS.md)** — Best practices for adopting WaysNX UI Kit in applications with existing design systems
+
+### Quick Token Reference
+
+Common tokens you'll use frequently:
+
+| Category | Token | Value | Usage |
+|----------|-------|-------|-------|
+| Brand | `--wx-color-primary` | `#f19924` | Primary actions, links |
+| Spacing | `--wx-spacing-md` | `16px` | Default padding/margins |
+| Text | `--wx-color-text` | `#1e293b` | Body text |
+| Surface | `--wx-color-surface` | `#ffffff` | Card backgrounds |
+| Radius | `--wx-radius-md` | `8px` | Default rounding |
+
+See the [complete token reference](docs/theming/TOKENS.md) for all 44 tokens.
+
+### Customization Example
+
+Override tokens to match your brand:
+
+```css
+:root {
+  --wx-color-primary: #007bff;  /* Your brand blue */
+  --wx-spacing-md: 20px;         /* Larger spacing */
+}
+```
+
 Applications should prefer the public UI Kit tokens and components rather than creating parallel implementations of the same design patterns.
 
 ---
