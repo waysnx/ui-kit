@@ -37,19 +37,27 @@
     "react-number-format": "^5.4.4"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.5.0",
+    "@testing-library/react": "^16.0.0",
+    "@testing-library/user-event": "^14.5.0",
     "@types/dompurify": "^3.0.5",
     "@types/node": "^25.0.3",
     "@types/react": "^19.2.7",
     "@types/react-datepicker": "^7.0.0",
     "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^4.3.0",
     "copyfiles": "^2.4.1",
+    "jsdom": "^25.0.0",
     "tsup": "^8.5.1",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
   },
   "scripts": {
     "build": "tsup && npm run copy-css",
     "copy-css": "copyfiles -u 1 \"src/**/*.css\" dist",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "exports": {
     "./dist/index.css": "./dist/index.css",
