@@ -133,27 +133,62 @@ export const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
     },
     ref
   ) => {
+    // Phase 1: SSR-safe initialization - use prop/default only, no localStorage
     const [collapsed, setCollapsed] = useState(isCollapsed);
     const sidebarRef = useRef<HTMLDivElement>(null);
 
-    // Initialize from localStorage
+    // Phase 2: Read persisted state AFTER hydration (client-side only)
     useEffect(() => {
-      if (persistState) {
-        const stored = localStorage.getItem(storageKey);
-        if (stored !== null) {
-          setCollapsed(JSON.parse(stored));
+      if (!persistState) return;
+      
+      // Skip in SSR environment
+      if (typeof window === 'undefined') return;
+      
+      try {
+        // Access localStorage - may throw in sandboxed contexts
+        const storage = window.localStorage;
+        const savedState = storage.getItem(storageKey);
+        
+        if (savedState !== null) {
+          const persisted = JSON.parse(savedState);
+          
+          // Validate parsed value is boolean before applying
+          if (typeof persisted === 'boolean') {
+            setCollapsed(persisted);
+          } else {
+            // Invalid type: retain default state, log warning
+            console.warn('[Sidebar] Invalid persisted state (not boolean), using default');
+          }
+        }
+        // If savedState is null, no persisted value exists; keep default
+      } catch (e) {
+        if (e instanceof SyntaxError) {
+          // Malformed JSON: retain default state, log warning
+          console.warn('[Sidebar] Failed to parse persisted state (malformed JSON), using default');
+        } else {
+          // Storage error (SecurityError, unavailable): retain default state, log warning
+          console.warn('[Sidebar] Failed to access localStorage, using default state');
         }
       }
     }, [persistState, storageKey]);
 
-    // Handle collapse change
+    // Handle collapse change with SSR-safe persistence
     const handleToggleCollapse = useCallback(() => {
       const newState = !collapsed;
       setCollapsed(newState);
       onCollapseChange?.(newState);
 
-      if (persistState) {
-        localStorage.setItem(storageKey, JSON.stringify(newState));
+      if (persistState && typeof window !== 'undefined') {
+        try {
+          localStorage.setItem(storageKey, JSON.stringify(newState));
+        } catch (e) {
+          if (e instanceof DOMException && e.name === 'QuotaExceededError') {
+            console.warn('[Sidebar] localStorage quota exceeded, state not persisted');
+          } else {
+            // General error: handle SecurityError, other exceptions
+            console.warn('[Sidebar] Failed to persist state to localStorage');
+          }
+        }
       }
     }, [collapsed, onCollapseChange, persistState, storageKey]);
 
