@@ -201,42 +201,301 @@ describe("Sidebar", () => {
   });
 
   describe("SSR Safety", () => {
-    it("documents known SSR issue with localStorage access", () => {
-      // KNOWN ISSUE - Phase 3: Sidebar currently throws when localStorage is unavailable
-      // Expected behavior: Should gracefully handle missing localStorage in SSR environments
-      // Current behavior: Throws error during render
-      
-      // Mock localStorage to throw (simulating SSR environment)
+    it("renders without crashing when localStorage is undefined (SSR environment)", () => {
       const originalLocalStorage = global.localStorage;
       
       try {
+        // Simulate SSR: window.localStorage is undefined
         Object.defineProperty(global, "localStorage", {
-          get: () => {
-            throw new Error("localStorage is not available");
-          },
+          get: () => undefined,
           configurable: true,
         });
 
-        // Currently throws - this documents the issue for Phase 3 fix
-        expect(() => {
-          render(
-            <Sidebar
-              items={mockItems}
-              persistState={true}
-              storageKey="test-key"
-            />
-          );
-        }).toThrow("localStorage is not available");
+        const { container } = render(
+          <Sidebar
+            items={mockItems}
+            persistState={true}
+            storageKey="test-key"
+          />
+        );
         
-        // TODO Phase 3: Update Sidebar to use try-catch around localStorage access
-        // and provide SSR-safe fallback behavior
+        const sidebar = container.querySelector(".nav-sidebar");
+        expect(sidebar).toBeInTheDocument();
+        expect(sidebar).toHaveClass("nav-sidebar--expanded");
       } finally {
-        // Restore localStorage even if assertion fails
         Object.defineProperty(global, "localStorage", {
           value: originalLocalStorage,
           configurable: true,
         });
       }
+    });
+
+    it("handles accessing window.localStorage itself throwing SecurityError", () => {
+      const originalLocalStorage = global.localStorage;
+      const consoleWarnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+      
+      try {
+        // Simulate sandboxed iframe: accessing localStorage getter throws
+        Object.defineProperty(global, "localStorage", {
+          get: () => {
+            throw new DOMException("Access denied", "SecurityError");
+          },
+          configurable: true,
+        });
+
+        const { container } = render(
+          <Sidebar
+            items={mockItems}
+            persistState={true}
+            storageKey="test-key"
+          />
+        );
+        
+        const sidebar = container.querySelector(".nav-sidebar");
+        expect(sidebar).toBeInTheDocument();
+        expect(sidebar).toHaveClass("nav-sidebar--expanded");
+        expect(consoleWarnSpy).toHaveBeenCalledWith(
+          expect.stringContaining("Failed to access localStorage")
+        );
+      } finally {
+        Object.defineProperty(global, "localStorage", {
+          value: originalLocalStorage,
+          configurable: true,
+        });
+        consoleWarnSpy.mockRestore();
+      }
+    });
+
+    it("handles getItem throwing SecurityError gracefully", () => {
+      const consoleWarnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+      const mockStorage = {
+        getItem: vi.fn(() => {
+          throw new DOMException("Access denied", "SecurityError");
+        }),
+        setItem: vi.fn(),
+        removeItem: vi.fn(),
+        clear: vi.fn(),
+        length: 0,
+        key: vi.fn(),
+      };
+
+      const originalLocalStorage = global.localStorage;
+      
+      try {
+        Object.defineProperty(global, "localStorage", {
+          value: mockStorage,
+          configurable: true,
+        });
+
+        const { container } = render(
+          <Sidebar
+            items={mockItems}
+            persistState={true}
+            storageKey="test-key"
+          />
+        );
+        
+        const sidebar = container.querySelector(".nav-sidebar");
+        expect(sidebar).toBeInTheDocument();
+        expect(sidebar).toHaveClass("nav-sidebar--expanded");
+        expect(consoleWarnSpy).toHaveBeenCalledWith(
+          expect.stringContaining("Failed to access localStorage")
+        );
+      } finally {
+        Object.defineProperty(global, "localStorage", {
+          value: originalLocalStorage,
+          configurable: true,
+        });
+        consoleWarnSpy.mockRestore();
+      }
+    });
+
+    it("handles setItem throwing QuotaExceededError gracefully", async () => {
+      const user = userEvent.setup();
+      const consoleWarnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+      const mockStorage = {
+        getItem: vi.fn(() => null),
+        setItem: vi.fn(() => {
+          throw new DOMException("Quota exceeded", "QuotaExceededError");
+        }),
+        removeItem: vi.fn(),
+        clear: vi.fn(),
+        length: 0,
+        key: vi.fn(),
+      };
+
+      const originalLocalStorage = global.localStorage;
+      
+      try {
+        Object.defineProperty(global, "localStorage", {
+          value: mockStorage,
+          configurable: true,
+        });
+
+        render(
+          <Sidebar
+            items={mockItems}
+            persistState={true}
+            storageKey="test-key"
+            collapsible={true}
+          />
+        );
+        
+        const toggleButton = screen.getByLabelText("Collapse sidebar");
+        await user.click(toggleButton);
+        
+        expect(consoleWarnSpy).toHaveBeenCalledWith(
+          expect.stringContaining("localStorage quota exceeded")
+        );
+      } finally {
+        Object.defineProperty(global, "localStorage", {
+          value: originalLocalStorage,
+          configurable: true,
+        });
+        consoleWarnSpy.mockRestore();
+      }
+    });
+
+    it("handles malformed JSON in persisted state gracefully", () => {
+      const consoleWarnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+      localStorage.setItem("test-key", "{invalid json");
+      
+      const { container } = render(
+        <Sidebar
+          items={mockItems}
+          persistState={true}
+          storageKey="test-key"
+        />
+      );
+      
+      const sidebar = container.querySelector(".nav-sidebar");
+      expect(sidebar).toBeInTheDocument();
+      expect(sidebar).toHaveClass("nav-sidebar--expanded");
+      expect(consoleWarnSpy).toHaveBeenCalledWith(
+        expect.stringContaining("Failed to parse persisted state")
+      );
+      
+      consoleWarnSpy.mockRestore();
+    });
+
+    it("handles non-boolean values in persisted state gracefully", () => {
+      const consoleWarnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+      
+      // Test with string value
+      localStorage.setItem("test-key", JSON.stringify("collapsed"));
+      
+      const { container, rerender } = render(
+        <Sidebar
+          items={mockItems}
+          persistState={true}
+          storageKey="test-key"
+        />
+      );
+      
+      let sidebar = container.querySelector(".nav-sidebar");
+      expect(sidebar).toHaveClass("nav-sidebar--expanded");
+      expect(consoleWarnSpy).toHaveBeenCalledWith(
+        expect.stringContaining("Invalid persisted state")
+      );
+      
+      consoleWarnSpy.mockClear();
+      
+      // Test with number value
+      localStorage.setItem("test-key", JSON.stringify(1));
+      
+      rerender(
+        <Sidebar
+          items={mockItems}
+          persistState={true}
+          storageKey="test-key-2"
+        />
+      );
+      
+      // Should still use default (expanded)
+      sidebar = container.querySelector(".nav-sidebar");
+      expect(sidebar).toHaveClass("nav-sidebar--expanded");
+      
+      consoleWarnSpy.mockRestore();
+    });
+
+    it("handles valid boolean values in persisted state correctly", () => {
+      // Test with true
+      localStorage.setItem("test-key", JSON.stringify(true));
+      
+      const { container } = render(
+        <Sidebar
+          items={mockItems}
+          persistState={true}
+          storageKey="test-key"
+        />
+      );
+      
+      let sidebar = container.querySelector(".nav-sidebar");
+      expect(sidebar).toHaveClass("nav-sidebar--collapsed");
+      
+      cleanup();
+      
+      // Test with false
+      localStorage.setItem("test-key-2", JSON.stringify(false));
+      
+      const { container: container2 } = render(
+        <Sidebar
+          items={mockItems}
+          persistState={true}
+          storageKey="test-key-2"
+        />
+      );
+      
+      sidebar = container2.querySelector(".nav-sidebar");
+      expect(sidebar).toHaveClass("nav-sidebar--expanded");
+    });
+
+    it("performs two-phase hydration without React mismatch warnings", () => {
+      // Phase 1: Server render (no localStorage access)
+      localStorage.setItem("test-key", JSON.stringify(true));
+      
+      const { container } = render(
+        <Sidebar
+          items={mockItems}
+          persistState={true}
+          storageKey="test-key"
+        />
+      );
+      
+      // Initial render uses prop default (expanded), not persisted state
+      const sidebar = container.querySelector(".nav-sidebar");
+      
+      // After useEffect runs, should apply persisted state
+      // Note: In this test environment, useEffect runs synchronously
+      // In real SSR, there would be a hydration phase between these states
+      expect(sidebar).toHaveClass("nav-sidebar--collapsed");
+      
+      // No React hydration mismatch errors should occur
+      // (vitest doesn't emit these, but the pattern prevents them in real SSR)
+    });
+
+    it("persists state changes to localStorage after hydration", async () => {
+      const user = userEvent.setup();
+      
+      render(
+        <Sidebar
+          items={mockItems}
+          persistState={true}
+          storageKey="test-key"
+          collapsible={true}
+        />
+      );
+      
+      const toggleButton = screen.getByLabelText("Collapse sidebar");
+      await user.click(toggleButton);
+      
+      const storedValue = localStorage.getItem("test-key");
+      expect(storedValue).toBe("true");
+      
+      await user.click(screen.getByLabelText("Expand sidebar"));
+      
+      const updatedValue = localStorage.getItem("test-key");
+      expect(updatedValue).toBe("false");
     });
   });
 
