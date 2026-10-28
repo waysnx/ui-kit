@@ -450,28 +450,82 @@ describe("Sidebar", () => {
       expect(sidebar).toHaveClass("nav-sidebar--expanded");
     });
 
-    it("performs two-phase hydration without React mismatch warnings", () => {
-      // Phase 1: Server render (no localStorage access)
-      localStorage.setItem("test-key", JSON.stringify(true));
-      
-      const { container } = render(
+    it("performs two-phase hydration without React mismatch warnings", async () => {
+      // Phase 1: Server-side rendering (SSR)
+      // On server, localStorage is not available, so component uses prop default
+      const { renderToString } = require("react-dom/server");
+      const serverMarkup = renderToString(
         <Sidebar
           items={mockItems}
           persistState={true}
           storageKey="test-key"
+          isCollapsed={false} // Explicitly set default for SSR
         />
       );
       
-      // Initial render uses prop default (expanded), not persisted state
-      const sidebar = container.querySelector(".nav-sidebar");
+      // Server markup should render with default (expanded) state
+      expect(serverMarkup).toContain("nav-sidebar--expanded");
+      expect(serverMarkup).not.toContain("nav-sidebar--collapsed");
       
-      // After useEffect runs, should apply persisted state
-      // Note: In this test environment, useEffect runs synchronously
-      // In real SSR, there would be a hydration phase between these states
-      expect(sidebar).toHaveClass("nav-sidebar--collapsed");
+      // Phase 2: Client-side hydration
+      const { hydrateRoot } = require("react-dom/client");
+      const container = document.createElement("div");
+      container.innerHTML = serverMarkup;
+      document.body.appendChild(container);
       
-      // No React hydration mismatch errors should occur
-      // (vitest doesn't emit these, but the pattern prevents them in real SSR)
+      // Track hydration errors
+      const originalError = console.error;
+      const hydrationErrors: string[] = [];
+      console.error = (...args: any[]) => {
+        const message = args[0]?.toString() || "";
+        if (message.includes("Hydration") || message.includes("did not match")) {
+          hydrationErrors.push(message);
+        }
+        originalError.apply(console, args);
+      };
+      
+      try {
+        // Set persisted state before hydration (simulates existing localStorage on client)
+        localStorage.setItem("test-key", JSON.stringify(true));
+        
+        // Hydrate with same props - initial render should match server markup
+        const root = hydrateRoot(
+          container,
+          <Sidebar
+            items={mockItems}
+            persistState={true}
+            storageKey="test-key"
+            isCollapsed={false} // Same as server
+          />
+        );
+        
+        // Wait for React to complete hydration
+        await new Promise(resolve => setTimeout(resolve, 10));
+        
+        // No hydration errors should occur - this is the key assertion
+        // Hydration matches because both server and initial client render use prop default
+        expect(hydrationErrors).toHaveLength(0);
+        
+        // Verify initial state matches server (expanded)
+        const sidebar = container.querySelector(".nav-sidebar");
+        expect(sidebar).toHaveClass("nav-sidebar--expanded");
+        
+        // After useEffect runs, persisted state gets applied (collapsed)
+        await new Promise(resolve => setTimeout(resolve, 50));
+        expect(sidebar).toHaveClass("nav-sidebar--collapsed");
+        
+        // Clean up
+        await new Promise(resolve => {
+          root.unmount();
+          setTimeout(resolve, 10);
+        });
+      } finally {
+        console.error = originalError;
+        if (document.body.contains(container)) {
+          document.body.removeChild(container);
+        }
+        localStorage.clear();
+      }
     });
 
     it("persists state changes to localStorage after hydration", async () => {
