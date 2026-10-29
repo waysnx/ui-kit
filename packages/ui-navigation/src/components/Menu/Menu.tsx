@@ -90,12 +90,6 @@ export interface MenuProps {
   ariaLabel?: string;
 
   /**
-   * Menu role
-   * @default 'navigation'
-   */
-  role?: 'navigation' | 'none';
-
-  /**
    * Default expanded item IDs (uncontrolled mode)
    * Sets which menu items are expanded on initial render
    */

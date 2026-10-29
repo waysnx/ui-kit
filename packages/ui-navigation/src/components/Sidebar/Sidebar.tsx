@@ -268,7 +268,6 @@ export const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
             variant={variant}
             density={density}
             className="nav-sidebar__menu"
-            role="navigation"
           />
         </nav>
 

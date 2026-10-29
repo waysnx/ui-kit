@@ -230,32 +230,34 @@ export const MenuItem = forwardRef<HTMLLIElement, MenuItemProps>(
             </span>
           </button>
         ) : (
-          // Link for navigable items
-          <a
-            href={item.href || '#'}
-            className="nav-menu-item__link"
-            onClick={handleClick}
-            onFocus={handleFocus}
-            onBlur={handleBlur}
-            aria-current={isActive ? 'page' : undefined}
-            aria-disabled={isDisabled}
-            aria-expanded={hasChildren ? isExpanded : undefined}
-          >
-            <span className="nav-menu-item__content">
-              {showIcons && item.icon && (
-                <span className="nav-menu-item__icon" aria-hidden="true">
-                  {item.icon}
-                </span>
-              )}
+          // Link for navigable items - chevron button is sibling when children exist
+          <div className="nav-menu-item__controls">
+            <a
+              href={item.href || '#'}
+              className="nav-menu-item__link"
+              onClick={handleClick}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
+              aria-current={isActive ? 'page' : undefined}
+              aria-disabled={isDisabled}
+              aria-expanded={hasChildren ? isExpanded : undefined}
+            >
+              <span className="nav-menu-item__content">
+                {showIcons && item.icon && (
+                  <span className="nav-menu-item__icon" aria-hidden="true">
+                    {item.icon}
+                  </span>
+                )}
 
-              <span className="nav-menu-item__label">{item.label}</span>
+                <span className="nav-menu-item__label">{item.label}</span>
 
-              {showBadges && item.badge && (
-                <span className="nav-menu-item__badge" role="status">
-                  {item.badge}
-                </span>
-              )}
-            </span>
+                {showBadges && item.badge && (
+                  <span className="nav-menu-item__badge" role="status">
+                    {item.badge}
+                  </span>
+                )}
+              </span>
+            </a>
 
             {hasChildren && (
               <button
@@ -270,6 +272,10 @@ export const MenuItem = forwardRef<HTMLLIElement, MenuItemProps>(
                     onToggleExpand(item.id);
                   }
                 }}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
+                disabled={isDisabled}
+                aria-disabled={isDisabled}
                 tabIndex={0}
               >
                 <svg
@@ -283,7 +289,7 @@ export const MenuItem = forwardRef<HTMLLIElement, MenuItemProps>(
                 </svg>
               </button>
             )}
-          </a>
+          </div>
         )}
 
         {hasChildren && isExpanded && item.children && (

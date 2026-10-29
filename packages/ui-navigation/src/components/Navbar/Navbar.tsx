@@ -189,7 +189,6 @@ export const Navbar = forwardRef<HTMLDivElement, NavbarProps>(
               orientation="horizontal"
               variant={variant}
               className="nav-navbar__menu"
-              role="navigation"
             />
           </div>
 
@@ -229,7 +228,6 @@ export const Navbar = forwardRef<HTMLDivElement, NavbarProps>(
               orientation="vertical"
               variant={variant}
               className="nav-navbar__mobile-menu-content"
-              role="navigation"
             />
           </div>
         )}

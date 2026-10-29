@@ -319,6 +319,53 @@ describe("Menu", () => {
       expect(screen.getByText("Electronics")).toBeInTheDocument();
     });
 
+    it("respects disabled state on disclosure buttons and chevron buttons", async () => {
+      // P0 #1: Disabled buttons don't respond to Enter/Space
+      
+      const user = userEvent.setup();
+      const itemsWithDisabled: NavigationItem[] = [
+        {
+          id: "disabled-disclosure",
+          label: "Disabled Disclosure",
+          disabled: true,
+          children: [
+            { id: "child1", label: "Child 1", href: "/child1" },
+          ],
+        },
+        {
+          id: "disabled-with-link",
+          label: "Disabled With Link",
+          href: "/disabled",
+          disabled: true,
+          children: [
+            { id: "child2", label: "Child 2", href: "/child2" },
+          ],
+        },
+      ];
+      
+      render(<Menu items={itemsWithDisabled} keyboardNav={true} />);
+      
+      const disabledDisclosure = screen.getByRole("button", { name: /Disabled Disclosure/i });
+      const disabledChevron = screen.getByRole("button", { name: /Expand Disabled With Link/i });
+      
+      // Disabled buttons should have aria-disabled
+      expect(disabledDisclosure).toHaveAttribute("aria-disabled", "true");
+      expect(disabledDisclosure).toBeDisabled();
+      expect(disabledChevron).toHaveAttribute("aria-disabled", "true");
+      expect(disabledChevron).toBeDisabled();
+      
+      // Space should not toggle
+      disabledDisclosure.focus();
+      await user.keyboard(" ");
+      expect(disabledDisclosure).toHaveAttribute("aria-expanded", "false");
+      expect(screen.queryByText("Child 1")).not.toBeInTheDocument();
+      
+      disabledChevron.focus();
+      await user.keyboard(" ");
+      expect(disabledChevron).toHaveAttribute("aria-expanded", "false");
+      expect(screen.queryByText("Child 2")).not.toBeInTheDocument();
+    });
+
     it("documents keyboard nav limitation - ArrowDown (Phase 3)", async () => {
       // KNOWN LIMITATION - Phase 3: Menu does not implement custom arrow key navigation
       // Native Tab/Shift+Tab navigation is the primary method (P0 #1 implemented)
@@ -560,13 +607,6 @@ describe("Menu", () => {
       
       const menu = screen.getByRole("navigation");
       expect(menu).toBeInTheDocument();
-    });
-
-    it("has navigation role when specified", () => {
-      render(<Menu items={mockItems} role="navigation" />);
-      
-      const nav = screen.getByRole("navigation");
-      expect(nav).toBeInTheDocument();
     });
 
     it("has accessible label", () => {
