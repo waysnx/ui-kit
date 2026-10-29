@@ -162,24 +162,6 @@ export const MenuItem = forwardRef<HTMLLIElement, MenuItemProps>(
       [item, isDisabled, hasChildren, onToggleExpand, onItemClick]
     );
 
-    // Handle key down
-    const handleKeyDown = useCallback(
-      (e: React.KeyboardEvent<HTMLAnchorElement>) => {
-        if (isDisabled) {
-          return;
-        }
-
-        // Space or Enter on toggle-only items
-        if ((e.key === ' ' || e.key === 'Enter') && hasChildren && !item.href) {
-          e.preventDefault();
-          if (onToggleExpand) {
-            onToggleExpand(item.id);
-          }
-        }
-      },
-      [item, isDisabled, hasChildren, onToggleExpand]
-    );
-
     // Handle focus
     const handleFocus = useCallback(() => {
       onFocus?.(item.id);
@@ -198,47 +180,44 @@ export const MenuItem = forwardRef<HTMLLIElement, MenuItemProps>(
         } ${isDisabled ? 'nav-menu-item--disabled' : ''} ${
           hasChildren ? 'nav-menu-item--expandable' : ''
         } ${isExpanded ? 'nav-menu-item--expanded' : ''} ${className}`}
-        role="none"
         style={style}
       >
-        <a
-          href={item.href || '#'}
-          className="nav-menu-item__link"
-          onClick={handleClick}
-          onKeyDown={handleKeyDown}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-          aria-current={isActive ? 'page' : undefined}
-          aria-disabled={isDisabled}
-          aria-expanded={hasChildren ? isExpanded : undefined}
-          role="menuitem"
-          tabIndex={isFocused ? 0 : -1}
-        >
-          <span className="nav-menu-item__content">
-            {showIcons && item.icon && (
-              <span className="nav-menu-item__icon" aria-hidden="true">
-                {item.icon}
-              </span>
-            )}
+        {hasChildren && !item.href ? (
+          // Disclosure button for expandable items without links
+          <button
+            type="button"
+            className="nav-menu-item__link nav-menu-item__disclosure"
+            onClick={(e) => {
+              e.preventDefault();
+              if (!isDisabled && onToggleExpand) {
+                onToggleExpand(item.id);
+              }
+            }}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            aria-expanded={isExpanded}
+            aria-disabled={isDisabled}
+            disabled={isDisabled}
+          >
+            <span className="nav-menu-item__content">
+              {showIcons && item.icon && (
+                <span className="nav-menu-item__icon" aria-hidden="true">
+                  {item.icon}
+                </span>
+              )}
 
-            <span className="nav-menu-item__label">{item.label}</span>
+              <span className="nav-menu-item__label">{item.label}</span>
 
-            {showBadges && item.badge && (
-              <span className="nav-menu-item__badge" role="status">
-                {item.badge}
-              </span>
-            )}
-          </span>
+              {showBadges && item.badge && (
+                <span className="nav-menu-item__badge" role="status">
+                  {item.badge}
+                </span>
+              )}
+            </span>
 
-          {hasChildren && (
             <span
               className="nav-menu-item__chevron"
               aria-hidden="true"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                onToggleExpand?.(item.id);
-              }}
             >
               <svg
                 viewBox="0 0 24 24"
@@ -249,11 +228,66 @@ export const MenuItem = forwardRef<HTMLLIElement, MenuItemProps>(
                 <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z" />
               </svg>
             </span>
-          )}
-        </a>
+          </button>
+        ) : (
+          // Link for navigable items
+          <a
+            href={item.href || '#'}
+            className="nav-menu-item__link"
+            onClick={handleClick}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            aria-current={isActive ? 'page' : undefined}
+            aria-disabled={isDisabled}
+            aria-expanded={hasChildren ? isExpanded : undefined}
+          >
+            <span className="nav-menu-item__content">
+              {showIcons && item.icon && (
+                <span className="nav-menu-item__icon" aria-hidden="true">
+                  {item.icon}
+                </span>
+              )}
+
+              <span className="nav-menu-item__label">{item.label}</span>
+
+              {showBadges && item.badge && (
+                <span className="nav-menu-item__badge" role="status">
+                  {item.badge}
+                </span>
+              )}
+            </span>
+
+            {hasChildren && (
+              <button
+                type="button"
+                className="nav-menu-item__chevron nav-menu-item__chevron-button"
+                aria-label={`${isExpanded ? 'Collapse' : 'Expand'} ${item.label}`}
+                aria-expanded={isExpanded}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  if (!isDisabled && onToggleExpand) {
+                    onToggleExpand(item.id);
+                  }
+                }}
+                tabIndex={0}
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  width="1em"
+                  height="1em"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z" />
+                </svg>
+              </button>
+            )}
+          </a>
+        )}
 
         {hasChildren && isExpanded && item.children && (
-          <ul className="nav-menu-item__submenu" role="menu">
+          <ul className="nav-menu-item__submenu" role="list">
             {item.children.map((child) => (
               <MenuItem
                 key={child.id}

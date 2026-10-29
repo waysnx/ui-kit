@@ -91,8 +91,9 @@ export interface MenuProps {
 
   /**
    * Menu role
+   * @default 'navigation'
    */
-  role?: 'menu' | 'menubar' | 'navigation' | 'none';
+  role?: 'navigation' | 'none';
 
   /**
    * Default expanded item IDs (uncontrolled mode)
@@ -136,7 +137,6 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(
       maxDepth = 5,
       keyboardNav = true,
       ariaLabel,
-      role = 'menu',
       defaultExpandedIds,
     },
     ref
@@ -267,15 +267,14 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(
     }, [ref]);
 
     return (
-      <div
+      <nav
         ref={menuRef}
         className={`nav-menu nav-menu--${orientation} nav-menu--${density} nav-menu--${variant} nav-component ${className}`}
-        role={role}
         aria-label={ariaLabel || 'Menu'}
         onKeyDown={handleKeyDown}
         style={style}
       >
-        <ul className="nav-menu__list" role={role === 'none' ? 'none' : 'presentation'}>
+        <ul className="nav-menu__list" role="list">
           {visibleItems.map((item) => (
             <MenuItemComponent
               key={item.id}
@@ -295,7 +294,7 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(
             />
           ))}
         </ul>
-      </div>
+      </nav>
     );
   }
 );

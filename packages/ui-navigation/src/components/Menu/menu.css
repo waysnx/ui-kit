@@ -201,8 +201,45 @@
   border-radius: var(--wx-radius-sm, 4px);
 }
 
-.nav-menu-item__chevron:hover {
+/* Chevron button (separate focusable button for disclosure) */
+.nav-menu-item__chevron-button {
+  background: none;
+  border: none;
+  padding: 0.25rem;
+  margin: 0;
+  cursor: pointer;
+  color: currentColor;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  flex-shrink: 0;
+  transition: all var(--wx-nav-transition, 200ms) ease-in-out;
+  border-radius: var(--wx-radius-sm, 4px);
+}
+
+.nav-menu-item__chevron:hover,
+.nav-menu-item__chevron-button:hover {
   background-color: var(--nav-menu-item-chevron-hover-bg, rgba(0, 0, 0, 0.05));
+}
+
+.nav-menu-item__chevron-button:focus-visible {
+  outline: 2px solid var(--nav-menu-item-focus-outline, var(--wx-color-primary, #f19924));
+  outline-offset: 2px;
+}
+
+/* Disclosure button (button that acts as both label and toggle) */
+.nav-menu-item__disclosure {
+  background: none;
+  border: none;
+  text-align: left;
+  font: inherit;
+  width: 100%;
+}
+
+.nav-menu-item__disclosure .nav-menu-item__chevron {
+  margin-left: auto;
 }
 
 /* Expanded state */
@@ -272,7 +309,8 @@
     background-color: var(--nav-menu-item-hover-bg-dark, var(--wx-color-surface-hover, #f1f5f9));
   }
 
-  .nav-menu-item__chevron:hover {
+  .nav-menu-item__chevron:hover,
+  .nav-menu-item__chevron-button:hover {
     background-color: var(--nav-menu-item-chevron-hover-bg-dark, rgba(255, 255, 255, 0.1));
   }
 }
