@@ -172,11 +172,14 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(
       });
     }, []);
 
-    // Keyboard navigation
+    // Keyboard navigation (optional arrow key enhancements for Phase 3)
     const handleKeyDown = useCallback(
       (e: React.KeyboardEvent<HTMLDivElement>) => {
         if (!keyboardNav) return;
 
+        // Optional arrow key navigation (Phase 3 enhancement)
+        // Note: Tab/Shift+Tab, Enter, and Space are handled natively by links and buttons
+        
         const allItems = visibleItems.flatMap((item) => [
           item,
           ...(item.children || []),
@@ -184,6 +187,7 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(
 
         switch (e.key) {
           case 'ArrowDown':
+            // Optional: Move focus to next item
             e.preventDefault();
             const currentIdx = allItems.findIndex((item) => item.id === focusedItemId);
             const nextIdx = Math.min(currentIdx + 1, allItems.length - 1);
@@ -191,6 +195,7 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(
             break;
 
           case 'ArrowUp':
+            // Optional: Move focus to previous item
             e.preventDefault();
             const currIdx = allItems.findIndex((item) => item.id === focusedItemId);
             const prevIdx = Math.max(currIdx - 1, 0);
@@ -198,6 +203,7 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(
             break;
 
           case 'ArrowRight':
+            // Optional: Expand item with arrow right
             if (focusedItemId) {
               const item = allItems.find((i) => i.id === focusedItemId);
               if (item?.children?.length) {
@@ -207,6 +213,7 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(
             break;
 
           case 'ArrowLeft':
+            // Optional: Collapse item with arrow left
             if (focusedItemId) {
               setExpandedItems((prev) => {
                 const next = new Set(prev);
@@ -216,37 +223,23 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(
             }
             break;
 
-          case 'Enter':
-          case ' ':
-            e.preventDefault();
-            if (focusedItemId) {
-              const item = allItems.find((i) => i.id === focusedItemId);
-              if (item) {
-                handleItemClick(item);
-                if (item.children?.length) {
-                  handleToggleExpand(focusedItemId);
-                }
-              }
-            }
-            break;
-
-          case 'Escape':
-            e.preventDefault();
-            setFocusedItemId(undefined);
-            break;
-
           case 'Home':
+            // Optional: Focus first item
             e.preventDefault();
             setFocusedItemId(allItems[0]?.id);
             break;
 
           case 'End':
+            // Optional: Focus last item
             e.preventDefault();
             setFocusedItemId(allItems[allItems.length - 1]?.id);
             break;
+            
+          // Note: Space and Enter are NOT handled here
+          // They are handled natively by <button> and <a> elements
         }
       },
-      [focusedItemId, visibleItems, keyboardNav, handleItemClick, handleToggleExpand]
+      [focusedItemId, visibleItems, keyboardNav, handleToggleExpand]
     );
 
     // Combine refs
