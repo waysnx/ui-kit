@@ -24,7 +24,7 @@
 .nav-drawer-backdrop {
   position: absolute;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: var(--wx-overlay-bg, rgba(0, 0, 0, 0.5));
   pointer-events: auto;
 }
 
