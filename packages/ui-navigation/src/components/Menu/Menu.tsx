@@ -93,6 +93,12 @@ export interface MenuProps {
    * Menu role
    */
   role?: 'menu' | 'menubar' | 'navigation' | 'none';
+
+  /**
+   * Default expanded item IDs (uncontrolled mode)
+   * Sets which menu items are expanded on initial render
+   */
+  defaultExpandedIds?: string[];
 }
 
 /**
@@ -131,10 +137,17 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(
       keyboardNav = true,
       ariaLabel,
       role = 'menu',
+      defaultExpandedIds,
     },
     ref
   ) => {
-    const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
+    // Initialize expanded items from defaultExpandedIds prop
+    const [expandedItems, setExpandedItems] = useState<Set<string>>(() => {
+      if (defaultExpandedIds && defaultExpandedIds.length > 0) {
+        return new Set(defaultExpandedIds);
+      }
+      return new Set();
+    });
     const [focusedItemId, setFocusedItemId] = useState<string>();
     const menuRef = useRef<HTMLDivElement>(null);
 

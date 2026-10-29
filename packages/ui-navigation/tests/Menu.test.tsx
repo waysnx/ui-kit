@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
-import { render, screen, cleanup } from "@testing-library/react";
+import { render, screen, cleanup, fireEvent } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
 import { Menu } from "../src/components/Menu";
 import type { NavigationItem, SecurityContext } from "../src/types";
@@ -501,6 +501,93 @@ describe("Menu", () => {
       // Expected after fix:
       // expect(menu).toHaveStyle({ backgroundColor: "blue" });
       // expect(menu).toHaveStyle({ padding: "20px" });
+    });
+  });
+
+  describe("Default Expanded Items", () => {
+    const itemsWithSubmenu: MenuItem[] = [
+      { id: "home", label: "Home", href: "/" },
+      { 
+        id: "products", 
+        label: "Products", 
+        href: "/products",
+        children: [
+          { id: "product-1", label: "Product 1", href: "/products/1" },
+          { id: "product-2", label: "Product 2", href: "/products/2" }
+        ]
+      },
+      { 
+        id: "services", 
+        label: "Services", 
+        href: "/services",
+        children: [
+          { id: "service-1", label: "Service 1", href: "/services/1" },
+          { id: "service-2", label: "Service 2", href: "/services/2" }
+        ]
+      }
+    ];
+
+    it("renders all items collapsed when defaultExpandedIds is not supplied", () => {
+      render(<Menu items={itemsWithSubmenu} />);
+      
+      // Child items should not be visible
+      expect(screen.queryByText("Product 1")).not.toBeInTheDocument();
+      expect(screen.queryByText("Service 1")).not.toBeInTheDocument();
+    });
+
+    it("expands single item when one ID is supplied in defaultExpandedIds", () => {
+      render(<Menu items={itemsWithSubmenu} defaultExpandedIds={["products"]} />);
+      
+      // Products children should be visible
+      expect(screen.getByText("Product 1")).toBeInTheDocument();
+      expect(screen.getByText("Product 2")).toBeInTheDocument();
+      
+      // Services children should not be visible
+      expect(screen.queryByText("Service 1")).not.toBeInTheDocument();
+      expect(screen.queryByText("Service 2")).not.toBeInTheDocument();
+    });
+
+    it("expands multiple items when multiple IDs are supplied in defaultExpandedIds", () => {
+      render(<Menu items={itemsWithSubmenu} defaultExpandedIds={["products", "services"]} />);
+      
+      // Both sets of children should be visible
+      expect(screen.getByText("Product 1")).toBeInTheDocument();
+      expect(screen.getByText("Product 2")).toBeInTheDocument();
+      expect(screen.getByText("Service 1")).toBeInTheDocument();
+      expect(screen.getByText("Service 2")).toBeInTheDocument();
+    });
+
+    it("handles invalid/unknown IDs gracefully and still expands valid IDs", () => {
+      render(<Menu items={itemsWithSubmenu} defaultExpandedIds={["invalid-id", "products", "unknown"]} />);
+      
+      // Valid ID (products) should still expand
+      expect(screen.getByText("Product 1")).toBeInTheDocument();
+      expect(screen.getByText("Product 2")).toBeInTheDocument();
+      
+      // Other children should remain collapsed
+      expect(screen.queryByText("Service 1")).not.toBeInTheDocument();
+    });
+
+    it("allows user to collapse and expand items after initial render", () => {
+      render(<Menu items={itemsWithSubmenu} defaultExpandedIds={["products"]} />);
+      
+      // Products should be initially expanded
+      expect(screen.getByText("Product 1")).toBeInTheDocument();
+      
+      // Click to collapse Products
+      const productsButton = screen.getByText("Products");
+      fireEvent.click(productsButton);
+      
+      // Products children should now be hidden
+      expect(screen.queryByText("Product 1")).not.toBeInTheDocument();
+      
+      // Click to expand Services
+      const servicesButton = screen.getByText("Services");
+      fireEvent.click(servicesButton);
+      
+      // Services children should now be visible
+      expect(screen.getByText("Service 1")).toBeInTheDocument();
+      expect(screen.getByText("Service 2")).toBeInTheDocument();
     });
   });
 });
