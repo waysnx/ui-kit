@@ -105,44 +105,56 @@ describe("Menu", () => {
 
   describe("Item Expansion", () => {
     it("marks items with children as expandable and toggles aria-expanded", async () => {
+      // Updated for final review correction:
+      // Items with href+children have aria-expanded ONLY on chevron button, not on anchor
+      
       const user = userEvent.setup();
       const { container } = render(<Menu items={mockItemsWithChildren} />);
       
       const productsItem = screen.getByText("Products").closest("li");
       const productsLink = screen.getByText("Products").closest("a");
+      const chevronButton = screen.getByRole("button", { name: /Expand Products/i });
       
-      // Should have expandable class and aria-expanded=false initially
+      // Should have expandable class
       expect(productsItem).toHaveClass("nav-menu-item--expandable");
-      expect(productsLink).toHaveAttribute("aria-expanded", "false");
       
-      // Click to expand
-      await user.click(screen.getByText("Products"));
+      // Link should NOT have aria-expanded (anchor is for navigation only)
+      expect(productsLink).not.toHaveAttribute("aria-expanded");
       
-      // Verify aria-expanded changes to true after click
-      expect(productsLink).toHaveAttribute("aria-expanded", "true");
+      // Chevron button should have aria-expanded=false initially
+      expect(chevronButton).toHaveAttribute("aria-expanded", "false");
       
-      // Note: Child visibility depends on MenuItem implementation
-      // The expandable state and aria-expanded are the contract
+      // Click chevron button to expand
+      await user.click(chevronButton);
+      
+      // Verify aria-expanded changes to true on the chevron button
+      expect(chevronButton).toHaveAttribute("aria-expanded", "true");
+      
+      // Link still should not have aria-expanded
+      expect(productsLink).not.toHaveAttribute("aria-expanded");
     });
 
     it("nested children become visible when parent is expanded", async () => {
+      // Updated for final review correction:
+      // Check aria-expanded on chevron button, not on anchor
+      
       const user = userEvent.setup();
       render(<Menu items={mockItemsWithChildren} />);
       
-      const productsLink = screen.getByText("Products").closest("a");
+      const chevronButton = screen.getByRole("button", { name: /Expand Products/i });
       
       // Initially collapsed
-      expect(productsLink).toHaveAttribute("aria-expanded", "false");
+      expect(chevronButton).toHaveAttribute("aria-expanded", "false");
       
-      // Children should not be visible initially (or should verify actual behavior)
-      // If implementation renders children collapsed, verify they exist but are hidden
-      // If implementation doesn't render until expanded, verify they're absent
+      // Children should not be visible initially
+      expect(screen.queryByText("Electronics")).not.toBeInTheDocument();
+      expect(screen.queryByText("Clothing")).not.toBeInTheDocument();
       
-      // Click to expand
-      await user.click(screen.getByText("Products"));
+      // Click chevron button to expand
+      await user.click(chevronButton);
       
-      // Verify expanded state
-      expect(productsLink).toHaveAttribute("aria-expanded", "true");
+      // Verify expanded state on chevron button
+      expect(chevronButton).toHaveAttribute("aria-expanded", "true");
       
       // Verify children are now visible
       expect(screen.getByText("Electronics")).toBeVisible();
@@ -485,29 +497,30 @@ describe("Menu", () => {
 
     it("documents keyboard nav limitation - Escape key (Phase 3)", async () => {
       // KNOWN LIMITATION - Phase 3: Escape key collapse not implemented
+      // Updated for final review correction: aria-expanded is on chevron button, not anchor
       
       const user = userEvent.setup();
       render(<Menu items={mockItemsWithChildren} keyboardNav={true} />);
       
-      const productsLink = screen.getByText("Products").closest("a");
+      const chevronButton = screen.getByRole("button", { name: /Expand Products/i });
       
       // Click to expand
-      await user.click(screen.getByText("Products"));
+      await user.click(chevronButton);
       
-      // Verify expanded
-      expect(productsLink).toHaveAttribute("aria-expanded", "true");
+      // Verify expanded on chevron button
+      expect(chevronButton).toHaveAttribute("aria-expanded", "true");
       
-      // Focus the item
-      productsLink?.focus();
+      // Focus the chevron button
+      chevronButton.focus();
       
       // Press Escape
       await user.keyboard("{Escape}");
       
       // CURRENT BEHAVIOR: Does not collapse
-      expect(productsLink).toHaveAttribute("aria-expanded", "true");
+      expect(chevronButton).toHaveAttribute("aria-expanded", "true");
       
-      // TODO Phase 3: Implement Escape key handler
-      // Expected: expect(productsLink).toHaveAttribute("aria-expanded", "false");
+      // TODO Phase 3 (optional): Implement Escape key handler
+      // Expected: expect(chevronButton).toHaveAttribute("aria-expanded", "false");
     });
 
     it("keyboard navigation prop is available but not fully implemented", async () => {
@@ -619,6 +632,35 @@ describe("Menu", () => {
       render(<Menu items={mockItems} />);
       
       expect(screen.getByLabelText("Menu")).toBeInTheDocument();
+    });
+
+    it("keeps aria-expanded only on disclosure button, not on anchor", () => {
+      // Regression test for final review correction:
+      // Items with both href and children should have aria-expanded ONLY on the chevron button
+      
+      render(<Menu items={mockItemsWithChildren} />);
+      
+      const productsLink = screen.getByText("Products").closest("a");
+      const chevronButton = screen.getByRole("button", { name: /Expand Products/i });
+      
+      // Anchor should NOT have aria-expanded
+      expect(productsLink).not.toHaveAttribute("aria-expanded");
+      
+      // Chevron button SHOULD have aria-expanded
+      expect(chevronButton).toHaveAttribute("aria-expanded", "false");
+    });
+
+    it("renders single navigation landmark per Menu instance", () => {
+      // Regression test for final review correction:
+      // Menu component should render as <nav>, avoid nested navigation landmarks
+      
+      render(<Menu items={mockItems} ariaLabel="Test navigation" />);
+      
+      const navElements = screen.getAllByRole("navigation");
+      
+      // Should be exactly one navigation landmark for this Menu
+      expect(navElements).toHaveLength(1);
+      expect(navElements[0]).toHaveAccessibleName("Test navigation");
     });
   });
 

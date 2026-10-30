@@ -240,7 +240,6 @@ export const MenuItem = forwardRef<HTMLLIElement, MenuItemProps>(
               onBlur={handleBlur}
               aria-current={isActive ? 'page' : undefined}
               aria-disabled={isDisabled}
-              aria-expanded={hasChildren ? isExpanded : undefined}
             >
               <span className="nav-menu-item__content">
                 {showIcons && item.icon && (

@@ -260,7 +260,7 @@ export const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
         {showDivider && <div className="nav-sidebar__divider" />}
 
         {/* Menu */}
-        <nav className="nav-sidebar__content" role="navigation">
+        <div className="nav-sidebar__content">
           <Menu
             items={items}
             {...menuProps}
@@ -268,8 +268,9 @@ export const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
             variant={variant}
             density={density}
             className="nav-sidebar__menu"
+            ariaLabel="Sidebar navigation"
           />
-        </nav>
+        </div>
 
         {/* Footer */}
         {footer && (

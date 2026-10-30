@@ -221,13 +221,14 @@ export const Navbar = forwardRef<HTMLDivElement, NavbarProps>(
 
         {/* Mobile menu - dropdown */}
         {showMobileMenu && mobileMenuOpen && (
-          <div className="nav-navbar__mobile-menu" role="navigation">
+          <div className="nav-navbar__mobile-menu">
             <Menu
               items={items}
               {...menuProps}
               orientation="vertical"
               variant={variant}
               className="nav-navbar__mobile-menu-content"
+              ariaLabel="Mobile navigation menu"
             />
           </div>
         )}
