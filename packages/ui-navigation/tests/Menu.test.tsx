@@ -643,7 +643,6 @@ describe("Menu", () => {
       // Regression test: role prop is deprecated but accepted for backwards compatibility
       // It has no effect - Menu always renders as <nav>
       
-      // @ts-expect-error - role is deprecated but still accepted
       render(<Menu items={mockItems} role="menu" ariaLabel="Test menu" />);
       
       // Always renders as navigation landmark regardless of role prop

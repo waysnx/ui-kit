@@ -120,7 +120,7 @@ export interface MenuProps {
  * />
  * ```
  */
-export const Menu = forwardRef<HTMLDivElement, MenuProps>(
+export const Menu = forwardRef<HTMLElement, MenuProps>(
   (
     {
       items,
@@ -151,7 +151,7 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(
       return new Set();
     });
     const [focusedItemId, setFocusedItemId] = useState<string>();
-    const menuRef = useRef<HTMLDivElement>(null);
+    const menuRef = useRef<HTMLElement>(null);
 
     // Filter items by permissions
     const visibleItems = security
