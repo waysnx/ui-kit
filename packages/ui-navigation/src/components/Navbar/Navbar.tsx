@@ -84,7 +84,7 @@ export interface NavbarProps extends Omit<MenuProps, 'orientation' | 'role'> {
  * />
  * ```
  */
-export const Navbar = forwardRef<HTMLDivElement, NavbarProps>(
+export const Navbar = forwardRef<HTMLElement, NavbarProps>(
   (
     {
       items,
@@ -107,7 +107,7 @@ export const Navbar = forwardRef<HTMLDivElement, NavbarProps>(
     ref
   ) => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-    const navbarRef = useRef<HTMLDivElement>(null);
+    const navbarRef = useRef<HTMLElement>(null);
 
     // Handle mobile menu toggle
     const handleMobileMenuToggle = useCallback(() => {
@@ -189,7 +189,6 @@ export const Navbar = forwardRef<HTMLDivElement, NavbarProps>(
               orientation="horizontal"
               variant={variant}
               className="nav-navbar__menu"
-              role="menubar"
             />
           </div>
 
@@ -222,14 +221,14 @@ export const Navbar = forwardRef<HTMLDivElement, NavbarProps>(
 
         {/* Mobile menu - dropdown */}
         {showMobileMenu && mobileMenuOpen && (
-          <div className="nav-navbar__mobile-menu" role="menu">
+          <div className="nav-navbar__mobile-menu">
             <Menu
               items={items}
               {...menuProps}
               orientation="vertical"
               variant={variant}
               className="nav-navbar__mobile-menu-content"
-              role="menu"
+              ariaLabel="Mobile navigation menu"
             />
           </div>
         )}

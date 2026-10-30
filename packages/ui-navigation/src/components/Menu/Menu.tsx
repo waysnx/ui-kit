@@ -90,7 +90,9 @@ export interface MenuProps {
   ariaLabel?: string;
 
   /**
-   * Menu role
+   * @deprecated Menu now always renders as <nav> using Disclosure Navigation Pattern.
+   * This prop is kept for API compatibility but has no effect.
+   * The role prop will be removed in the next major version.
    */
   role?: 'menu' | 'menubar' | 'navigation' | 'none';
 
@@ -118,7 +120,7 @@ export interface MenuProps {
  * />
  * ```
  */
-export const Menu = forwardRef<HTMLDivElement, MenuProps>(
+export const Menu = forwardRef<HTMLElement, MenuProps>(
   (
     {
       items,
@@ -134,9 +136,9 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(
       showIcons = true,
       showBadges = true,
       maxDepth = 5,
-      keyboardNav = true,
+      keyboardNav: _keyboardNav = true, // Accepted for API compatibility, not used
       ariaLabel,
-      role = 'menu',
+      role: _role, // Deprecated - accepted for API compatibility, not used
       defaultExpandedIds,
     },
     ref
@@ -149,7 +151,7 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(
       return new Set();
     });
     const [focusedItemId, setFocusedItemId] = useState<string>();
-    const menuRef = useRef<HTMLDivElement>(null);
+    const menuRef = useRef<HTMLElement>(null);
 
     // Filter items by permissions
     const visibleItems = security
@@ -178,82 +180,10 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(
       });
     }, []);
 
-    // Keyboard navigation
-    const handleKeyDown = useCallback(
-      (e: React.KeyboardEvent<HTMLDivElement>) => {
-        if (!keyboardNav) return;
-
-        const allItems = visibleItems.flatMap((item) => [
-          item,
-          ...(item.children || []),
-        ]);
-
-        switch (e.key) {
-          case 'ArrowDown':
-            e.preventDefault();
-            const currentIdx = allItems.findIndex((item) => item.id === focusedItemId);
-            const nextIdx = Math.min(currentIdx + 1, allItems.length - 1);
-            setFocusedItemId(allItems[nextIdx]?.id);
-            break;
-
-          case 'ArrowUp':
-            e.preventDefault();
-            const currIdx = allItems.findIndex((item) => item.id === focusedItemId);
-            const prevIdx = Math.max(currIdx - 1, 0);
-            setFocusedItemId(allItems[prevIdx]?.id);
-            break;
-
-          case 'ArrowRight':
-            if (focusedItemId) {
-              const item = allItems.find((i) => i.id === focusedItemId);
-              if (item?.children?.length) {
-                handleToggleExpand(focusedItemId);
-              }
-            }
-            break;
-
-          case 'ArrowLeft':
-            if (focusedItemId) {
-              setExpandedItems((prev) => {
-                const next = new Set(prev);
-                next.delete(focusedItemId);
-                return next;
-              });
-            }
-            break;
-
-          case 'Enter':
-          case ' ':
-            e.preventDefault();
-            if (focusedItemId) {
-              const item = allItems.find((i) => i.id === focusedItemId);
-              if (item) {
-                handleItemClick(item);
-                if (item.children?.length) {
-                  handleToggleExpand(focusedItemId);
-                }
-              }
-            }
-            break;
-
-          case 'Escape':
-            e.preventDefault();
-            setFocusedItemId(undefined);
-            break;
-
-          case 'Home':
-            e.preventDefault();
-            setFocusedItemId(allItems[0]?.id);
-            break;
-
-          case 'End':
-            e.preventDefault();
-            setFocusedItemId(allItems[allItems.length - 1]?.id);
-            break;
-        }
-      },
-      [focusedItemId, visibleItems, keyboardNav, handleItemClick, handleToggleExpand]
-    );
+    // Keyboard navigation removed for Disclosure Navigation Pattern
+    // Native Tab/Shift+Tab navigation is the primary method
+    // Space and Enter are handled natively by <button> and <a> elements
+    // Arrow key enhancements may be added in a future release
 
     // Combine refs
     useEffect(() => {
@@ -267,15 +197,13 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(
     }, [ref]);
 
     return (
-      <div
+      <nav
         ref={menuRef}
         className={`nav-menu nav-menu--${orientation} nav-menu--${density} nav-menu--${variant} nav-component ${className}`}
-        role={role}
         aria-label={ariaLabel || 'Menu'}
-        onKeyDown={handleKeyDown}
         style={style}
       >
-        <ul className="nav-menu__list" role={role === 'none' ? 'none' : 'presentation'}>
+        <ul className="nav-menu__list" role="list">
           {visibleItems.map((item) => (
             <MenuItemComponent
               key={item.id}
@@ -295,7 +223,7 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(
             />
           ))}
         </ul>
-      </div>
+      </nav>
     );
   }
 );

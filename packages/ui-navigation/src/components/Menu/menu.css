@@ -80,11 +80,19 @@
   padding: 0;
 }
 
+/* Controls wrapper for link + chevron button */
+.nav-menu-item__controls {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+}
+
 .nav-menu-item__link {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: var(--nav-menu-item-height, 2.5rem);
+  min-height: var(--nav-menu-item-height, 2.5rem);
   padding: var(--nav-menu-item-padding, 0.5rem 1rem);
   font-size: var(--nav-menu-font-size, var(--wx-font-size-md, 16px));
   color: var(--nav-menu-item-text, var(--wx-color-text, #1e293b));
@@ -99,6 +107,12 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  flex: 1;
+}
+
+/* When link is inside controls wrapper next to chevron button, reduce right padding */
+.nav-menu-item__controls > .nav-menu-item__link {
+  padding-right: 0.25rem;
 }
 
 /* Hover state */
@@ -201,8 +215,50 @@
   border-radius: var(--wx-radius-sm, 4px);
 }
 
-.nav-menu-item__chevron:hover {
+/* Chevron button (separate focusable button for disclosure) */
+.nav-menu-item__chevron-button {
+  background: none;
+  border: none;
+  padding: 0.25rem;
+  margin: 0;
+  cursor: pointer;
+  color: currentColor;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  flex-shrink: 0;
+  transition: all var(--wx-nav-transition, 200ms) ease-in-out;
+  border-radius: var(--wx-radius-sm, 4px);
+}
+
+.nav-menu-item__chevron:hover,
+.nav-menu-item__chevron-button:hover {
   background-color: var(--nav-menu-item-chevron-hover-bg, rgba(0, 0, 0, 0.05));
+}
+
+.nav-menu-item__chevron-button:focus-visible {
+  outline: 2px solid var(--nav-menu-item-focus-outline, var(--wx-color-primary, #f19924));
+  outline-offset: 2px;
+}
+
+/* Disclosure button (button that acts as both label and toggle) */
+.nav-menu-item__disclosure {
+  background: none;
+  border: none;
+  text-align: left;
+  font: inherit;
+  width: 100%;
+}
+
+.nav-menu-item__disclosure:focus-visible {
+  outline: 2px solid var(--nav-menu-item-focus-outline, var(--wx-color-primary, #f19924));
+  outline-offset: 2px;
+}
+
+.nav-menu-item__disclosure .nav-menu-item__chevron {
+  margin-left: auto;
 }
 
 /* Expanded state */
@@ -272,7 +328,8 @@
     background-color: var(--nav-menu-item-hover-bg-dark, var(--wx-color-surface-hover, #f1f5f9));
   }
 
-  .nav-menu-item__chevron:hover {
+  .nav-menu-item__chevron:hover,
+  .nav-menu-item__chevron-button:hover {
     background-color: var(--nav-menu-item-chevron-hover-bg-dark, rgba(255, 255, 255, 0.1));
   }
 }
