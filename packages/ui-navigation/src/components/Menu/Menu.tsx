@@ -90,6 +90,13 @@ export interface MenuProps {
   ariaLabel?: string;
 
   /**
+   * @deprecated Menu now always renders as <nav> using Disclosure Navigation Pattern.
+   * This prop is kept for API compatibility but has no effect.
+   * The role prop will be removed in the next major version.
+   */
+  role?: 'menu' | 'menubar' | 'navigation' | 'none';
+
+  /**
    * Default expanded item IDs (uncontrolled mode)
    * Sets which menu items are expanded on initial render
    */
@@ -129,8 +136,9 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(
       showIcons = true,
       showBadges = true,
       maxDepth = 5,
-      keyboardNav = true,
+      keyboardNav: _keyboardNav = true, // Accepted for API compatibility, not used
       ariaLabel,
+      role: _role, // Deprecated - accepted for API compatibility, not used
       defaultExpandedIds,
     },
     ref
@@ -172,75 +180,10 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(
       });
     }, []);
 
-    // Keyboard navigation (optional arrow key enhancements for Phase 3)
-    const handleKeyDown = useCallback(
-      (e: React.KeyboardEvent<HTMLDivElement>) => {
-        if (!keyboardNav) return;
-
-        // Optional arrow key navigation (Phase 3 enhancement)
-        // Note: Tab/Shift+Tab, Enter, and Space are handled natively by links and buttons
-        
-        const allItems = visibleItems.flatMap((item) => [
-          item,
-          ...(item.children || []),
-        ]);
-
-        switch (e.key) {
-          case 'ArrowDown':
-            // Optional: Move focus to next item
-            e.preventDefault();
-            const currentIdx = allItems.findIndex((item) => item.id === focusedItemId);
-            const nextIdx = Math.min(currentIdx + 1, allItems.length - 1);
-            setFocusedItemId(allItems[nextIdx]?.id);
-            break;
-
-          case 'ArrowUp':
-            // Optional: Move focus to previous item
-            e.preventDefault();
-            const currIdx = allItems.findIndex((item) => item.id === focusedItemId);
-            const prevIdx = Math.max(currIdx - 1, 0);
-            setFocusedItemId(allItems[prevIdx]?.id);
-            break;
-
-          case 'ArrowRight':
-            // Optional: Expand item with arrow right
-            if (focusedItemId) {
-              const item = allItems.find((i) => i.id === focusedItemId);
-              if (item?.children?.length) {
-                handleToggleExpand(focusedItemId);
-              }
-            }
-            break;
-
-          case 'ArrowLeft':
-            // Optional: Collapse item with arrow left
-            if (focusedItemId) {
-              setExpandedItems((prev) => {
-                const next = new Set(prev);
-                next.delete(focusedItemId);
-                return next;
-              });
-            }
-            break;
-
-          case 'Home':
-            // Optional: Focus first item
-            e.preventDefault();
-            setFocusedItemId(allItems[0]?.id);
-            break;
-
-          case 'End':
-            // Optional: Focus last item
-            e.preventDefault();
-            setFocusedItemId(allItems[allItems.length - 1]?.id);
-            break;
-            
-          // Note: Space and Enter are NOT handled here
-          // They are handled natively by <button> and <a> elements
-        }
-      },
-      [focusedItemId, visibleItems, keyboardNav, handleToggleExpand]
-    );
+    // Keyboard navigation removed for Disclosure Navigation Pattern
+    // Native Tab/Shift+Tab navigation is the primary method
+    // Space and Enter are handled natively by <button> and <a> elements
+    // Arrow key enhancements may be added in a future release
 
     // Combine refs
     useEffect(() => {
@@ -258,7 +201,6 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(
         ref={menuRef}
         className={`nav-menu nav-menu--${orientation} nav-menu--${density} nav-menu--${variant} nav-component ${className}`}
         aria-label={ariaLabel || 'Menu'}
-        onKeyDown={handleKeyDown}
         style={style}
       >
         <ul className="nav-menu__list" role="list">

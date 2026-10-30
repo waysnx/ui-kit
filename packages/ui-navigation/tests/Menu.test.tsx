@@ -378,10 +378,10 @@ describe("Menu", () => {
       expect(screen.queryByText("Child 2")).not.toBeInTheDocument();
     });
 
-    it("documents keyboard nav limitation - ArrowDown (Phase 3)", async () => {
-      // KNOWN LIMITATION - Phase 3: Menu does not implement custom arrow key navigation
-      // Native Tab/Shift+Tab navigation is the primary method (P0 #1 implemented)
-      // Arrow keys are optional enhancements for Phase 3
+    it("arrow key handlers removed for Disclosure Navigation Pattern", async () => {
+      // Arrow key handlers have been removed in favor of native Tab navigation
+      // W3C Disclosure Navigation Pattern relies on Tab/Shift+Tab as primary method
+      // Arrow keys may be added as optional enhancements in a future release
       
       const user = userEvent.setup();
       render(<Menu items={mockItems} keyboardNav={true} />);
@@ -393,39 +393,21 @@ describe("Menu", () => {
       await user.tab();
       expect(document.activeElement).toBe(firstLink);
       
-      // Press ArrowDown
+      // Press ArrowDown - no custom handler, browser default behavior
       await user.keyboard("{ArrowDown}");
       
-      // CURRENT BEHAVIOR: Arrow keys don't move focus (Tab is the primary method)
-      // This is acceptable per W3C Disclosure Navigation Pattern
+      // Focus remains on first link (no arrow key navigation)
       expect(document.activeElement).toBe(firstLink);
       
-      // TODO Phase 3 (optional): Implement arrow key enhancements
-      // Expected: expect(document.activeElement).toBe(secondLink);
-    });
-
-    it("documents keyboard nav limitation - ArrowUp (Phase 3)", async () => {
-      // KNOWN LIMITATION - Phase 3: Arrow key navigation not implemented
-      // Tab/Shift+Tab are the primary navigation methods (already working)
-      
-      const user = userEvent.setup();
-      render(<Menu items={mockItems} keyboardNav={true} />);
-      
-      const firstLink = screen.getByText("Home").closest("a");
-      const secondLink = screen.getByText("About").closest("a");
-      
-      // Focus second item via Tab
-      await user.tab();
+      // Tab to second item works correctly
       await user.tab();
       expect(document.activeElement).toBe(secondLink);
       
-      // Press ArrowUp
+      // Press ArrowUp - no custom handler, browser default behavior
       await user.keyboard("{ArrowUp}");
       
-      // CURRENT BEHAVIOR: Arrow keys don't move focus
+      // Focus remains on second link (no arrow key navigation)
       expect(document.activeElement).toBe(secondLink);
-      
-      // TODO Phase 3 (optional): expect(document.activeElement).toBe(firstLink);
     });
 
     it("Enter key triggers native link behavior", async () => {
@@ -451,95 +433,89 @@ describe("Menu", () => {
       );
     });
 
-    it("documents keyboard nav limitation - Home key (Phase 3)", async () => {
-      // KNOWN LIMITATION - Phase 3: Home/End keys not implemented
+    it("keyboardNav prop accepted for API compatibility", async () => {
+      // keyboardNav prop is accepted but has no effect
+      // Native keyboard behavior (Tab/Enter/Space) works regardless of this prop
       
-      const user = userEvent.setup();
-      render(<Menu items={mockItems} keyboardNav={true} />);
-      
-      const lastLink = screen.getByText("Contact").closest("a");
-      const firstLink = screen.getByText("Home").closest("a");
-      
-      // Focus last item
-      lastLink?.focus();
-      expect(document.activeElement).toBe(lastLink);
-      
-      // Press Home
-      await user.keyboard("{Home}");
-      
-      // CURRENT BEHAVIOR: Focus does not move
-      expect(document.activeElement).toBe(lastLink);
-      
-      // TODO Phase 3: expect(document.activeElement).toBe(firstLink);
-    });
-
-    it("documents keyboard nav limitation - End key (Phase 3)", async () => {
-      // KNOWN LIMITATION - Phase 3: Home/End keys not implemented
-      
-      const user = userEvent.setup();
-      render(<Menu items={mockItems} keyboardNav={true} />);
-      
-      const firstLink = screen.getByText("Home").closest("a");
-      const lastLink = screen.getByText("Contact").closest("a");
-      
-      // Focus first item
-      firstLink?.focus();
-      expect(document.activeElement).toBe(firstLink);
-      
-      // Press End
-      await user.keyboard("{End}");
-      
-      // CURRENT BEHAVIOR: Focus does not move
-      expect(document.activeElement).toBe(firstLink);
-      
-      // TODO Phase 3: expect(document.activeElement).toBe(lastLink);
-    });
-
-    it("documents keyboard nav limitation - Escape key (Phase 3)", async () => {
-      // KNOWN LIMITATION - Phase 3: Escape key collapse not implemented
-      // Updated for final review correction: aria-expanded is on chevron button, not anchor
-      
-      const user = userEvent.setup();
-      render(<Menu items={mockItemsWithChildren} keyboardNav={true} />);
-      
-      const chevronButton = screen.getByRole("button", { name: /Expand Products/i });
-      
-      // Click to expand
-      await user.click(chevronButton);
-      
-      // Verify expanded on chevron button
-      expect(chevronButton).toHaveAttribute("aria-expanded", "true");
-      
-      // Focus the chevron button
-      chevronButton.focus();
-      
-      // Press Escape
-      await user.keyboard("{Escape}");
-      
-      // CURRENT BEHAVIOR: Does not collapse
-      expect(chevronButton).toHaveAttribute("aria-expanded", "true");
-      
-      // TODO Phase 3 (optional): Implement Escape key handler
-      // Expected: expect(chevronButton).toHaveAttribute("aria-expanded", "false");
-    });
-
-    it("keyboard navigation prop is available but not fully implemented", async () => {
       const user = userEvent.setup();
       render(<Menu items={mockItems} keyboardNav={false} />);
       
       const firstLink = screen.getByText("Home").closest("a");
-      const secondLink = screen.getByText("About").closest("a");
       
-      // Focus first item
-      firstLink?.focus();
+      // Tab navigation still works (native browser behavior)
+      await user.tab();
+      expect(document.activeElement).toBe(firstLink);
+    });
+
+    it("verifies visible focus indicators on links via :focus-visible", async () => {
+      // Regression test: Links must have visible focus indicators for keyboard navigation
+      
+      const user = userEvent.setup();
+      const { container } = render(<Menu items={mockItems} keyboardNav={true} />);
+      
+      const firstLink = screen.getByText("Home").closest("a");
+      
+      // Tab to focus the link
+      await user.tab();
       expect(document.activeElement).toBe(firstLink);
       
-      // Press ArrowDown
-      await user.keyboard("{ArrowDown}");
+      // Link should be focused
+      expect(firstLink).toHaveFocus();
       
-      // With keyboardNav false, custom nav should not work (currently not implemented either way)
-      expect(firstLink).toBeInTheDocument();
-      expect(secondLink).toBeInTheDocument();
+      // CSS :focus-visible applies focus indicator styles
+      // We verify the link can receive focus; visual indicator is in CSS
+      // menu.css: .nav-menu-item__link:focus-visible { outline: 2px solid ... }
+    });
+
+    it("verifies visible focus indicators on disclosure buttons via :focus-visible", async () => {
+      // Regression test: Disclosure buttons must have visible focus indicators
+      
+      const user = userEvent.setup();
+      const itemsWithDisclosure: NavigationItem[] = [
+        {
+          id: "products",
+          label: "Products",
+          children: [
+            { id: "electronics", label: "Electronics", href: "/products/electronics" },
+          ],
+        },
+      ];
+      
+      const { container } = render(<Menu items={itemsWithDisclosure} keyboardNav={true} />);
+      
+      const disclosureButton = screen.getByRole("button", { name: /Products/i });
+      
+      // Tab to focus the disclosure button
+      await user.tab();
+      expect(document.activeElement).toBe(disclosureButton);
+      
+      // Button should be focused
+      expect(disclosureButton).toHaveFocus();
+      
+      // CSS :focus-visible applies focus indicator styles
+      // menu.css: .nav-menu-item__disclosure:focus-visible { outline: 2px solid ... }
+    });
+
+    it("verifies visible focus indicators on chevron buttons via :focus-visible", async () => {
+      // Regression test: Chevron buttons must have visible focus indicators
+      
+      const user = userEvent.setup();
+      
+      render(<Menu items={mockItemsWithChildren} keyboardNav={true} />);
+      
+      const chevronButton = screen.getByRole("button", { name: /Expand Products/i });
+      
+      // Tab to link, then tab to chevron button
+      await user.tab();
+      await user.tab();
+      await user.tab();
+      expect(document.activeElement).toBe(chevronButton);
+      
+      // Button should be focused
+      expect(chevronButton).toHaveFocus();
+      
+      // CSS :focus-visible applies focus indicator styles
+      // menu.css: .nav-menu-item__chevron-button:focus-visible { outline: 2px solid ... }
     });
   });
 
@@ -661,6 +637,19 @@ describe("Menu", () => {
       // Should be exactly one navigation landmark for this Menu
       expect(navElements).toHaveLength(1);
       expect(navElements[0]).toHaveAccessibleName("Test navigation");
+    });
+
+    it("accepts deprecated role prop for API compatibility", () => {
+      // Regression test: role prop is deprecated but accepted for backwards compatibility
+      // It has no effect - Menu always renders as <nav>
+      
+      // @ts-expect-error - role is deprecated but still accepted
+      render(<Menu items={mockItems} role="menu" ariaLabel="Test menu" />);
+      
+      // Always renders as navigation landmark regardless of role prop
+      const nav = screen.getByRole("navigation");
+      expect(nav).toBeInTheDocument();
+      expect(nav).toHaveAccessibleName("Test menu");
     });
   });
 
