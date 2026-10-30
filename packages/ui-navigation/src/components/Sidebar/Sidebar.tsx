@@ -106,7 +106,7 @@ export interface SidebarProps extends Omit<MenuProps, 'role'> {
  * />
  * ```
  */
-export const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
+export const Sidebar = forwardRef<HTMLElement, SidebarProps>(
   (
     {
       items,
@@ -135,7 +135,7 @@ export const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
   ) => {
     // Phase 1: SSR-safe initialization - use prop/default only, no localStorage
     const [collapsed, setCollapsed] = useState(isCollapsed);
-    const sidebarRef = useRef<HTMLDivElement>(null);
+    const sidebarRef = useRef<HTMLElement>(null);
 
     // Phase 2: Read persisted state AFTER hydration (client-side only)
     useEffect(() => {

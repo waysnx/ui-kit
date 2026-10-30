@@ -84,7 +84,7 @@ export interface NavbarProps extends Omit<MenuProps, 'orientation' | 'role'> {
  * />
  * ```
  */
-export const Navbar = forwardRef<HTMLDivElement, NavbarProps>(
+export const Navbar = forwardRef<HTMLElement, NavbarProps>(
   (
     {
       items,
@@ -107,7 +107,7 @@ export const Navbar = forwardRef<HTMLDivElement, NavbarProps>(
     ref
   ) => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-    const navbarRef = useRef<HTMLDivElement>(null);
+    const navbarRef = useRef<HTMLElement>(null);
 
     // Handle mobile menu toggle
     const handleMobileMenuToggle = useCallback(() => {
