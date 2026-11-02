@@ -32,7 +32,8 @@
   --wx-color-destructive-hover: #b91c1c;
 
   /* Focus & Overlay */
-  --wx-shadow-focus: 0 0 0 3px rgba(241, 153, 36, 0.1);
+  --wx-color-focus: #d4731f; /* WCAG 2.2 AA compliant (3:1 on white background) */
+  --wx-shadow-focus: 0 0 0 3px rgba(212, 115, 31, 0.1);
   --wx-overlay-bg: rgba(0, 0, 0, 0.4);
 
   /* Input Height */
