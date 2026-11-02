@@ -605,9 +605,14 @@ describe("Sidebar", () => {
     });
 
     it("has accessible label", () => {
+      // Updated for final review correction:
+      // Menu now has its own ariaLabel="Sidebar navigation"
+      // So we query by role="navigation" to get the Menu's nav element
+      
       render(<Sidebar items={mockItems} />);
       
-      expect(screen.getByLabelText("Sidebar navigation")).toBeInTheDocument();
+      const nav = screen.getByRole("navigation");
+      expect(nav).toHaveAccessibleName("Sidebar navigation");
     });
 
     it("toggle button has correct aria-expanded attribute", async () => {
@@ -622,6 +627,20 @@ describe("Sidebar", () => {
       
       const expandButton = screen.getByLabelText("Expand sidebar");
       expect(expandButton).toHaveAttribute("aria-expanded", "false");
+    });
+
+    it("avoids nested navigation landmarks", () => {
+      // Regression test for final review correction:
+      // Sidebar wraps Menu in a div, not a <nav>, to avoid nested landmarks
+      // Menu itself renders as <nav>, so Sidebar should not add another
+      
+      render(<Sidebar items={mockItems} />);
+      
+      const navElements = screen.getAllByRole("navigation");
+      
+      // Should be exactly one navigation landmark (from Menu component)
+      expect(navElements).toHaveLength(1);
+      expect(navElements[0]).toHaveAccessibleName("Sidebar navigation");
     });
   });
 
