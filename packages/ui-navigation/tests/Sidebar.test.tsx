@@ -1,6 +1,7 @@
-import { describe, it, expect, vi, afterEach, beforeEach } from "vitest";
+﻿import { describe, it, expect, vi, afterEach, beforeEach } from "vitest";
 import { render, screen, cleanup } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
+import React from "react";
 import { Sidebar } from "../src/components/Sidebar";
 import type { NavigationItem } from "../src/types";
 import * as matchers from "@testing-library/jest-dom/matchers";
@@ -664,3 +665,4 @@ describe("Sidebar", () => {
     });
   });
 });
+
