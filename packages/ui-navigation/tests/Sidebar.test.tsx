@@ -735,6 +735,9 @@ describe("Sidebar", () => {
       const handleChange = vi.fn();
       const storageKey = "test-controlled-sidebar";
       
+      // Mock localStorage.setItem to verify it's not called
+      const setItemSpy = vi.spyOn(Storage.prototype, 'setItem');
+      
       render(
         <Sidebar
           items={mockItems}
@@ -749,8 +752,14 @@ describe("Sidebar", () => {
       const toggleButton = screen.getByLabelText("Collapse sidebar");
       await user.click(toggleButton);
       
+      // Verify localStorage.setItem was never called (controlled mode doesn't persist)
+      expect(setItemSpy).not.toHaveBeenCalled();
+      
+      // Also verify no value in localStorage
       const storedValue = localStorage.getItem(storageKey);
       expect(storedValue).toBeNull();
+      
+      setItemSpy.mockRestore();
     });
 
     it("supports controlled mode without callback", () => {
@@ -1097,7 +1106,7 @@ describe("Sidebar", () => {
     it("callback ref works in controlled mode", () => {
       const refCallback = vi.fn();
       
-      render(
+      const { unmount } = render(
         <Sidebar
           ref={refCallback}
           items={mockItems}
@@ -1108,6 +1117,10 @@ describe("Sidebar", () => {
       expect(refCallback).toHaveBeenCalled();
       const element = refCallback.mock.calls[0][0];
       expect(element?.tagName).toBe("ASIDE");
+      
+      // Verify callback ref receives null on unmount
+      unmount();
+      expect(refCallback).toHaveBeenCalledWith(null);
     });
 
     it("ref properly cleaned up in controlled mode on unmount", () => {

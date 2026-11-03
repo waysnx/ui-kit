@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { TestBadge } from '../TestBadge';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Sidebar } from '@waysnx/ui-navigation';
 import type { NavigationItem } from '@waysnx/ui-navigation';
 
