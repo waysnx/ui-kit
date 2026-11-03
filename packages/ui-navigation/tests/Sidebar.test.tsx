@@ -935,4 +935,3 @@ describe("Sidebar", () => {
   });
 });
 
-
