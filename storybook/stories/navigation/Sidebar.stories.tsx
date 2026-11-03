@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { TestBadge } from '../TestBadge';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Sidebar } from '@waysnx/ui-navigation';
 import type { NavigationItem } from '@waysnx/ui-navigation';
 
@@ -531,15 +531,23 @@ export const ControlledWithExternalPersistence: Story = {
   },
   render: (args) => {
     const [activeItem, setActiveItem] = useState<NavigationItem | undefined>();
+    
+    // Phase 1: Initialize with safe default (prevents SSR hydration mismatch)
     const [collapsed, setCollapsed] = useState(() => {
-      if (typeof window === 'undefined') return false;
+      if (typeof window === 'undefined') return false; // Server default
+      return false; // Client default (same as server)
+    });
+    
+    // Phase 2: Restore persisted state after hydration
+    useEffect(() => {
+      if (typeof window === 'undefined') return;
       try {
         const saved = localStorage.getItem('storybook-sidebar-controlled');
-        return saved ? JSON.parse(saved) : false;
+        if (saved) setCollapsed(JSON.parse(saved));
       } catch {
-        return false;
+        // Handle quota exceeded or other errors
       }
-    });
+    }, []);
     
     const handleChange = (value: boolean) => {
       setCollapsed(value);
@@ -566,7 +574,7 @@ export const ControlledWithExternalPersistence: Story = {
           <p>Active: {activeItem?.label || 'None'}</p>
           <p>Collapsed: {collapsed ? 'yes' : 'no'}</p>
           <p>Toggle the sidebar and refresh the page to see the state persisted.</p>
-          <p style={{ color: '#666', fontSize: '0.9rem' }}>Note: Persistence is handled externally in the component using localStorage.</p>
+          <p style={{ color: '#666', fontSize: '0.9rem' }}>Note: Uses two-phase hydration pattern to prevent SSR mismatches.</p>
         </div>
       </div>
     );

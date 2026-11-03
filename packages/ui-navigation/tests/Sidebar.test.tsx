@@ -933,5 +933,199 @@ describe("Sidebar", () => {
       expect(ref.current).toBeNull();
     });
   });
-});
 
+  describe("Controlled Mode - Regression Tests", () => {
+    it("prop updates override toggle button clicks", async () => {
+      const user = userEvent.setup();
+      const { container, rerender } = render(
+        <Sidebar
+          items={mockItems}
+          collapsed={false}
+          collapsible={true}
+        />
+      );
+      
+      // User clicks toggle
+      const toggleButton = screen.getByLabelText("Collapse sidebar");
+      await user.click(toggleButton);
+      
+      // UI should stay expanded (parent hasn't updated prop)
+      let sidebar = container.querySelector(".nav-sidebar");
+      expect(sidebar).toHaveClass("nav-sidebar--expanded");
+      
+      // Parent updates collapsed prop to true
+      rerender(
+        <Sidebar
+          items={mockItems}
+          collapsed={true}
+          collapsible={true}
+        />
+      );
+      
+      // Now UI updates to collapsed
+      sidebar = container.querySelector(".nav-sidebar");
+      expect(sidebar).toHaveClass("nav-sidebar--collapsed");
+    });
+
+    it("callback fires but UI doesn't change without prop update", async () => {
+      const user = userEvent.setup();
+      const handleChange = vi.fn();
+      const { container } = render(
+        <Sidebar
+          items={mockItems}
+          collapsed={false}
+          onCollapseChange={handleChange}
+          collapsible={true}
+        />
+      );
+      
+      const toggleButton = screen.getByLabelText("Collapse sidebar");
+      await user.click(toggleButton);
+      
+      // Callback was called
+      expect(handleChange).toHaveBeenCalledWith(true);
+      
+      // But UI didn't change (no prop update from parent)
+      const sidebar = container.querySelector(".nav-sidebar");
+      expect(sidebar).toHaveClass("nav-sidebar--expanded");
+    });
+
+    it("no-callback controlled mode works (toggle button has no effect)", async () => {
+      const user = userEvent.setup();
+      const { container } = render(
+        <Sidebar
+          items={mockItems}
+          collapsed={false}
+          collapsible={true}
+        />
+      );
+      
+      const toggleButton = screen.getByLabelText("Collapse sidebar");
+      await user.click(toggleButton);
+      
+      // UI stays expanded (no callback means nothing responds to toggle)
+      const sidebar = container.querySelector(".nav-sidebar");
+      expect(sidebar).toHaveClass("nav-sidebar--expanded");
+    });
+
+    it("defaultCollapsed ignored when collapsed prop provided", () => {
+      const { container } = render(
+        <Sidebar
+          items={mockItems}
+          collapsed={true}
+          defaultCollapsed={false} // This should be ignored
+        />
+      );
+      
+      // Should use collapsed prop value, not defaultCollapsed
+      const sidebar = container.querySelector(".nav-sidebar");
+      expect(sidebar).toHaveClass("nav-sidebar--collapsed");
+    });
+
+    it("persistence does not apply in controlled mode", async () => {
+      const user = userEvent.setup();
+      const handleChange = vi.fn();
+      
+      // Pre-set localStorage with different value
+      localStorage.setItem("test-controlled", JSON.stringify(true));
+      
+      const { container, rerender } = render(
+        <Sidebar
+          items={mockItems}
+          collapsed={false} // Prop says expanded
+          onCollapseChange={handleChange}
+          persistState={true}
+          storageKey="test-controlled"
+          collapsible={true}
+        />
+      );
+      
+      // UI renders expanded (from prop, ignoring localStorage)
+      let sidebar = container.querySelector(".nav-sidebar");
+      expect(sidebar).toHaveClass("nav-sidebar--expanded");
+      
+      // Toggle button clicked
+      const toggleButton = screen.getByLabelText("Collapse sidebar");
+      await user.click(toggleButton);
+      
+      // Callback called but localStorage NOT written (controlled mode)
+      expect(handleChange).toHaveBeenCalledWith(true);
+      expect(JSON.parse(localStorage.getItem("test-controlled") || "false")).toBe(true);
+      
+      // Clean up
+      localStorage.clear();
+    });
+
+    it("mode change warning in development", () => {
+      const originalEnv = process.env.NODE_ENV;
+      process.env.NODE_ENV = 'development';
+      
+      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      
+      const { rerender } = render(
+        <Sidebar items={mockItems} collapsed={false} />
+      );
+      
+      // Switch to uncontrolled mode
+      rerender(
+        <Sidebar items={mockItems} />
+      );
+      
+      expect(warnSpy).toHaveBeenCalledWith(
+        expect.stringContaining('Mode change detected after mount')
+      );
+      
+      warnSpy.mockRestore();
+      process.env.NODE_ENV = originalEnv;
+    });
+
+    it("object ref works in controlled mode", () => {
+      const ref = React.createRef<HTMLElement>();
+      
+      render(
+        <Sidebar
+          ref={ref}
+          items={mockItems}
+          collapsed={false}
+        />
+      );
+      
+      expect(ref.current).toBeInstanceOf(HTMLElement);
+      expect(ref.current?.tagName).toBe("ASIDE");
+    });
+
+    it("callback ref works in controlled mode", () => {
+      const refCallback = vi.fn();
+      
+      render(
+        <Sidebar
+          ref={refCallback}
+          items={mockItems}
+          collapsed={false}
+        />
+      );
+      
+      expect(refCallback).toHaveBeenCalled();
+      const element = refCallback.mock.calls[0][0];
+      expect(element?.tagName).toBe("ASIDE");
+    });
+
+    it("ref properly cleaned up in controlled mode on unmount", () => {
+      const ref = React.createRef<HTMLElement>();
+      
+      const { unmount } = render(
+        <Sidebar
+          ref={ref}
+          items={mockItems}
+          collapsed={false}
+        />
+      );
+      
+      expect(ref.current).not.toBeNull();
+      
+      unmount();
+      
+      expect(ref.current).toBeNull();
+    });
+  });
+});

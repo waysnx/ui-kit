@@ -279,22 +279,28 @@ export interface SidebarProps extends Omit<MenuProps, 'role'> {
  *
  * @example
  * ```tsx
- * // SSR-SAFE: Initialize in useState, not at module level
+ * // SSR-SAFE: Two-phase hydration pattern
+ * // Phase 1: Initialize with safe default (no localStorage access)
  * const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
- *   // This runs on client only after hydration
- *   // typeof window check prevents SSR errors
+ *   // Server and initial client render use prop default (prevents hydration mismatch)
  *   if (typeof window === 'undefined') {
  *     return false; // SSR default
  *   }
+ *   // On client: start with same default, restore persisted state in useEffect
+ *   return false;
+ * });
+ *
+ * // Phase 2: Restore persisted state after hydration
+ * useEffect(() => {
+ *   if (typeof window === 'undefined') return;
  *   
  *   try {
  *     const saved = localStorage.getItem('sidebar-collapsed');
- *     return saved ? JSON.parse(saved) : false;
+ *     if (saved) setSidebarCollapsed(JSON.parse(saved));
  *   } catch (e) {
  *     // localStorage not available (sandboxed context)
- *     return false;
  *   }
- * });
+ * }, []); // Single run after mount
  *
  * const handleChange = (collapsed: boolean) => {
  *   setSidebarCollapsed(collapsed);
@@ -321,8 +327,9 @@ export interface SidebarProps extends Omit<MenuProps, 'role'> {
  * />
  * ```
  *
- * Note: Always check `typeof window !== 'undefined'` before accessing localStorage
- * to avoid SSR hydration mismatches and runtime errors in sandboxed contexts.
+ * Note: Two-phase hydration prevents SSR mismatches: initialize with prop default on both
+ * server and client, then restore persisted state after hydration via useEffect. Always check
+ * `typeof window !== 'undefined'` before accessing localStorage to avoid runtime errors in SSR.
  *
  * ## Backward Compatibility
  * The isCollapsed prop is deprecated but fully supported for backward compatibility.
@@ -480,30 +487,28 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(
       // In controlled mode: consumer handles state update via onCollapseChange
     }, [renderCollapsed, isControlled, onCollapseChange, persistState, storageKey]);
 
-    // ========== ASSIGN FORWARDED REF with cleanup ==========
-    useEffect(() => {
+    // ========== MERGED CALLBACK REF (assigned during commit phase) ==========
+    // This merged ref handles both forwarded ref and internal sidebarRef
+    // Assigned during React's commit phase (not in useEffect), properly cleaned up on unmount
+    const mergedRef = useCallback((element: HTMLElement | null) => {
+      // Assign to internal ref
+      sidebarRef.current = element;
+      
+      // Assign to forwarded ref
       if (ref) {
         if (typeof ref === 'function') {
           // Callback ref
-          ref(sidebarRef.current);
-          // Cleanup: Clear callback ref on unmount
-          return () => {
-            ref(null as unknown as HTMLElement);
-          };
+          ref(element);
         } else {
           // Object ref
-          ref.current = sidebarRef.current;
-          // Cleanup: Clear object ref on unmount
-          return () => {
-            if (ref.current) ref.current = null;
-          };
+          ref.current = element;
         }
       }
     }, [ref]);
 
     return (
       <aside
-        ref={sidebarRef}
+        ref={mergedRef}
         className={`nav-sidebar nav-sidebar--${position} nav-sidebar--${renderCollapsed ? 'collapsed' : 'expanded'} nav-component ${className}`}
         style={{
           ...style,
