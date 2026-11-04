@@ -1,7 +1,9 @@
 ﻿import { describe, it, expect, vi, afterEach, beforeEach } from "vitest";
-import { render, screen, cleanup } from "@testing-library/react";
+import { render, screen, cleanup, act } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
 import React from "react";
+import { createRoot, hydrateRoot, Root } from 'react-dom/client';
+import { renderToString } from 'react-dom/server';
 import { Sidebar } from "../src/components/Sidebar";
 import type { NavigationItem } from "../src/types";
 import * as matchers from "@testing-library/jest-dom/matchers";
@@ -1141,4 +1143,412 @@ describe("Sidebar", () => {
       expect(ref.current).toBeNull();
     });
   });
+
+  describe("Hydration (SSR Safety) - React act() + renderToString", () => {
+    it("performs SSR renderToString without errors and hydrates correctly", () => {
+      // Phase 1: Server-side render with renderToString
+      const html = renderToString(
+        <Sidebar
+          items={mockItems}
+          defaultCollapsed={false}
+          persistState={true}
+          storageKey="ssr-test-key"
+        />
+      );
+
+      // Verify HTML was generated
+      expect(html).toContain('nav-sidebar');
+      expect(html).toContain('nav-sidebar--expanded');
+    });
+
+    it("hydrates correctly with act() and captures hydration state", async () => {
+      // Pre-set localStorage to simulate client-side persisted state
+      localStorage.setItem('ssr-hydration-key', JSON.stringify(true)); // collapsed
+
+      const container = document.createElement('div');
+      document.body.appendChild(container);
+
+      try {
+        // Phase 1: Server render HTML (simulated as expanded from prop)
+        const html = renderToString(
+          <Sidebar
+            items={mockItems}
+            defaultCollapsed={false}
+            persistState={true}
+            storageKey="ssr-hydration-key"
+          />
+        );
+
+        // Set innerHTML to simulate server HTML
+        container.innerHTML = html;
+
+        // Phase 2: Hydrate on client with act()
+        const root = hydrateRoot(
+          container,
+          <Sidebar
+            items={mockItems}
+            defaultCollapsed={false}
+            persistState={true}
+            storageKey="ssr-hydration-key"
+          />
+        );
+
+        // Flush all React updates
+        await act(async () => {
+          // Allow effects to run
+          await new Promise(resolve => setTimeout(resolve, 0));
+        });
+
+        // Verify hydration completed and persisted state was applied
+        const sidebar = container.querySelector('.nav-sidebar');
+        expect(sidebar).toHaveClass('nav-sidebar--collapsed');
+
+        // Clean up root
+        root.unmount();
+      } finally {
+        document.body.removeChild(container);
+        localStorage.clear();
+      }
+    });
+
+    it("captures hydration mismatch scenario with act() and flushes effects", async () => {
+      const container = document.createElement('div');
+      document.body.appendChild(container);
+
+      try {
+        // Scenario: Server renders expanded, but client has persisted collapsed state
+        localStorage.setItem('mismatch-key', JSON.stringify(true)); // Client persisted: collapsed
+
+        // Simulate server HTML (expanded)
+        const serverHtml = renderToString(
+          <Sidebar
+            items={mockItems}
+            defaultCollapsed={false} // Server prop: expanded
+            persistState={true}
+            storageKey="mismatch-key"
+          />
+        );
+
+        container.innerHTML = serverHtml;
+
+        // Client hydration - should resolve mismatch by using persisted state
+        const root = hydrateRoot(
+          container,
+          <Sidebar
+            items={mockItems}
+            defaultCollapsed={false} // Client prop: expanded initially
+            persistState={true}
+            storageKey="mismatch-key"
+          />
+        );
+
+        // Flush effects with act()
+        await act(async () => {
+          await new Promise(resolve => setTimeout(resolve, 0));
+        });
+
+        // After hydration, should show persisted state (collapsed)
+        const sidebar = container.querySelector('.nav-sidebar');
+        expect(sidebar).toHaveClass('nav-sidebar--collapsed');
+
+        root.unmount();
+      } finally {
+        document.body.removeChild(container);
+        localStorage.clear();
+      }
+    });
+
+    it("handles SSR with no localStorage during renderToString", () => {
+      // During renderToString on server, localStorage is undefined
+      // Component should not crash and should render with default value
+      const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+      const html = renderToString(
+        <Sidebar
+          items={mockItems}
+          defaultCollapsed={false}
+          persistState={true}
+          storageKey="server-key"
+        />
+      );
+
+      // Should render successfully with default (expanded)
+      expect(html).toContain('nav-sidebar--expanded');
+      expect(html).toContain('nav-sidebar');
+
+      consoleWarnSpy.mockRestore();
+    });
+  });
+
+  describe("Persistence Configuration Stability (Dependency Safety)", () => {
+    it("does not restore persisted state if persistState changes false → true after mount", async () => {
+      // Pre-set localStorage
+      localStorage.setItem('config-key', JSON.stringify(true)); // collapsed
+
+      const { container, rerender } = render(
+        <Sidebar
+          items={mockItems}
+          persistState={false} // Initially not persisting
+          storageKey="config-key"
+        />
+      );
+
+      // Should render expanded (default, not restored)
+      let sidebar = container.querySelector('.nav-sidebar');
+      expect(sidebar).toHaveClass('nav-sidebar--expanded');
+
+      // Change persistState to true
+      rerender(
+        <Sidebar
+          items={mockItems}
+          persistState={true} // Now persisting
+          storageKey="config-key"
+        />
+      );
+
+      // Mount-only effect: should NOT restore on dependency change
+      // Should still be expanded (not overwritten by localStorage)
+      sidebar = container.querySelector('.nav-sidebar');
+      expect(sidebar).toHaveClass('nav-sidebar--expanded');
+
+      localStorage.clear();
+    });
+
+    it("does not change rendered state if storageKey changes after mount", async () => {
+      localStorage.setItem('key-a', JSON.stringify(true)); // collapsed
+      localStorage.setItem('key-b', JSON.stringify(false)); // expanded
+
+      const { container, rerender } = render(
+        <Sidebar
+          items={mockItems}
+          persistState={true}
+          storageKey="key-a"
+        />
+      );
+
+      // Initial render: restores from key-a (collapsed)
+      let sidebar = container.querySelector('.nav-sidebar');
+      expect(sidebar).toHaveClass('nav-sidebar--collapsed');
+
+      // Change storageKey to key-b
+      rerender(
+        <Sidebar
+          items={mockItems}
+          persistState={true}
+          storageKey="key-b"
+        />
+      );
+
+      // Mount-only effect: should NOT restore from new key
+      // Should remain collapsed (not overwritten by key-b value)
+      sidebar = container.querySelector('.nav-sidebar');
+      expect(sidebar).toHaveClass('nav-sidebar--collapsed');
+
+      localStorage.clear();
+    });
+
+    it("does not overwrite user interactions when persistence config changes", async () => {
+      const user = userEvent.setup();
+
+      const { container, rerender } = render(
+        <Sidebar
+          items={mockItems}
+          defaultCollapsed={false}
+          persistState={true}
+          storageKey="interaction-key"
+          collapsible={true}
+        />
+      );
+
+      // User interacts: toggles sidebar
+      const toggleButton = screen.getByLabelText("Collapse sidebar");
+      await user.click(toggleButton);
+
+      // Sidebar is now collapsed (user action persisted)
+      let sidebar = container.querySelector('.nav-sidebar');
+      expect(sidebar).toHaveClass('nav-sidebar--collapsed');
+      expect(JSON.parse(localStorage.getItem('interaction-key') || 'false')).toBe(true);
+
+      // Change persistState to false during interaction
+      rerender(
+        <Sidebar
+          items={mockItems}
+          defaultCollapsed={false}
+          persistState={false} // Disable persistence
+          storageKey="interaction-key"
+          collapsible={true}
+        />
+      );
+
+      // User's collapsed state should NOT be overwritten
+      sidebar = container.querySelector('.nav-sidebar');
+      expect(sidebar).toHaveClass('nav-sidebar--collapsed');
+
+      // Further toggles should not persist
+      const expandButton = screen.getByLabelText("Expand sidebar");
+      await user.click(expandButton);
+
+      sidebar = container.querySelector('.nav-sidebar');
+      expect(sidebar).toHaveClass('nav-sidebar--expanded');
+
+      // Check that localStorage was not updated (persistState=false)
+      expect(JSON.parse(localStorage.getItem('interaction-key') || 'true')).toBe(true); // Still old value
+
+      localStorage.clear();
+    });
+
+    it("preserves internal state when controlled/uncontrolled mode does not change", async () => {
+      const user = userEvent.setup();
+
+      const { container, rerender } = render(
+        <Sidebar
+          items={mockItems}
+          defaultCollapsed={false}
+          collapsible={true}
+        />
+      );
+
+      // User interacts: toggles sidebar
+      const toggleButton = screen.getByLabelText("Collapse sidebar");
+      await user.click(toggleButton);
+
+      let sidebar = container.querySelector('.nav-sidebar');
+      expect(sidebar).toHaveClass('nav-sidebar--collapsed');
+
+      // Rerender with same mode (uncontrolled) - other props may change
+      rerender(
+        <Sidebar
+          items={mockItems}
+          defaultCollapsed={false}
+          collapsible={true}
+          colorScheme="dark" // Only color scheme changed
+        />
+      );
+
+      // Internal state should persist - still collapsed
+      sidebar = container.querySelector('.nav-sidebar');
+      expect(sidebar).toHaveClass('nav-sidebar--collapsed');
+    });
+  });
+
+  describe("Dedicated Controlled Mode Tests", () => {
+    it("collapsed prop controls rendered state directly", () => {
+      const { container } = render(
+        <Sidebar
+          items={mockItems}
+          collapsed={true}
+        />
+      );
+
+      const sidebar = container.querySelector('.nav-sidebar');
+      expect(sidebar).toHaveClass('nav-sidebar--collapsed');
+    });
+
+    it("onCollapseChange is called on toggle interaction", async () => {
+      const user = userEvent.setup();
+      const handleChange = vi.fn();
+
+      render(
+        <Sidebar
+          items={mockItems}
+          collapsed={false}
+          onCollapseChange={handleChange}
+          collapsible={true}
+        />
+      );
+
+      const toggleButton = screen.getByLabelText("Collapse sidebar");
+      await user.click(toggleButton);
+
+      expect(handleChange).toHaveBeenCalledTimes(1);
+      expect(handleChange).toHaveBeenCalledWith(true);
+    });
+
+    it("persistence restoration is skipped in controlled mode", () => {
+      localStorage.setItem('controlled-persist-key', JSON.stringify(true));
+
+      const { container } = render(
+        <Sidebar
+          items={mockItems}
+          collapsed={false} // Explicitly expanded
+          persistState={true}
+          storageKey="controlled-persist-key"
+        />
+      );
+
+      // Should render expanded (from prop), ignoring localStorage
+      const sidebar = container.querySelector('.nav-sidebar');
+      expect(sidebar).toHaveClass('nav-sidebar--expanded');
+
+      localStorage.clear();
+    });
+
+    it("localStorage.setItem() is never called in controlled mode", async () => {
+      const user = userEvent.setup();
+      const setItemSpy = vi.spyOn(Storage.prototype, 'setItem');
+
+      render(
+        <Sidebar
+          items={mockItems}
+          collapsed={false}
+          onCollapseChange={() => {}}
+          persistState={true}
+          storageKey="controlled-no-persist"
+          collapsible={true}
+        />
+      );
+
+      const toggleButton = screen.getByLabelText("Collapse sidebar");
+      await user.click(toggleButton);
+
+      // setItem should never be called in controlled mode
+      expect(setItemSpy).not.toHaveBeenCalled();
+
+      setItemSpy.mockRestore();
+    });
+
+    it("controlled mode renders correct aria-expanded attribute", async () => {
+      const user = userEvent.setup();
+      const { rerender } = render(
+        <Sidebar
+          items={mockItems}
+          collapsed={false}
+          collapsible={true}
+        />
+      );
+
+      let toggleButton = screen.getByLabelText("Collapse sidebar");
+      expect(toggleButton).toHaveAttribute("aria-expanded", "true");
+
+      // Simulate parent prop update
+      rerender(
+        <Sidebar
+          items={mockItems}
+          collapsed={true}
+          collapsible={true}
+        />
+      );
+
+      toggleButton = screen.getByLabelText("Expand sidebar");
+      expect(toggleButton).toHaveAttribute("aria-expanded", "false");
+    });
+
+    it("controlled mode without onCollapseChange callback works", () => {
+      const { container } = render(
+        <Sidebar
+          items={mockItems}
+          collapsed={true}
+          collapsible={true}
+          // No onCollapseChange callback
+        />
+      );
+
+      const sidebar = container.querySelector('.nav-sidebar');
+      expect(sidebar).toHaveClass('nav-sidebar--collapsed');
+
+      // Toggle button exists but has no effect (no callback)
+      expect(screen.getByLabelText("Expand sidebar")).toBeInTheDocument();
+    });
+  });
 });
+

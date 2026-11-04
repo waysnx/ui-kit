@@ -136,11 +136,32 @@ export interface SidebarProps extends Omit<MenuProps, 'role'> {
    * 
    * In controlled mode, persistence is handled externally by consumer.
    * In uncontrolled mode, enables automatic localStorage persistence.
+   * 
+   * IMPORTANT: persistState changes do NOT trigger restoration or state changes.
+   * State restoration only occurs on initial mount (hydration phase).
+   * Changes to persistState, storageKey, or controlled/uncontrolled mode after mount
+   * will NOT unexpectedly restore or overwrite user interactions.
+   * 
+   * Predictable Behavior:
+   * - persistState=false → true: Does NOT restore persisted state (mount-only)
+   * - storageKey change: Does NOT restore from new key (mount-only)
+   * - Controlled → Uncontrolled mode: Not supported (mode must be stable)
+   * - Uncontrolled → Controlled mode: Not supported (mode must be stable)
+   * 
+   * Use Case: If persistence needs to be toggled post-mount, manage state externally
+   * in controlled mode instead of changing persistState.
    */
   persistState?: boolean;
 
   /**
    * Storage key for persistence
+   * 
+   * IMPORTANT: Changing storageKey after mount does NOT trigger restoration from the
+   * new key or clear the old key. This prevents unexpected state restoration that could
+   * overwrite user interactions.
+   * 
+   * Storage key changes are designed to be used only during initial configuration.
+   * For dynamic persistence behavior, use controlled mode with external state management.
    */
   storageKey?: string;
 
@@ -173,6 +194,22 @@ export interface SidebarProps extends Omit<MenuProps, 'role'> {
  * Note: Persisted state takes precedence over initial props after hydration.
  * This means if you have persisted state, toggling the sidebar once and
  * refreshing will restore the toggled state, not the defaultCollapsed value.
+ *
+ * ## Persistence Configuration Stability
+ * 
+ * **Key Design Principle:** Changes to `persistState`, `storageKey`, or mode after
+ * initial mount will NOT cause unexpected state restoration that could overwrite
+ * user interactions. State restoration only occurs during the hydration phase.
+ * 
+ * Predictable Behavior:
+ * - **persistState changes** (false → true): Does NOT restore persisted state
+ * - **storageKey changes**: Does NOT restore from new key or clear old key  
+ * - **Mode changes**: Switching between controlled/uncontrolled is not supported
+ *   (will trigger development warning). Mode must be stable throughout lifetime.
+ * 
+ * This design prevents footguns where config changes could overwrite user's recent
+ * interactions. If dynamic persistence behavior is needed, use controlled mode with
+ * external state management instead of changing persistState after mount.
  *
  * ## Mode Stability (Important)
  * Do NOT switch between controlled and uncontrolled modes after mounting.
@@ -427,6 +464,8 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(
 
     // ========== UNCONTROLLED MODE: Phase 2 - Restore Persisted State (SSR-safe) ==========
     // Only runs in uncontrolled mode, after hydration
+    // IMPORTANT: Mount-only effect ([]) prevents unexpected restoration on dependency changes
+    // persistState/storageKey changes cannot override user interactions after hydration
     useEffect(() => {
       if (isControlled) return;  // Skip if controlled
       if (!persistState) return;
@@ -457,7 +496,7 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(
           console.warn('[Sidebar] Failed to access localStorage, using default state');
         }
       }
-    }, [persistState, storageKey, isControlled]);
+    }, []);
 
     // ========== HANDLE TOGGLE (Works in Both Modes) ==========
     const handleToggleCollapse = useCallback(() => {
