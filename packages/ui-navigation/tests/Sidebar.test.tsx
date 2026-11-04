@@ -1166,6 +1166,23 @@ describe("Sidebar", () => {
   });
 
   describe("Hydration (SSR Safety) - React act() + renderToString", () => {
+    // Helper: Comprehensive hydration warning detection
+    const captureHydrationWarnings = (consoleErrorSpy: any) => {
+      return consoleErrorSpy.mock.calls.filter((call: any[]) => {
+        const message = call[0]?.toString?.() || '';
+        // Capture all React hydration-related errors
+        return (
+          message.includes('Hydration') ||
+          message.includes('hydration') ||
+          message.includes('mismatch') ||
+          message.includes('Mismatch') ||
+          message.includes('expected') ||
+          message.includes('was not') ||
+          message.includes('did not match')
+        );
+      });
+    };
+
     it("performs SSR renderToString without errors and hydrates correctly", () => {
       // Phase 1: Server-side render with renderToString
       const html = renderToString(
@@ -1225,12 +1242,9 @@ describe("Sidebar", () => {
         const sidebar = container.querySelector('.nav-sidebar');
         expect(sidebar).toHaveClass('nav-sidebar--collapsed');
 
-        // Verify no hydration mismatch warnings
-        const errorCalls = consoleErrorSpy.mock.calls.filter(
-          call => call[0]?.includes?.('Hydration mismatch') || 
-                   call[0]?.includes?.('hydration failed')
-        );
-        expect(errorCalls).toHaveLength(0);
+        // Verify no hydration warnings using comprehensive detection
+        const hydrationWarnings = captureHydrationWarnings(consoleErrorSpy);
+        expect(hydrationWarnings).toHaveLength(0);
 
         // Clean up root
         if (root) {
@@ -1244,15 +1258,16 @@ describe("Sidebar", () => {
       }
     });
 
-    it("captures hydration mismatch scenario with act() and flushes effects", async () => {
+    it("restores persisted state after hydration without mismatch warnings", async () => {
       const container = document.createElement('div');
       document.body.appendChild(container);
 
-      // Capture console to verify hydration mismatch handling
+      // Capture console to verify no hydration mismatch warnings
       const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
       try {
-        // Scenario: Server renders expanded, but client has persisted collapsed state
+        // Scenario: Server renders expanded (defaultCollapsed=false)
+        // Client has persisted collapsed state (true)
         localStorage.setItem('mismatch-key', JSON.stringify(true)); // Client persisted: collapsed
 
         // Simulate server HTML (expanded)
@@ -1267,7 +1282,7 @@ describe("Sidebar", () => {
 
         container.innerHTML = serverHtml;
 
-        // Client hydration - should resolve mismatch by using persisted state
+        // Client hydration - should restore persisted state (collapsed)
         let root: Root | null = null;
         await act(async () => {
           root = hydrateRoot(
@@ -1285,12 +1300,9 @@ describe("Sidebar", () => {
         const sidebar = container.querySelector('.nav-sidebar');
         expect(sidebar).toHaveClass('nav-sidebar--collapsed');
 
-        // Verify component handled mismatch gracefully
-        // (No hydration mismatch warnings expected - component is designed to handle this)
-        const hydrationWarnings = consoleErrorSpy.mock.calls.filter(
-          call => call[0]?.includes?.('Hydration mismatch')
-        );
-        expect(hydrationWarnings.length).toBeLessThanOrEqual(0);
+        // Verify no hydration mismatch warnings using comprehensive detection
+        const hydrationWarnings = captureHydrationWarnings(consoleErrorSpy);
+        expect(hydrationWarnings).toHaveLength(0);
 
         if (root) {
           root.unmount();
