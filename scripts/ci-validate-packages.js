@@ -45,8 +45,10 @@ const PUBLISHABLE_PACKAGES = new Set([
 
 // Expected versions for packages (allows different versions per package)
 const EXPECTED_VERSIONS = {
+  '@waysnx/ui-core': '1.0.2',          // Focus color accessibility fix
+  '@waysnx/ui-navigation': '1.1.0',    // Keyboard accessibility + controlled Sidebar + SSR fixes
   '@waysnx/ui-form-builder': '1.0.2',  // Bug fix release
-  '@waysnx/ui-kit': '1.0.2',           // Aggregate updated to include form-builder fix
+  '@waysnx/ui-kit': '1.0.3',           // Aggregate updated to include ui-core 1.0.2 fix
   // All others default to 1.0.1
 };
 
