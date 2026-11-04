@@ -335,7 +335,7 @@ describe("Sidebar", () => {
           configurable: true,
         });
 
-        render(
+        const { container } = render(
           <Sidebar
             items={mockItems}
             persistState={true}
@@ -343,13 +343,34 @@ describe("Sidebar", () => {
             collapsible={true}
           />
         );
-        
+
+        // Initial state: expanded
+        let sidebar = container.querySelector(".nav-sidebar");
+        expect(sidebar).toHaveClass("nav-sidebar--expanded");
+
+        // User clicks toggle
         const toggleButton = screen.getByLabelText("Collapse sidebar");
         await user.click(toggleButton);
-        
+
+        // Verify state changed to collapsed despite storage failure
+        sidebar = container.querySelector(".nav-sidebar");
+        expect(sidebar).toHaveClass("nav-sidebar--collapsed");
+
+        // Verify warning was logged
         expect(consoleWarnSpy).toHaveBeenCalledWith(
           expect.stringContaining("localStorage quota exceeded")
         );
+
+        // Verify interaction remains functional - toggle again
+        const expandButton = screen.getByLabelText("Expand sidebar");
+        await user.click(expandButton);
+
+        // Verify state changed back to expanded
+        sidebar = container.querySelector(".nav-sidebar");
+        expect(sidebar).toHaveClass("nav-sidebar--expanded");
+
+        // Verify localStorage.setItem was called but failed silently
+        expect(mockStorage.setItem).toHaveBeenCalled();
       } finally {
         Object.defineProperty(global, "localStorage", {
           value: originalLocalStorage,
@@ -1168,6 +1189,10 @@ describe("Sidebar", () => {
       const container = document.createElement('div');
       document.body.appendChild(container);
 
+      // Capture console output to verify no hydration warnings
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
       try {
         // Phase 1: Server render HTML (simulated as expanded from prop)
         const html = renderToString(
@@ -1182,38 +1207,49 @@ describe("Sidebar", () => {
         // Set innerHTML to simulate server HTML
         container.innerHTML = html;
 
-        // Phase 2: Hydrate on client with act()
-        const root = hydrateRoot(
-          container,
-          <Sidebar
-            items={mockItems}
-            defaultCollapsed={false}
-            persistState={true}
-            storageKey="ssr-hydration-key"
-          />
-        );
-
-        // Flush all React updates
+        // Phase 2: Hydrate on client with act() - no setTimeout delays
+        let root: Root | null = null;
         await act(async () => {
-          // Allow effects to run
-          await new Promise(resolve => setTimeout(resolve, 0));
+          root = hydrateRoot(
+            container,
+            <Sidebar
+              items={mockItems}
+              defaultCollapsed={false}
+              persistState={true}
+              storageKey="ssr-hydration-key"
+            />
+          );
         });
 
         // Verify hydration completed and persisted state was applied
         const sidebar = container.querySelector('.nav-sidebar');
         expect(sidebar).toHaveClass('nav-sidebar--collapsed');
 
+        // Verify no hydration mismatch warnings
+        const errorCalls = consoleErrorSpy.mock.calls.filter(
+          call => call[0]?.includes?.('Hydration mismatch') || 
+                   call[0]?.includes?.('hydration failed')
+        );
+        expect(errorCalls).toHaveLength(0);
+
         // Clean up root
-        root.unmount();
+        if (root) {
+          root.unmount();
+        }
       } finally {
         document.body.removeChild(container);
         localStorage.clear();
+        consoleErrorSpy.mockRestore();
+        consoleWarnSpy.mockRestore();
       }
     });
 
     it("captures hydration mismatch scenario with act() and flushes effects", async () => {
       const container = document.createElement('div');
       document.body.appendChild(container);
+
+      // Capture console to verify hydration mismatch handling
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
       try {
         // Scenario: Server renders expanded, but client has persisted collapsed state
@@ -1232,29 +1268,37 @@ describe("Sidebar", () => {
         container.innerHTML = serverHtml;
 
         // Client hydration - should resolve mismatch by using persisted state
-        const root = hydrateRoot(
-          container,
-          <Sidebar
-            items={mockItems}
-            defaultCollapsed={false} // Client prop: expanded initially
-            persistState={true}
-            storageKey="mismatch-key"
-          />
-        );
-
-        // Flush effects with act()
+        let root: Root | null = null;
         await act(async () => {
-          await new Promise(resolve => setTimeout(resolve, 0));
+          root = hydrateRoot(
+            container,
+            <Sidebar
+              items={mockItems}
+              defaultCollapsed={false} // Client prop: expanded initially
+              persistState={true}
+              storageKey="mismatch-key"
+            />
+          );
         });
 
         // After hydration, should show persisted state (collapsed)
         const sidebar = container.querySelector('.nav-sidebar');
         expect(sidebar).toHaveClass('nav-sidebar--collapsed');
 
-        root.unmount();
+        // Verify component handled mismatch gracefully
+        // (No hydration mismatch warnings expected - component is designed to handle this)
+        const hydrationWarnings = consoleErrorSpy.mock.calls.filter(
+          call => call[0]?.includes?.('Hydration mismatch')
+        );
+        expect(hydrationWarnings.length).toBeLessThanOrEqual(0);
+
+        if (root) {
+          root.unmount();
+        }
       } finally {
         document.body.removeChild(container);
         localStorage.clear();
+        consoleErrorSpy.mockRestore();
       }
     });
 
