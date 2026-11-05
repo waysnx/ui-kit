@@ -1,0 +1,1267 @@
+{
+  "auditId": "UIK11-001",
+  "schemaVersion": "1.0.0",
+  "auditDate": "2026-11-05",
+  "library": {
+    "name": "@waysnx/ui-core",
+    "version": "1.0.0",
+    "componentCount": 24,
+    "description": "Core UI components: form inputs, display, controls"
+  },
+  "components": [
+    {
+      "id": "autocomplete",
+      "name": "Autocomplete",
+      "type": "Input/Selection control",
+      "criteria": {
+        "responsive": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA"
+        },
+        "keyboard_focus": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA"
+        },
+        "states": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "long_content": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "backward_compatibility": {
+          "implementation": "Pass",
+          "documentation": "Pass",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "accessibility": {
+          "implementation": "Pass",
+          "documentation": "Code-reviewed",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA Pass, 2.2 AA Pass"
+        }
+      },
+      "materialFindings": [],
+      "decision": "Keep",
+      "reasoning": "Autocomplete is feature-complete with proper keyboard navigation, ARIA support, loading/error states, and responsive design."
+    },
+    {
+      "id": "button",
+      "name": "Button",
+      "type": "Action control",
+      "criteria": {
+        "responsive": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA"
+        },
+        "keyboard_focus": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA"
+        },
+        "states": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "long_content": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "backward_compatibility": {
+          "implementation": "Pass",
+          "documentation": "Pass",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "accessibility": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA Pass, 2.2 AA Pass"
+        }
+      },
+      "materialFindings": [],
+      "decision": "Keep",
+      "reasoning": "Simple, accessible, and focused implementation. Variant system is clear and extensible."
+    },
+    {
+      "id": "checkbox",
+      "name": "Checkbox",
+      "type": "Selection control (single/group)",
+      "criteria": {
+        "responsive": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA"
+        },
+        "keyboard_focus": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA"
+        },
+        "states": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "long_content": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "backward_compatibility": {
+          "implementation": "Pass",
+          "documentation": "Pass",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "accessibility": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA Pass, 2.2 AA Pass"
+        }
+      },
+      "materialFindings": [
+        {
+          "id": "checkbox-001",
+          "priority": "P2",
+          "title": "Xref loading state lacks per-option feedback",
+          "description": "When loading options from xref, only generic loading message shown; no per-option loading indication.",
+          "finding": "Finding 1: P2 - Xref loading state shows generic loading message; no per-option loading feedback"
+        }
+      ],
+      "decision": "Keep",
+      "reasoning": "Solid checkbox implementation with group support, proper accessibility patterns."
+    },
+    {
+      "id": "currency",
+      "name": "Currency",
+      "type": "Number input",
+      "criteria": {
+        "responsive": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA"
+        },
+        "keyboard_focus": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA"
+        },
+        "states": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "long_content": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "backward_compatibility": {
+          "implementation": "Pass",
+          "documentation": "Pass",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "accessibility": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA Pass, 2.2 AA Pass"
+        }
+      },
+      "materialFindings": [],
+      "decision": "Keep",
+      "reasoning": "Clean currency input wrapper with proper validation and number formatting support."
+    },
+    {
+      "id": "datepicker",
+      "name": "DatePicker",
+      "type": "Date input",
+      "criteria": {
+        "responsive": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA"
+        },
+        "keyboard_focus": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA"
+        },
+        "states": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "long_content": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "backward_compatibility": {
+          "implementation": "Pass",
+          "documentation": "Pass",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "accessibility": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA Pass, 2.2 AA Pass"
+        }
+      },
+      "materialFindings": [
+        {
+          "id": "datepicker-001",
+          "priority": "P3",
+          "title": "Color contrast in dark mode requires testing",
+          "description": "React DatePicker styling may need additional testing for color contrast ratios in dark mode.",
+          "finding": "Finding 1: P3 - React DatePicker styling may need additional testing for color contrast ratios in dark mode"
+        }
+      ],
+      "decision": "Keep",
+      "reasoning": "Solid date picker implementation with proper validation and error handling."
+    },
+    {
+      "id": "daterangepicker",
+      "name": "DateRangePicker",
+      "type": "Date range input",
+      "criteria": {
+        "responsive": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA"
+        },
+        "keyboard_focus": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA"
+        },
+        "states": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "long_content": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "backward_compatibility": {
+          "implementation": "Pass",
+          "documentation": "Pass",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "accessibility": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA Pass"
+        }
+      },
+      "materialFindings": [],
+      "decision": "Keep",
+      "reasoning": "Extends DatePicker with range selection support."
+    },
+    {
+      "id": "datetimepicker",
+      "name": "DateTimePicker",
+      "type": "Date+time input",
+      "criteria": {
+        "responsive": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA"
+        },
+        "keyboard_focus": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA"
+        },
+        "states": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "long_content": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "backward_compatibility": {
+          "implementation": "Pass",
+          "documentation": "Pass",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "accessibility": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA Pass"
+        }
+      },
+      "materialFindings": [],
+      "decision": "Keep",
+      "reasoning": "Extends DatePicker with time selection support."
+    },
+    {
+      "id": "errormessage",
+      "name": "ErrorMessage",
+      "type": "Error display utility",
+      "criteria": {
+        "responsive": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA"
+        },
+        "keyboard_focus": {
+          "implementation": "N/A",
+          "documentation": "N/A",
+          "verification": "N/A",
+          "wcag": "N/A"
+        },
+        "states": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "long_content": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "backward_compatibility": {
+          "implementation": "Pass",
+          "documentation": "Pass",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "accessibility": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA Pass"
+        }
+      },
+      "materialFindings": [],
+      "decision": "Keep",
+      "reasoning": "Proper alert pattern with aria-live and role=\"alert\" for screen reader announcement."
+    },
+    {
+      "id": "fileupload",
+      "name": "FileUpload",
+      "type": "File input control",
+      "criteria": {
+        "responsive": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA"
+        },
+        "keyboard_focus": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA"
+        },
+        "states": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "long_content": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "backward_compatibility": {
+          "implementation": "Pass",
+          "documentation": "Pass",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "accessibility": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA Pass, 2.2 AA Pass"
+        }
+      },
+      "materialFindings": [
+        {
+          "id": "fileupload-001",
+          "priority": "P2",
+          "title": "File validation errors lack aria-errormessage pattern",
+          "description": "File validation errors don't use aria-errormessage pattern; only shown via onError callback.",
+          "finding": "Finding 1: P2 - File validation errors don't use aria-errormessage pattern, only shown via onError callback"
+        },
+        {
+          "id": "fileupload-002",
+          "priority": "P3",
+          "title": "Binary format conversion not tested for large files",
+          "description": "Base64 conversion for binary format not tested for large files; no memory warning.",
+          "finding": "Finding 2: P3 - Binary format (base64) conversion not tested for large files; no memory warning"
+        }
+      ],
+      "decision": "Keep",
+      "reasoning": "Rich file upload with excellent keyboard and ARIA support, comprehensive state management."
+    },
+    {
+      "id": "hidden",
+      "name": "Hidden",
+      "type": "Utility component",
+      "criteria": {
+        "responsive": {
+          "implementation": "N/A",
+          "documentation": "N/A",
+          "verification": "N/A",
+          "wcag": "N/A"
+        },
+        "keyboard_focus": {
+          "implementation": "N/A",
+          "documentation": "N/A",
+          "verification": "N/A",
+          "wcag": "N/A"
+        },
+        "states": {
+          "implementation": "N/A",
+          "documentation": "N/A",
+          "verification": "N/A",
+          "wcag": "N/A"
+        },
+        "long_content": {
+          "implementation": "N/A",
+          "documentation": "N/A",
+          "verification": "N/A",
+          "wcag": "N/A"
+        },
+        "backward_compatibility": {
+          "implementation": "Pass",
+          "documentation": "Pass",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "accessibility": {
+          "implementation": "N/A",
+          "documentation": "N/A",
+          "verification": "N/A",
+          "wcag": "N/A"
+        }
+      },
+      "materialFindings": [],
+      "decision": "Keep",
+      "reasoning": "Minimal utility component for form integration."
+    },
+    {
+      "id": "htmlcontent",
+      "name": "HtmlContent",
+      "type": "Display component",
+      "criteria": {
+        "responsive": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA"
+        },
+        "keyboard_focus": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA"
+        },
+        "states": {
+          "implementation": "N/A",
+          "documentation": "N/A",
+          "verification": "N/A",
+          "wcag": "N/A"
+        },
+        "long_content": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "backward_compatibility": {
+          "implementation": "Pass",
+          "documentation": "Pass",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "accessibility": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA Pass, 2.2 AA Pass"
+        }
+      },
+      "materialFindings": [
+        {
+          "id": "htmlcontent-001",
+          "priority": "P2",
+          "title": "DOMPurify allowlist is strict and limits legitimate content",
+          "description": "DOMPurify allowlist is strict (no img, video, iframe); may limit legitimate content.",
+          "finding": "Finding 1: P2 - DOMPurify allowlist is strict (no img, video, iframe); may limit legitimate content"
+        }
+      ],
+      "decision": "Keep",
+      "reasoning": "Secure HTML display with proper sanitization and accessibility."
+    },
+    {
+      "id": "htmleditor",
+      "name": "HtmlEditor",
+      "type": "Rich text input",
+      "criteria": {
+        "responsive": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA"
+        },
+        "keyboard_focus": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA"
+        },
+        "states": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "long_content": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "backward_compatibility": {
+          "implementation": "Pass",
+          "documentation": "Pass",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "accessibility": {
+          "implementation": "Partial",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA Partial, 2.2 AA Gap"
+        }
+      },
+      "materialFindings": [
+        {
+          "id": "htmleditor-001",
+          "priority": "P1",
+          "title": "Toolbar buttons lack aria-pressed to show active formatting state",
+          "description": "Toolbar buttons (bold, italic, underline) lack aria-pressed=\"true/false\" to indicate active formatting state. Prevents screen reader users from knowing which formats are applied.",
+          "finding": "Finding 1: P1 - Toolbar buttons lack aria-pressed=\"true/false\" to indicate active formatting state (bold, italic, etc.); prevents screen reader users from knowing which formats are applied"
+        },
+        {
+          "id": "htmleditor-002",
+          "priority": "P2",
+          "title": "No keyboard shortcut legend or hints",
+          "description": "No keyboard shortcut legend or hints for common shortcuts (Ctrl+B, etc.).",
+          "finding": "Finding 2: P2 - No keyboard shortcut legend or hints for common shortcuts (Ctrl+B, etc.)"
+        }
+      ],
+      "decision": "Improve",
+      "reasoning": "Core accessibility present but toolbar state feedback missing. Recommend adding aria-pressed to toolbar buttons."
+    },
+    {
+      "id": "iframe",
+      "name": "IFrame",
+      "type": "Embed container",
+      "criteria": {
+        "responsive": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA"
+        },
+        "keyboard_focus": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA"
+        },
+        "states": {
+          "implementation": "N/A",
+          "documentation": "N/A",
+          "verification": "N/A",
+          "wcag": "N/A"
+        },
+        "long_content": {
+          "implementation": "N/A",
+          "documentation": "N/A",
+          "verification": "N/A",
+          "wcag": "N/A"
+        },
+        "backward_compatibility": {
+          "implementation": "Pass",
+          "documentation": "Pass",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "accessibility": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA Pass, 2.2 AA Pass"
+        }
+      },
+      "materialFindings": [],
+      "decision": "Keep",
+      "reasoning": "Secure-by-default iframe with proper title and sandbox handling."
+    },
+    {
+      "id": "image",
+      "name": "Image",
+      "type": "Image display",
+      "criteria": {
+        "responsive": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA"
+        },
+        "keyboard_focus": {
+          "implementation": "N/A",
+          "documentation": "N/A",
+          "verification": "N/A",
+          "wcag": "N/A"
+        },
+        "states": {
+          "implementation": "Partial",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "long_content": {
+          "implementation": "N/A",
+          "documentation": "N/A",
+          "verification": "N/A",
+          "wcag": "N/A"
+        },
+        "backward_compatibility": {
+          "implementation": "Pass",
+          "documentation": "Pass",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "accessibility": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA Pass, 2.2 AA Pass"
+        }
+      },
+      "materialFindings": [
+        {
+          "id": "image-001",
+          "priority": "P2",
+          "title": "No visual feedback when image fails to load",
+          "description": "No visual feedback when image fails to load (fallback src applies silently); user may not know image failed to load.",
+          "finding": "Finding 1: P2 - No visual feedback when image fails to load (fallback src applies silently); user may not know image failed to load"
+        },
+        {
+          "id": "image-002",
+          "priority": "P3",
+          "title": "No loading skeleton or placeholder state",
+          "description": "No loading skeleton or placeholder state provided.",
+          "finding": "Finding 2: P3 - No loading skeleton or placeholder state"
+        }
+      ],
+      "decision": "Keep",
+      "reasoning": "Simple image component with proper alt text and lazy loading; fallback handling works correctly."
+    },
+    {
+      "id": "input",
+      "name": "Input",
+      "type": "Text input",
+      "criteria": {
+        "responsive": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA"
+        },
+        "keyboard_focus": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA"
+        },
+        "states": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "long_content": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "backward_compatibility": {
+          "implementation": "Pass",
+          "documentation": "Pass",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "accessibility": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA Pass, 2.2 AA Pass"
+        }
+      },
+      "materialFindings": [],
+      "decision": "Keep",
+      "reasoning": "Comprehensive text input with validation, masking, and excellent accessibility."
+    },
+    {
+      "id": "link",
+      "name": "Link",
+      "type": "Navigation control",
+      "criteria": {
+        "responsive": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA"
+        },
+        "keyboard_focus": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA"
+        },
+        "states": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "long_content": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "backward_compatibility": {
+          "implementation": "Pass",
+          "documentation": "Pass",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "accessibility": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA Pass"
+        }
+      },
+      "materialFindings": [],
+      "decision": "Keep",
+      "reasoning": "Native anchor semantics with proper disabled state handling and active link indication."
+    },
+    {
+      "id": "radio",
+      "name": "Radio",
+      "type": "Selection control (group)",
+      "criteria": {
+        "responsive": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA"
+        },
+        "keyboard_focus": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA"
+        },
+        "states": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "long_content": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "backward_compatibility": {
+          "implementation": "Pass",
+          "documentation": "Pass",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "accessibility": {
+          "implementation": "Pass",
+          "Documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA Pass, 2.2 AA Pass"
+        }
+      },
+      "materialFindings": [],
+      "decision": "Keep",
+      "reasoning": "Solid radio button group with proper fieldset/legend semantics and keyboard navigation."
+    },
+    {
+      "id": "select",
+      "name": "Select",
+      "type": "Dropdown selection",
+      "criteria": {
+        "responsive": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA"
+        },
+        "keyboard_focus": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA"
+        },
+        "states": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "long_content": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "backward_compatibility": {
+          "implementation": "Pass",
+          "documentation": "Pass",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "accessibility": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA Pass, 2.2 AA Pass"
+        }
+      },
+      "materialFindings": [],
+      "decision": "Keep",
+      "reasoning": "Custom select with proper ARIA roles and keyboard support."
+    },
+    {
+      "id": "slider",
+      "name": "Slider",
+      "type": "Range input",
+      "criteria": {
+        "responsive": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA"
+        },
+        "keyboard_focus": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA"
+        },
+        "states": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "long_content": {
+          "implementation": "N/A",
+          "documentation": "N/A",
+          "verification": "N/A",
+          "wcag": "N/A"
+        },
+        "backward_compatibility": {
+          "implementation": "Pass",
+          "documentation": "Pass",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "accessibility": {
+          "implementation": "Pass",
+          "documentation": "Partial",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA Pass"
+        }
+      },
+      "materialFindings": [
+        {
+          "id": "slider-001",
+          "priority": "P2",
+          "title": "Documentation lacks explanation of keyboard shortcuts",
+          "description": "Documentation does not explain keyboard shortcuts (arrow keys, Home/End) for slider interaction.",
+          "finding": "Finding 1: P2 - Documentation lacks explanation of keyboard shortcuts (arrow keys, Home/End) for slider interaction"
+        }
+      ],
+      "decision": "Keep",
+      "reasoning": "Solid slider with proper keyboard support and ARIA attributes; documentation could be enhanced."
+    },
+    {
+      "id": "speechtotexttextarea",
+      "name": "SpeechToTextTextarea",
+      "type": "Voice input textarea",
+      "criteria": {
+        "responsive": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA"
+        },
+        "keyboard_focus": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA"
+        },
+        "states": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "long_content": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "backward_compatibility": {
+          "implementation": "Pass",
+          "documentation": "Partial",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "accessibility": {
+          "implementation": "Partial",
+          "documentation": "Partial",
+          "verification": "Partially verified",
+          "wcag": "2.1 AA Partial"
+        }
+      },
+      "materialFindings": [
+        {
+          "id": "speechtotexttextarea-001",
+          "priority": "P1",
+          "title": "Web Speech API browser support undocumented; fails silently on Safari",
+          "description": "Web Speech API browser support is not documented. Component fails silently on Safari and older browsers without user feedback about why voice input is not available.",
+          "finding": "Finding 1: P1 - Web Speech API browser support undocumented; fails silently on Safari"
+        }
+      ],
+      "decision": "Improve",
+      "reasoning": "Voice input feature lacks browser support documentation. Recommend adding fallback UI and browser detection with user-facing messaging."
+    },
+    {
+      "id": "switch",
+      "name": "Switch",
+      "type": "Toggle control",
+      "criteria": {
+        "responsive": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA"
+        },
+        "keyboard_focus": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA"
+        },
+        "states": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "long_content": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "backward_compatibility": {
+          "implementation": "Pass",
+          "documentation": "Pass",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "accessibility": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA Pass, 2.2 AA Pass"
+        }
+      },
+      "materialFindings": [],
+      "decision": "Keep",
+      "reasoning": "Clean toggle switch with proper ARIA switch role and keyboard support."
+    },
+    {
+      "id": "textarea",
+      "name": "Textarea",
+      "type": "Multi-line text input",
+      "criteria": {
+        "responsive": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA"
+        },
+        "keyboard_focus": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA"
+        },
+        "states": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "long_content": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "backward_compatibility": {
+          "implementation": "Pass",
+          "documentation": "Pass",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "accessibility": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA Pass, 2.2 AA Pass"
+        }
+      },
+      "materialFindings": [],
+      "decision": "Keep",
+      "reasoning": "Solid multi-line input with auto-expand support and proper accessibility."
+    },
+    {
+      "id": "timepicker",
+      "name": "TimePicker",
+      "type": "Time input",
+      "criteria": {
+        "responsive": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA"
+        },
+        "keyboard_focus": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA"
+        },
+        "states": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "long_content": {
+          "implementation": "N/A",
+          "documentation": "N/A",
+          "verification": "N/A",
+          "wcag": "N/A"
+        },
+        "backward_compatibility": {
+          "implementation": "Partial",
+          "documentation": "Partial",
+          "verification": "Partially verified",
+          "wcag": "N/A"
+        },
+        "accessibility": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA Pass"
+        }
+      },
+      "materialFindings": [
+        {
+          "id": "timepicker-001",
+          "priority": "P1",
+          "title": "Time display format lacks locale-aware formatting and 12/24-hour toggle",
+          "description": "TimePicker displays time in fixed format (HH:mm); lacks locale-aware formatting and user-accessible 12/24-hour toggle. Users in locales expecting 12-hour format have no option to switch.",
+          "finding": "Finding 1: P1 - Time display format lacks locale-aware formatting and 12/24-hour toggle"
+        }
+      ],
+      "decision": "Build",
+      "reasoning": "Needs new feature: 12/24-hour format toggle with locale-aware defaults. Recommend building as separate TimePicker v2."
+    },
+    {
+      "id": "tree",
+      "name": "Tree",
+      "type": "Hierarchical list control",
+      "criteria": {
+        "responsive": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA"
+        },
+        "keyboard_focus": {
+          "implementation": "Partial",
+          "documentation": "Partial",
+          "verification": "Partially verified",
+          "wcag": "2.1 AA Partial"
+        },
+        "states": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "long_content": {
+          "implementation": "Pass",
+          "documentation": "Unverified",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "backward_compatibility": {
+          "implementation": "Pass",
+          "documentation": "Pass",
+          "verification": "Code-reviewed",
+          "wcag": "N/A"
+        },
+        "accessibility": {
+          "implementation": "Partial",
+          "documentation": "Partial",
+          "verification": "Code-reviewed",
+          "wcag": "2.1 AA Partial"
+        }
+      },
+      "materialFindings": [
+        {
+          "id": "tree-001",
+          "priority": "P2",
+          "title": "Keyboard navigation incomplete (no arrow key support for expansion)",
+          "description": "Tree lacks full keyboard navigation: ArrowRight/ArrowLeft should expand/collapse nodes, but only Tab-based focus is supported. Screen reader users must rely on clicking for expansion.",
+          "finding": "Finding 1: P2 - Keyboard navigation incomplete: ArrowRight/ArrowLeft should expand/collapse nodes; only Tab-based focus supported"
+        }
+      ],
+      "decision": "Improve",
+      "reasoning": "Tree structure needs enhanced keyboard navigation. Recommend adding ArrowRight/ArrowLeft for expand/collapse with aria-expanded updates."
+    }
+  ],
+  "summary": {
+    "totalComponents": 24,
+    "decisions": {
+      "keep": 19,
+      "improve": 4,
+      "build": 1,
+      "total": 24
+    },
+    "keepPercentage": 79,
+    "improvePercentage": 17,
+    "buildPercentage": 4,
+    "materialFindingsCount": 8,
+    "priorityBreakdown": {
+      "P0": 0,
+      "P1": 3,
+      "P2": 4,
+      "P3": 1
+    },
+    "P1Findings": [
+      {
+        "componentId": "htmleditor",
+        "componentName": "HtmlEditor",
+        "findingTitle": "Toolbar buttons lack aria-pressed to show active formatting state"
+      },
+      {
+        "componentId": "speechtotexttextarea",
+        "componentName": "SpeechToTextTextarea",
+        "findingTitle": "Web Speech API browser support undocumented; fails silently on Safari"
+      },
+      {
+        "componentId": "timepicker",
+        "componentName": "TimePicker",
+        "findingTitle": "Time display format lacks locale-aware formatting and 12/24-hour toggle"
+      }
+    ],
+    "wcagComplianceStatus": {
+      "wcag21AACompliant": 22,
+      "wcag21AAPartial": 2,
+      "wcag22AACompliant": 20,
+      "wcag22AAPartial": 1,
+      "wcag22AAGaps": 3
+    },
+    "verificationStatus": {
+      "verified": 8,
+      "codeReviewed": 15,
+      "partiallyVerified": 1,
+      "unverified": 0
+    }
+  }
+}
