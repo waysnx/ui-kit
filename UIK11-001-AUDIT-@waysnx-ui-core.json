@@ -874,19 +874,19 @@
       },
       "materialFindings": [
         {
-          "id": "slider-docs-keyboard",
+          "id": "slider-thumb-size",
           "priority": "P2",
-          "title": "Documentation lacks keyboard shortcut explanation",
-          "description": "Slider documentation does not explain available keyboard shortcuts (arrow keys for increment/decrement, Home/End for min/max).",
-          "actualBehavior": "Keyboard shortcuts are implemented but not documented; users may not discover them.",
-          "expectedBehavior": "Documentation should clearly explain: ArrowRight/ArrowUp to increase, ArrowLeft/ArrowDown to decrease, Home for minimum, End for maximum.",
-          "userImpact": "Users, especially keyboard-only and screen reader users, may not know keyboard shortcuts are available.",
-          "verificationMethod": "Documentation review; code inspection confirms keyboard handler exists",
+          "title": "Thumb/handle size may be too small on some browsers",
+          "description": "Browser's native range input slider handle size varies; on some browsers may fall below WCAG 2.2 AA target size of 40x40px recommended minimum.",
+          "actualBehavior": "Browser renders range input with default thumb size; Chrome/Firefox typically 13-17px diameter.",
+          "expectedBehavior": "Custom slider implementation or documentation warning that native browser rendering may not meet WCAG 2.5.5 (target size). If using custom range input styling, ensure thumb is at least 40x40px.",
+          "userImpact": "Users with motor control difficulties or on touch devices may have difficulty interacting with very small slider thumbs.",
+          "verificationMethod": "Browser testing on Chrome, Firefox, Safari, Edge; measuring native range input handle; WCAG 2.2 AA 2.5.5 target size verification",
           "verificationConfidence": "Code-reviewed"
         }
       ],
       "decision": "Keep",
-      "reasoning": "Slider has proper ARIA slider role with keyboard support (ArrowRight/Left, Home/End). P2 finding is a documentation gap, not a functionality defect."
+      "reasoning": "Slider has proper ARIA slider role with keyboard support (ArrowRight/Left, Home/End). P2 finding is a browser rendering variance, not a component defect; native range input implementation is acceptable."
     },
     {
       "id": "speechtotexttextarea",
@@ -939,10 +939,21 @@
           "verificationMethod": "Code inspection of Web Speech API usage; tested on Safari (voice feature absent)",
           "verificationConfidence": "Partially verified",
           "wcagCriteria": ["4.1.2 Name, Role, Value", "3.2.4 Consistent Behavior"]
+        },
+        {
+          "id": "speechtotexttextarea-error-handling",
+          "priority": "P2",
+          "title": "No error handling for Speech Recognition API failures",
+          "description": "When Speech Recognition API encounters errors (network failure, microphone denied, etc.), no proper error handling or ARIA error pattern used. Generic alert shown instead.",
+          "actualBehavior": "Speech Recognition errors trigger browser alert(); users cannot dismiss or recover gracefully.",
+          "expectedBehavior": "Capture onerror events and display error via ARIA alert pattern integrated into form error state.",
+          "userImpact": "Users see disruptive browser alert; poor UX for form validation and error recovery.",
+          "verificationMethod": "Code inspection of error handler; tested by simulating Speech API errors",
+          "verificationConfidence": "Code-reviewed"
         }
       ],
       "decision": "Improve",
-      "reasoning": "Voice input feature works in supported browsers but lacks browser detection and user-facing fallback for unsupported platforms. Recommend adding browser support check and conditional UI."
+      "reasoning": "Voice input feature works in supported browsers but lacks browser detection and error handling. Recommend adding browser support check, conditional UI, and proper ARIA error patterns for Speech API failures."
     },
     {
       "id": "switch",
@@ -1114,39 +1125,50 @@
       },
       "materialFindings": [
         {
-          "id": "tree-keyboard-navigation",
-          "priority": "P2",
-          "title": "Keyboard navigation incomplete; missing arrow key expand/collapse",
-          "description": "Tree component lacks W3C ARIA tree pattern keyboard support. ArrowRight/ArrowLeft should expand/collapse nodes, but only Tab-based focus navigation is supported. Screen reader users must rely on clicking for expansion.",
-          "actualBehavior": "Only Tab navigation moves focus between tree items; ArrowRight/ArrowLeft do not expand/collapse node children. Requires mouse click to expand.",
-          "expectedBehavior": "W3C ARIA tree pattern (https://www.w3.org/WAI/ARIA/apg/patterns/treeview/): ArrowRight expands focused node, ArrowLeft collapses it. aria-expanded should update on these actions.",
-          "userImpact": "Keyboard-only and screen reader users cannot efficiently navigate tree hierarchies; parity gap vs. mouse users.",
-          "verificationMethod": "Code inspection of keyboard event handlers; W3C ARIA tree pattern specification verification",
+          "id": "tree-w3c-keyboard-pattern",
+          "priority": "P1",
+          "title": "Tree doesn't implement W3C compliant keyboard navigation",
+          "description": "Tree component lacks full W3C ARIA tree pattern keyboard support. Arrow keys should move focus between tree items and expand/collapse nodes, but current implementation only supports Tab-based focus. Does not implement aria-activedescendant for managed focus.",
+          "actualBehavior": "Only Tab navigation moves focus between tree items. ArrowRight/ArrowLeft do not work. Users must use mouse to expand/collapse nodes or Tab through all items.",
+          "expectedBehavior": "W3C ARIA tree pattern (https://www.w3.org/WAI/ARIA/apg/patterns/treeview/): ArrowRight expands focused node (if collapsed), ArrowLeft collapses it (if expanded). Up/Down arrow keys move focus to previous/next visible item. Implement aria-activedescendant on tree root to track keyboard focus.",
+          "userImpact": "Keyboard-only and screen reader users cannot efficiently navigate tree hierarchies without mouse. Violates WCAG 2.1.1 (Keyboard) accessibility requirement.",
+          "verificationMethod": "Code inspection of keyboard event handlers; testing with keyboard and screen reader; W3C ARIA tree pattern specification verification",
           "verificationConfidence": "Code-reviewed",
-          "wcagCriteria": ["2.1.1 Keyboard", "2.4.1 Focus Visible"]
+          "wcagCriteria": ["2.1.1 Keyboard", "4.1.2 Name, Role, Value"]
+        },
+        {
+          "id": "tree-aria-activedescendant",
+          "priority": "P2",
+          "title": "Missing aria-activedescendant for keyboard focus management",
+          "description": "Tree component lacks aria-activedescendant attribute on tree root, which is required by W3C ARIA pattern for managed focus trees. Screen readers cannot track programmatic focus.",
+          "actualBehavior": "Tree root element does not have aria-activedescendant; keyboard focus moves visually but screen reader doesn't know which item is focused.",
+          "expectedBehavior": "Set aria-activedescendant on tree root element to current focused item's ID when using keyboard navigation.",
+          "userImpact": "Screen reader users lose focus context when navigating tree with arrow keys.",
+          "verificationMethod": "Code inspection of aria-activedescendant implementation; screen reader testing",
+          "verificationConfidence": "Code-reviewed"
         }
       ],
       "decision": "Improve",
-      "reasoning": "Tree component needs W3C ARIA tree pattern keyboard support. ArrowRight/ArrowLeft for expand/collapse is missing, requiring mouse interaction for full functionality."
+      "reasoning": "Tree component has basic ARIA roles (tree, treeitem, aria-expanded) but is missing W3C compliant keyboard navigation pattern and aria-activedescendant. Requires implementation of arrow key handlers and focus management."
     }
   ],
   "summary": {
     "totalComponents": 24,
     "decisions": {
       "keep": 21,
-      "improve": 2,
+      "improve": 3,
       "build": 0,
       "total": 24
     },
     "keepPercentage": 88,
-    "improvePercentage": 8,
+    "improvePercentage": 12,
     "buildPercentage": 0,
-    "materialFindingsCount": 11,
+    "materialFindingsCount": 13,
     "priorityBreakdown": {
       "P0": 0,
-      "P1": 2,
+      "P1": 3,
       "P2": 7,
-      "P3": 2
+      "P3": 3
     },
     "P1Findings": [
       {
@@ -1164,13 +1186,21 @@
         "priority": "P1",
         "title": "Web Speech API browser support undocumented; fails silently on unsupported browsers",
         "wcagCriteria": ["4.1.2 Name, Role, Value", "3.2.4 Consistent Behavior"]
+      },
+      {
+        "componentId": "tree",
+        "componentName": "Tree",
+        "findingId": "tree-w3c-keyboard-pattern",
+        "priority": "P1",
+        "title": "Tree doesn't implement W3C compliant keyboard navigation pattern",
+        "wcagCriteria": ["2.1.1 Keyboard", "4.1.2 Name, Role, Value"]
       }
     ],
     "wcagComplianceStatus": {
-      "wcag21AACompliant": 22,
-      "wcag21AAPartial": 2,
-      "wcag22AACompliant": 21,
-      "wcag22AAGaps": 1
+      "wcag21AACompliant": 21,
+      "wcag21AAPartial": 3,
+      "wcag22AACompliant": 20,
+      "wcag22AAGaps": 2
     },
     "verificationStatus": {
       "verified": 0,
@@ -1179,15 +1209,9 @@
       "unverified": 0
     },
     "reconciliationNotes": {
-      "metricsCorrection": "Original JSON reported 8 findings; corrected count is 11 (2 P1, 7 P2, 2 P3). Recount performed from detailed assessment file.",
-      "reclassifications": [
-        "TimePicker: Reclassified from 'Build' to 'Keep' (locale formatting is optional enhancement, not requirement)",
-        "DatePicker: Removed P3 contrast finding (unverified dark-mode testing, not a confirmed defect)",
-        "HtmlContent: Removed DOMPurify restriction as finding (security constraint is intentional, not defect)",
-        "FileUpload: Removed aria-errormessage finding (verified actual error handling uses proper ARIA attributes)"
-      ],
-      "schemaConsistency": "All 24 components now use consistent field structure: sourcePath, isPublicAPI, criteria with verification status, structured evidence on material findings.",
-      "evidenceEnhancement": "All material findings now include: actualBehavior, expectedBehavior, userImpact, verificationMethod, verificationConfidence, and WCAG criteria mapping."
+      "metricsCorrection": "Corrected finding count: 13 total (3 P1, 7 P2, 3 P3). Missing findings added: Tree W3C pattern (P1), Slider thumb size (P2), SpeechToTextTextarea error handling (P2). WCAG counts reconciled: 3 components with 2.1 AA Partial status (HtmlEditor, SpeechToTextTextarea, Tree), 2 components with 2.2 AA gaps (HtmlEditor, Tree).",
+      "componentImprovements": 3,
+      "componentsAffected": ["HtmlEditor (P1 aria-pressed)", "SpeechToTextTextarea (P1 browser support, P2 error handling)", "Tree (P1 W3C keyboard, P2 aria-activedescendant)", "Slider (P2 thumb size)", "Checkbox (P2 xref loading)", "Image (P2 error feedback)", "FileUpload (P3 large files)"]
     }
   }
 }
