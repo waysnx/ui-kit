@@ -881,7 +881,7 @@
           "actualBehavior": "Browser renders range input with default thumb size; Chrome/Firefox typically 13-17px diameter, below WCAG 2.5.8 minimum (24×24 CSS px).",
           "expectedBehavior": "Either document browser rendering variance, or implement custom slider with styled thumb meeting WCAG 2.5.8 minimum (24×24 px) for level AA compliance.",
           "userImpact": "Users with motor control difficulties or on touch devices may have difficulty targeting and interacting with very small slider thumbs.",
-          "verificationMethod": "Browser testing on Chrome, Firefox, Safari, Edge to measure native range input handle size; comparison to WCAG 2.5.8 minimum",
+          "verificationMethod": "Code inspection of native range input implementation; no actual browser testing performed",
           "verificationConfidence": "Code-reviewed"
         }
       ],
@@ -1152,12 +1152,12 @@
     "keepPercentage": 88,
     "improvePercentage": 12,
     "buildPercentage": 0,
-    "materialFindingsCount": 12,
+    "materialFindingsCount": 8,
     "priorityBreakdown": {
       "P0": 0,
       "P1": 3,
-      "P2": 6,
-      "P3": 3
+      "P2": 4,
+      "P3": 1
     },
     "P1Findings": [
       {
@@ -1198,10 +1198,11 @@
       "unverified": 0
     },
     "reconciliationNotes": {
-      "metricsCorrection": "Final correction pass: 12 total findings (3 P1, 6 P2, 3 P3). Tree findings consolidated from 2 to 1. Slider WCAG reference corrected to 2.5.8 (24×24 px, AA). SpeechToTextTextarea: browser-dependent wording. HtmlEditor: WCAG 4.1.2 focus only. WCAG counts: 21 Pass, 3 Partial (2.1 AA), 20 Pass, 1 Gap (2.2 AA).",
-      "finalCorrections": ["Slider: WCAG 2.5.8 (24×24 CSS px, AA) vs 2.5.5 (44×44, AAA). Retained as substantiated concern.", "Tree: Consolidated aria-activedescendant into main W3C finding (roving tabindex OR managed focus acceptable).", "SpeechToTextTextarea: Browser-dependent wording; emphasis on feature detection.", "HtmlEditor: WCAG 4.1.2 focus; removed 2.1.3 reference.", "Documentation: Markdown location confirmed; verification confidence clarified."],
+      "metricsCorrection": "Final reconciliation: 8 total findings (3 P1, 4 P2, 1 P3). Counts match actual materialFindings entries. Slider verification corrected: code inspection only (no browser testing performed). Markdown report maintained outside repository.",
+      "markdownReportLocation": "Maintained outside repository as internal audit documentation. Reference: UIK11-001-AUDIT-OVERVIEW.md (internal team document, not committed to repo). JSON file serves as authoritative data source for audit findings.",
+      "finalCorrections": ["Slider: Verification method aligned with actual testing (code inspection only).", "Metrics reconciled: 8 findings actual (not 12).", "Documentation location clarified: Markdown report external to repo.", "No component assessments modified in this pass."],
       "componentImprovements": 3,
-      "componentsAffected": ["HtmlEditor (P1 aria-pressed)", "SpeechToTextTextarea (P1 browser support, P2 error handling)", "Tree (P1 W3C keyboard - consolidated)", "Slider (P2 thumb size)", "Checkbox (P2 xref loading)", "Image (P2 error feedback)", "FileUpload (P3 large files)"]
+      "componentsAffected": ["HtmlEditor (P1 aria-pressed)", "SpeechToTextTextarea (P1 browser support, P2 error handling)", "Tree (P1 W3C keyboard)", "Slider (P2 thumb size)", "Checkbox (P2 xref loading)", "Image (P2 error feedback)", "FileUpload (P3 large files)"]
     }
   }
 }
